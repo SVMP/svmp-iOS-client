@@ -92,7 +92,47 @@
 		FE680E76182AE45F00C0D516 /* libisac_neon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE680E73182AE45F00C0D516 /* libisac_neon.a */; };
 		FE680E77182AE45F00C0D516 /* libvpx_asm_offsets_vp8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE680E74182AE45F00C0D516 /* libvpx_asm_offsets_vp8.a */; };
 		FE680E78182AE45F00C0D516 /* libvpx_asm_offsets_vpx_scale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE680E75182AE45F00C0D516 /* libvpx_asm_offsets_vpx_scale.a */; };
+		FE7555751850D57C00C30C60 /* libProtocolBuffersTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE234D94184FD5CF0080000D /* libProtocolBuffersTouch.a */; };
+		FECDB9A3184E8080007C2286 /* Svmp.pb.m in Sources */ = {isa = PBXBuildFile; fileRef = FECDB9A2184E8080007C2286 /* Svmp.pb.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FE234D8F184FD5CF0080000D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = ProtocolBuffers;
+		};
+		FE234D91184FD5CF0080000D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C5B03F76125179F30087887C;
+			remoteInfo = UnitTests;
+		};
+		FE234D93184FD5CF0080000D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 726B877F15E3C3C300D064DC;
+			remoteInfo = ProtocolBuffersTouch;
+		};
+		FE234D95184FD5CF0080000D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63BD8C0415FFAC3A0010D8DA;
+			remoteInfo = "UnitTests iOS";
+		};
+		FE755573184FDF7B00C30C60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 726B877E15E3C3C300D064DC;
+			remoteInfo = ProtocolBuffersTouch;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		186CA7571836D3DB00CE8212 /* VideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoView.h; sourceTree = "<group>"; };
@@ -201,6 +241,7 @@
 		4FD7F5001732E1C2009295E5 /* APPRTCAppClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APPRTCAppClient.m; sourceTree = "<group>"; };
 		4FEE3E511743C92D0005814A /* ios_channel.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ios_channel.html; sourceTree = "<group>"; };
 		4FEE3EB61746A3810005814A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
+		FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ProtocolBuffers.xcodeproj; path = proto_buf/ProtocolBuffers.xcodeproj; sourceTree = "<group>"; };
 		FE2A3866182D981300E10046 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		FE2A3868182D989D00E10046 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		FE680E6D182AE41900C0D516 /* libaudio_processing_neon.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaudio_processing_neon.a; path = libs/libaudio_processing_neon.a; sourceTree = "<group>"; };
@@ -209,6 +250,8 @@
 		FE680E73182AE45F00C0D516 /* libisac_neon.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libisac_neon.a; path = libs/libisac_neon.a; sourceTree = "<group>"; };
 		FE680E74182AE45F00C0D516 /* libvpx_asm_offsets_vp8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx_asm_offsets_vp8.a; path = libs/libvpx_asm_offsets_vp8.a; sourceTree = "<group>"; };
 		FE680E75182AE45F00C0D516 /* libvpx_asm_offsets_vpx_scale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx_asm_offsets_vpx_scale.a; path = libs/libvpx_asm_offsets_vpx_scale.a; sourceTree = "<group>"; };
+		FE75554E184FD6DF00C30C60 /* Svmp.pb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Svmp.pb.h; sourceTree = "<group>"; };
+		FECDB9A2184E8080007C2286 /* Svmp.pb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Svmp.pb.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +259,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE7555751850D57C00C30C60 /* libProtocolBuffersTouch.a in Frameworks */,
 				FE2A3869182D989D00E10046 /* QuartzCore.framework in Frameworks */,
 				FE2A3867182D981300E10046 /* OpenGLES.framework in Frameworks */,
 				2945DB3517C21D60004BEFD1 /* libsqlite3.dylib in Frameworks */,
@@ -398,6 +442,7 @@
 		4FBCC0421728E929004C8C0B = {
 			isa = PBXGroup;
 			children = (
+				FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */,
 				FE2A3868182D989D00E10046 /* QuartzCore.framework */,
 				FE2A3866182D981300E10046 /* OpenGLES.framework */,
 				2945DB3417C21D60004BEFD1 /* libsqlite3.dylib */,
@@ -435,6 +480,8 @@
 		4FBCC0541728E929004C8C0B /* AppRTCDemo */ = {
 			isa = PBXGroup;
 			children = (
+				FECDB9A2184E8080007C2286 /* Svmp.pb.m */,
+				FE75554E184FD6DF00C30C60 /* Svmp.pb.h */,
 				186CA7571836D3DB00CE8212 /* VideoView.h */,
 				186CA7581836D3DB00CE8212 /* VideoView.m */,
 				2945DAFF17C20E24004BEFD1 /* public */,
@@ -465,6 +512,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FE234D89184FD5CE0080000D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FE234D90184FD5CF0080000D /* libProtocolBuffers.a */,
+				FE234D92184FD5CF0080000D /* UnitTests.octest */,
+				FE234D94184FD5CF0080000D /* libProtocolBuffersTouch.a */,
+				FE234D96184FD5CF0080000D /* UnitTests copy.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -479,6 +537,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				FE755574184FDF7B00C30C60 /* PBXTargetDependency */,
 			);
 			name = AppRTCDemo;
 			productName = AppRTCDemo;
@@ -505,12 +564,49 @@
 			mainGroup = 4FBCC0421728E929004C8C0B;
 			productRefGroup = 4FBCC04C1728E929004C8C0B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = FE234D89184FD5CE0080000D /* Products */;
+					ProjectRef = FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				4FBCC04A1728E929004C8C0B /* AppRTCDemo */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		FE234D90184FD5CF0080000D /* libProtocolBuffers.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libProtocolBuffers.a;
+			remoteRef = FE234D8F184FD5CF0080000D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FE234D92184FD5CF0080000D /* UnitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = UnitTests.octest;
+			remoteRef = FE234D91184FD5CF0080000D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FE234D94184FD5CF0080000D /* libProtocolBuffersTouch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libProtocolBuffersTouch.a;
+			remoteRef = FE234D93184FD5CF0080000D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FE234D96184FD5CF0080000D /* UnitTests copy.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "UnitTests copy.octest";
+			remoteRef = FE234D95184FD5CF0080000D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4FBCC0491728E929004C8C0B /* Resources */ = {
@@ -537,10 +633,19 @@
 				4FBCC0731729B780004C8C0B /* GAEChannelClient.m in Sources */,
 				186CA7591836D3DB00CE8212 /* VideoView.m in Sources */,
 				4FD7F5011732E1C2009295E5 /* APPRTCAppClient.m in Sources */,
+				FECDB9A3184E8080007C2286 /* Svmp.pb.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FE755574184FDF7B00C30C60 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ProtocolBuffersTouch;
+			targetProxy = FE755573184FDF7B00C30C60 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4FBCC0691728E929004C8C0B /* APPRTCViewController.xib */ = {
@@ -566,6 +671,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -579,7 +685,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				HEADER_SEARCH_PATHS = ../../proto_buf;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -597,13 +704,15 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				HEADER_SEARCH_PATHS = ../../proto_buf;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

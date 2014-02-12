@@ -45,6 +45,7 @@
 - (void)sendData:(NSData *)data;
 // Logging helper.
 - (void)displayLogMessage:(NSString *)message;
+
 @end
 
 @class APPRTCViewController;
@@ -61,5 +62,7 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) APPRTCViewController *viewController;
 @property (nonatomic, strong)  RTCVideoTrack *localVideoTrack;
+
+- (void) setCandidate:(NSDictionary *)objects;
 
 @end

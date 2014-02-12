@@ -33,6 +33,7 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "Svmp.pb.h"
 
 // These methods will be called by the AppEngine chanel.  The documentation
 // for these methods is found here.  (Yes, it is a JS API.)
@@ -40,7 +41,10 @@
 @protocol GAEMessageHandler<NSObject>
 
 - (void)onOpen;
-- (void)onMessage:(NSString *)data;
+//** SVMP
+//** - (void)onMessage:(NSString *)data;
+//** replace with SVMP response type as parameter
+- (void)onMessage:(NSString *) msg; //(Response *)data;
 - (void)onClose;
 - (void)onError:(int)code withDescription:(NSString *)description;
 

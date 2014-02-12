@@ -69,13 +69,21 @@
   if ([self connectedToInternet] == NO) {
       NSLog(@"NO INTERNET connection!");
   }
+    
+    //** run directly
+    NSString *url =
+        [NSString stringWithFormat:@"apprtc://192.168.1.3:8002/?r="];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+    
+    //** launch Video View
+    [self setVideoCapturer];
 }
 
 -(void)cancelNumberPad{
     [self.textField resignFirstResponder];
     self.textField.text = @"";
 }
-
+ 
 - (BOOL) connectedToInternet
 {
     NSString *URLString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.google.com"]];
@@ -92,9 +100,12 @@
     if ([room length] == 0) {
         return;
     }
+    room = @"0";
     
+    //NSString *url =
+    //    [NSString stringWithFormat:@"apprtc://apprtc.appspot.com/?r=%@", room];
     NSString *url =
-        [NSString stringWithFormat:@"apprtc://apprtc.appspot.com/?r=%@", room];
+        [NSString stringWithFormat:@"apprtc://192.168.1.3:8002/?r=%@", room];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
     
     //** launch Video View
@@ -234,7 +245,8 @@
 
 
     //----- START THE CAPTURE SESSION RUNNING -----
-	[self.captureSession startRunning];
+	// ** GG 1/16/14 SVMP does not need video streamed from client to the server...
+    //[self.captureSession startRunning];
     
 }
 #endif

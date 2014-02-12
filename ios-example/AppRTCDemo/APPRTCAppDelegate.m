@@ -50,6 +50,7 @@
 #import "RTCVideoTrack.h"
 #import "VideoView.h"
 
+#import "Svmp.pb.h"
 #import <AVFoundation/AVFoundation.h>
 
 
@@ -88,8 +89,9 @@
              addedStream:(RTCMediaStream *)stream {
   NSLog(@"PCO onAddStream.");
   dispatch_async(dispatch_get_main_queue(), ^(void) {
-    NSAssert([stream.audioTracks count] >= 1,
-             @"Expected at least 1 audio stream");
+    //** SVMP does not provide audio ...
+    //NSAssert([stream.audioTracks count] >= 1,
+    //         @"Expected at least 1 audio stream");
 
     NSAssert([stream.videoTracks count] >= 1,
              @"Expected at least 1 video stream");
@@ -121,8 +123,12 @@
         candidate.sdp);
   NSDictionary *json =
       @{ @"type" : @"candidate",
-         @"label" : [NSNumber numberWithInt:candidate.sdpMLineIndex],
-         @"id" : candidate.sdpMid,
+         
+         //3.46 change label to sdpMLineIndex @"label" : [NSNumber numberWithInt:candidate.sdpMLineIndex],
+         @"sdpMLineIndex" : [NSNumber numberWithInt:candidate.sdpMLineIndex],
+         
+         //3.46 change ID to sdpMid ... @"id" : candidate.sdpMid,
+         @"sdpMid" : candidate.sdpMid,
          @"candidate" : candidate.sdp };
   NSError *error;
   NSData *data =
@@ -162,6 +168,7 @@
 @property(nonatomic, strong) RTCPeerConnectionFactory *peerConnectionFactory;
 @property(nonatomic, strong) NSMutableArray *queuedRemoteCandidates;
 
+- (void) setCandidate:(NSDictionary *)objects;
 
 @end
 
@@ -181,6 +188,7 @@
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
   [RTCPeerConnectionFactory initializeSSL];
     
     
@@ -190,7 +198,7 @@
                                              bundle:nil];
   self.window.rootViewController = self.viewController;
   [self.window makeKeyAndVisible];
-  //** [self displayLogMessage:@"*** HERE in didFinishLaunchingWithOptions !!!!!"];
+  [self displayLogMessage:@"*** HERE in didFinishLaunchingWithOptions !!!!!"];
   return YES;
 }
 
@@ -217,9 +225,9 @@
 //**
 //**
 - (BOOL)application:(UIApplication *)application
-              openURL:(NSURL *)url
-    sourceApplication:(NSString *)sourceApplication
-           annotation:(id)annotation {
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
   if (self.client) {
     return NO;
   }
@@ -253,7 +261,8 @@
     //** may need this in the future
     //RTCICEServer *server = [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:@"turn:127.0.0.1:3478"] username:@"username" password:@"password"];
     
-    RTCMediaConstraints *_constraints = [[RTCMediaConstraints alloc] initWithMandatoryConstraints:@[[[RTCPair alloc] initWithKey:@"OfferToReceiveAudio" value:@"true"], [[RTCPair alloc] initWithKey:@"OfferToReceiveVideo" value:@"true"]] optionalConstraints:@[[[RTCPair alloc] initWithKey:@"internalSctpDataChannels" value:@"true"], [[RTCPair alloc] initWithKey:@"DtlsSrtpKeyAgreement" value:@"true"]]];
+    //** SVMP turn off AUDIO in offer
+    RTCMediaConstraints *_constraints = [[RTCMediaConstraints alloc] initWithMandatoryConstraints:@[[[RTCPair alloc] initWithKey:@"OfferToReceiveAudio" value:@"false"], [[RTCPair alloc] initWithKey:@"OfferToReceiveVideo" value:@"true"]] optionalConstraints:@[[[RTCPair alloc] initWithKey:@"internalSctpDataChannels" value:@"true"], [[RTCPair alloc] initWithKey:@"DtlsSrtpKeyAgreement" value:@"true"]]];
 
     
     self.queuedRemoteCandidates = [NSMutableArray array];
@@ -266,11 +275,14 @@
     RTCMediaStream *lms =
       [self.peerConnectionFactory mediaStreamWithLabel:@"ARDAMS"];
     NSLog(@"Adding Audio and Video devices ...");
-    [lms addAudioTrack:[self.peerConnectionFactory audioTrackWithID:@"ARDAMSa0"]];
+    //** SVMP remove audio track
+    //[lms addAudioTrack:[self.peerConnectionFactory audioTrackWithID:@"ARDAMSa0"]];
     
   
     //**  http://code.google.com/p/webrtc/issues/detail?id=2246
-    
+  
+#if 0
+    //** GG 1/16/14... SVMP server does not expect a video upload
     NSString *cameraID = nil;
     //** back camera
     //AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
@@ -293,6 +305,7 @@
     //** this adds the local camera video feed to the view as a preview
     //[self.viewController.videoView renderVideoTrackInterface:[self localVideoTrack]];
     // [[self localVideoTrack] addRenderer:self.viewController.videoRenderer];
+#endif
     
     //** pass the videoView to the observer, for later rendering
     self.pcObserver.videoView = self.viewController.videoView;
@@ -303,6 +316,9 @@
 
     [self displayLogMessage:@"onICEServers - add local stream."];
     NSLog(@"Adding Audio and Video devices ... DONE");
+    
+    //** create offer
+    [self onOpen];
 }
 
 #if 0
@@ -328,8 +344,9 @@
 - (void)onOpen {
     [self displayLogMessage:@"GAE onOpen - create offer."];
     
+    //** SVMP audio to false
     RTCPair *audio =
-        [[RTCPair alloc] initWithKey:@"OfferToReceiveAudio" value:@"true"];
+        [[RTCPair alloc] initWithKey:@"OfferToReceiveAudio" value:@"false"];
     //** video added
     RTCPair *video =
         [[RTCPair alloc] initWithKey:@"OfferToReceiveVideo" value:@"true"];
@@ -346,48 +363,141 @@
 //**********************
 //**
 //**
-- (void)onMessage:(NSString *)data {
-  [self displayLogMessage:@"*** HERE in onMEssage"];
+//** SVMP, candidates
+- (void) setCandidate:(NSDictionary *)objects {
+    NSLog(@"GAE CANDIDATE");
     
-  NSString *message = [self unHTMLifyString:data];
-  NSError *error;
-  NSDictionary *objects = [NSJSONSerialization
-      JSONObjectWithData:[message dataUsingEncoding:NSUTF8StringEncoding]
-                 options:0
-                   error:&error];
-  NSAssert(!error,
-           @"%@",
-           [NSString stringWithFormat:@"Error: %@", error.description]);
-  NSAssert([objects count] > 0, @"Invalid JSON object");
-    
-  NSString *value = [objects objectForKey:@"type"];
-  [self displayLogMessage:
-          [NSString stringWithFormat:@"GAE onMessage type - %@", value]];
-  if ([value compare:@"candidate"] == NSOrderedSame) {
-    NSString *mid = [objects objectForKey:@"id"];
-    NSNumber *sdpLineIndex = [objects objectForKey:@"label"];
+    NSString *mid = [objects objectForKey:@"sdpMid"];
+    NSNumber *sdpLineIndex = [objects objectForKey:@"sdpMLineIndex"];
     NSString *sdp = [objects objectForKey:@"candidate"];
+        
+    //** alloc a candidate object, add to ICE candidate list
     RTCICECandidate *candidate =
-        [[RTCICECandidate alloc] initWithMid:mid
-                                       index:sdpLineIndex.intValue
-                                         sdp:sdp];
+    [[RTCICECandidate alloc] initWithMid:mid
+                                   index:sdpLineIndex.intValue
+                                     sdp:sdp];
+    
+    NSLog(@"adding candidates! %@", candidate);
+    
     if (self.queuedRemoteCandidates) {
-      [self.queuedRemoteCandidates addObject:candidate];
+        NSLog(@"adding queuedRemoteCandidates");
+        [self.queuedRemoteCandidates addObject:candidate];
     } else {
-      [self.peerConnection addICECandidate:candidate];
+        NSLog(@"adding ICE peerConnection");
+        [self.peerConnection addICECandidate:candidate];
     }
-  } else if (([value compare:@"offer"] == NSOrderedSame) ||
-             ([value compare:@"answer"] == NSOrderedSame)) {
-    NSString *sdpString = [objects objectForKey:@"sdp"];
-    RTCSessionDescription *sdp = [[RTCSessionDescription alloc]
-        initWithType:value sdp:[APPRTCAppDelegate preferISAC:sdpString]];
-    [self.peerConnection setRemoteDescriptionWithDelegate:self sessionDescription:sdp];
-    [self displayLogMessage:@"PC - setRemoteDescription."];
-  } else if ([value compare:@"bye"] == NSOrderedSame) {
-    [self disconnect];
-  } else {
-    NSAssert(NO, @"Invalid message: %@", data);
-  }
+}
+
+//**********************
+//**********************
+//**
+//**
+//** SVMP, change parameter to SVMP response from NString
+- (void)onMessage:(Response *) resp {
+ 
+    [self displayLogMessage:@"*** HERE in onMessage"];
+    
+    //NSData *data = [msg dataUsingEncoding:NSUTF8StringEncoding];
+    //Response *resp = [Response parseFromData:data];
+    Response_ResponseType rt = [resp type];
+
+    switch ( rt ) {
+      case Response_ResponseTypeAuth:
+        {
+          NSLog(@"Response_ResponseTypeAuth received");
+          break;
+        }
+      case Response_ResponseTypeScreeninfo:
+        {
+          NSLog(@"Response_ResponseScreeninfo received");
+          break;
+        }
+      case Response_ResponseTypeLocation:
+        {
+          NSLog(@"Response_ResponseTypeLocation received");
+          //handleLocationResponse(data);
+          break;
+        }
+      // This is an ACK to the video STOP request.
+      case Response_ResponseTypeIntent:
+      case Response_ResponseTypeNotification:
+        {
+          NSLog(@"Response_ResponseTypeNotification or INTENT");
+          //Inspect this message to see if it's an intent or notification.
+          //NetIntentsHandler.inspect(data, AppRTCDemoActivity.this);
+          break;
+        }
+      case Response_ResponseTypeWebrtc:
+        {
+          NSLog(@"Response_ResponseTypeWebrtc");
+
+          //** remove % and & etc
+          NSString *message = [[resp webrtcMsg] json];
+          NSError *error;
+
+          //** Convert json into NSDictionary
+          NSDictionary *objects = [NSJSONSerialization
+            JSONObjectWithData:[message dataUsingEncoding:NSUTF8StringEncoding]
+                         options:0 error:&error];
+          NSAssert(!error, @"%@",
+                   [NSString stringWithFormat:@"Error: %@", error.description]);
+          NSAssert([objects count] > 0, @"Invalid JSON object");
+            
+          //** get the message type value
+          NSString *value = [objects objectForKey:@"type"];
+          NSLog(@"GAE onMessage type - %@", value);
+
+          //** CANDIDATE
+          if ([value compare:@"candidate"] == NSOrderedSame) {
+            NSLog(@"GAE CANDIDATE");
+              
+            //NSString *mid = [objects objectForKey:@"id"];
+            NSString *mid = [objects objectForKey:@"sdpMid"];
+              
+            //NSNumber *sdpLineIndex = [objects objectForKey:@"label"];
+            NSNumber *sdpLineIndex = [objects objectForKey:@"sdpMLineIndex"];
+            NSString *sdp = [objects objectForKey:@"candidate"];
+
+            //** alloc a candidate object, add to ICE candidate list
+            RTCICECandidate *candidate =
+                [[RTCICECandidate alloc] initWithMid:mid
+                                               index:sdpLineIndex.intValue
+                                                 sdp:sdp];
+            if (self.queuedRemoteCandidates) {
+              [self.queuedRemoteCandidates addObject:candidate];
+            } else {
+              [self.peerConnection addICECandidate:candidate];
+            }
+              
+          //** OFFER and ANSWER
+          } else if (([value compare:@"offer"] == NSOrderedSame) ||
+                     ([value compare:@"answer"] == NSOrderedSame)) {
+            NSLog(@"OFFER and ANSWER");
+              
+            NSString *sdpString = [objects objectForKey:@"sdp"];
+            RTCSessionDescription *sdp = [[RTCSessionDescription alloc]
+                initWithType:value sdp:[APPRTCAppDelegate preferISAC:sdpString]];
+            [self.peerConnection setRemoteDescriptionWithDelegate:self sessionDescription:sdp];
+            [self displayLogMessage:@"PC - setRemoteDescription."];
+
+          //** BYE
+          } else if ([value compare:@"bye"] == NSOrderedSame) {
+              NSLog(@"BYE");
+              [self disconnect];
+
+          //** GARBAGE
+          } else {
+            NSAssert(NO, @"Invalid message: %@", resp);
+          }
+
+          break;
+        }
+        default:
+            NSLog(@"Unexpected protocol message of type %d", rt);
+    }
+    
+
+    
 }
 
 - (void)onClose {

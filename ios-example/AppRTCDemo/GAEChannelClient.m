@@ -50,11 +50,14 @@
 
 - (id)initWithToken:(NSString *)token delegate:(id<GAEMessageHandler>)delegate {
   self = [super init];
-  [self displayLogMessage:@"*** HERE IN initWithToken"];
+  NSLog(@"*** HERE IN initWithToken");
+
   if (self) {
     _webView = [[UIWebView alloc] init];
     _webView.delegate = self;
     _delegate = delegate;
+      
+/* SVMP - comment out, go straight to onOpen
     NSString *htmlPath =
         [[NSBundle mainBundle] pathForResource:@"ios_channel" ofType:@"html"];
     NSURL *htmlUrl = [NSURL fileURLWithPath:htmlPath];
@@ -64,8 +67,11 @@
 
     [_webView
         loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:path]]];
+ */
   }
+    
   return self;
+      
 }
 
 - (void)dealloc {
@@ -84,6 +90,27 @@
     return YES;
   }
   NSString *resourceSpecifier = [request.URL resourceSpecifier];
+  Response *resp = [Response parseFromData:request.HTTPBody];
+  dispatch_async(dispatch_get_main_queue(), ^(void) {
+        //if ([method compare:@"onopen"] == NSOrderedSame) {
+        //    [self.delegate onOpen];
+        //} else if ([method compare:@"onmessage"] == NSOrderedSame) {
+            NSLog(@"here in OnMessage");
+            [self.delegate onMessage:resourceSpecifier];
+        //} else if ([method compare:@"onclose"] == NSOrderedSame) {
+        //    [self.delegate onClose];
+        //} else if ([method compare:@"onerror"] == NSOrderedSame) {
+        //    // TODO(hughv): Get error.
+        //    int code = -1;
+        //    NSString *description = message;
+         //   [self.delegate onError:code withDescription:description];
+        //} else {
+         //   NSAssert(NO, @"Invalid message sent from UIWebView: %@",
+         //            resourceSpecifier);
+        //}
+    });
+    
+/*
   NSRange range = [resourceSpecifier rangeOfString:@":"];
   NSString *method;
   NSString *message;
@@ -111,6 +138,8 @@
                resourceSpecifier);
     }
   });
+*/
+    
   return YES;
 }
 
