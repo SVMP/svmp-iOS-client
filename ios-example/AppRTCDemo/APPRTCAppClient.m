@@ -34,6 +34,7 @@
 
 #import "APPRTCAppClient.h"
 #import "APPRTCAppDelegate.h"
+#import "APPRTCViewController.h"
 #import <dispatch/dispatch.h>
 
 #import "GAEChannelClient.h"
@@ -728,8 +729,8 @@ int cnt;
                         NSLog(@"input buffer len: %d", t);
                         //NSData *dataData = [NSData dataWithBytes:buffer length:sizeof(buffer)];
                        // NSLog(@"buf ...%@...", dataData);
-                       // NSString *str = [[NSString alloc] initWithData:inputBuffer encoding:NSUTF8StringEncoding];
-                        //NSLog(@"%@",str);
+                         //NSString *str = [[NSString alloc] initWithData:inputBuffer encoding:NSUTF8StringEncoding];
+                         //NSLog(@"msgIN - %@",str);
 						[self messageReceived:inputBuffer length:len];
  
                     }
@@ -892,7 +893,12 @@ int cnt;
     else if ( rt == Response_ResponseTypeWebrtc || rt == Response_ResponseTypeVideostop ) {
         NSLog(@"Response_ResponseTypeWebrtc  - WEBRTC!!");
         [(APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate] onMessage:resp];
-
+    }
+    else if ( rt == Response_ResponseTypeScreeninfo ) {
+        NSLog(@"Response_ResponseTypeWebrtc  - SCREENINFO");
+        APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [[[ad viewController] videoView] handleScreenInfoResponse:resp];
+        
     }
     else {
         NSLog(@"unknown Message");

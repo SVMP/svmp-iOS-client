@@ -162,7 +162,6 @@
 
 @interface APPRTCAppDelegate ()
 
-@property(nonatomic, strong) APPRTCAppClient *client;
 @property(nonatomic, strong) PCObserver *pcObserver;
 @property(nonatomic, strong) RTCPeerConnection *peerConnection;
 @property(nonatomic, strong) RTCPeerConnectionFactory *peerConnectionFactory;

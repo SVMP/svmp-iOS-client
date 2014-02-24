@@ -64,5 +64,6 @@
 
 - (void)connectToRoom:(NSURL *)room;
 - (void)sendData:(NSData *)data;
+- (void)sendSVMPMessage:(Request *) request;
 
 @end

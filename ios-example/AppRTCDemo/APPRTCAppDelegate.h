@@ -61,6 +61,7 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) APPRTCViewController *viewController;
+@property (strong, nonatomic) APPRTCAppClient *client;
 @property (nonatomic, strong)  RTCVideoTrack *localVideoTrack;
 
 - (void) setCandidate:(NSDictionary *)objects;
