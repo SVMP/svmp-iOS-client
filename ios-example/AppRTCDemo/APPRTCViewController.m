@@ -77,6 +77,18 @@
     
     //** launch Video View
     [self setVideoCapturer];
+    
+    //** add button
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    // [button addTarget:self action:@selector(aMethod:)
+    //forControlEvents:UIControlEventTouchUpInside];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    [button setTitle:@"i" forState:UIControlStateNormal];
+    NSLog(@"%f -- %f", screenWidth, screenHeight);
+    button.frame = CGRectMake(screenWidth - 20, screenHeight - 40, 20.0, 20.0);
+    [self.view addSubview:button];
 }
 
 -(void)cancelNumberPad{
