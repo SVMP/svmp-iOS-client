@@ -97,6 +97,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3E7FC8CB18BCD95B00101184 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3B89357C162C92F1003750B6;
+			remoteInfo = SecureFoundation;
+		};
+		3E7FC8CD18BCD95B00101184 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3B89358D162C92F1003750B6;
+			remoteInfo = SecureFoundationTests;
+		};
+		3E7FC8D318BCD98A00101184 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E7FC8CF18BCD98900101184 /* AppPassword.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4819438D16CE96B90016DB79;
+			remoteInfo = AppPassword;
+		};
 		FE234D8F184FD5CF0080000D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */;
@@ -179,6 +200,8 @@
 		2953C4AE17BE129D001DA8CF /* libnss_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnss_static.a; path = libs/libnss_static.a; sourceTree = "<group>"; };
 		2953C4AF17BE129D001DA8CF /* librbe_components.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = librbe_components.a; path = libs/librbe_components.a; sourceTree = "<group>"; };
 		29A1B10717C377A30012C3FF /* libwebrtc_vp8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwebrtc_vp8.a; path = libs/libwebrtc_vp8.a; sourceTree = "<group>"; };
+		3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SecureFoundation.xcodeproj; path = ../vendor/securefoundation/SecureFoundation.xcodeproj; sourceTree = "<group>"; };
+		3E7FC8CF18BCD98900101184 /* AppPassword.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppPassword.xcodeproj; path = "../vendor/app-password/AppPassword.xcodeproj"; sourceTree = "<group>"; };
 		4F995B01173B6937007F179A /* libaudio_coding_module.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaudio_coding_module.a; path = libs/libaudio_coding_module.a; sourceTree = "<group>"; };
 		4F995B02173B6937007F179A /* libaudio_conference_mixer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaudio_conference_mixer.a; path = libs/libaudio_conference_mixer.a; sourceTree = "<group>"; };
 		4F995B03173B6937007F179A /* libaudio_device.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaudio_device.a; path = libs/libaudio_device.a; sourceTree = "<group>"; };
@@ -369,6 +392,23 @@
 			path = public;
 			sourceTree = "<group>";
 		};
+		3E7FC8C718BCD95B00101184 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3E7FC8CC18BCD95B00101184 /* libSecureFoundation.a */,
+				3E7FC8CE18BCD95B00101184 /* SecureFoundationTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3E7FC8D018BCD98900101184 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3E7FC8D418BCD98A00101184 /* AppPassword.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4F1CC122172F52E50090479F /* libs */ = {
 			isa = PBXGroup;
 			children = (
@@ -442,6 +482,8 @@
 		4FBCC0421728E929004C8C0B = {
 			isa = PBXGroup;
 			children = (
+				3E7FC8CF18BCD98900101184 /* AppPassword.xcodeproj */,
+				3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */,
 				FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */,
 				FE2A3868182D989D00E10046 /* QuartzCore.framework */,
 				FE2A3866182D981300E10046 /* OpenGLES.framework */,
@@ -566,8 +608,16 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 3E7FC8D018BCD98900101184 /* Products */;
+					ProjectRef = 3E7FC8CF18BCD98900101184 /* AppPassword.xcodeproj */;
+				},
+				{
 					ProductGroup = FE234D89184FD5CE0080000D /* Products */;
 					ProjectRef = FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */;
+				},
+				{
+					ProductGroup = 3E7FC8C718BCD95B00101184 /* Products */;
+					ProjectRef = 3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -578,6 +628,27 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		3E7FC8CC18BCD95B00101184 /* libSecureFoundation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSecureFoundation.a;
+			remoteRef = 3E7FC8CB18BCD95B00101184 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3E7FC8CE18BCD95B00101184 /* SecureFoundationTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SecureFoundationTests.octest;
+			remoteRef = 3E7FC8CD18BCD95B00101184 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3E7FC8D418BCD98A00101184 /* AppPassword.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AppPassword.framework;
+			remoteRef = 3E7FC8D318BCD98A00101184 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		FE234D90184FD5CF0080000D /* libProtocolBuffers.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
