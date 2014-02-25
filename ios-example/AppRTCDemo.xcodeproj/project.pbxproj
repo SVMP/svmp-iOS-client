@@ -29,6 +29,17 @@
 		2953C4B217BE129E001DA8CF /* libnss_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2953C4AE17BE129D001DA8CF /* libnss_static.a */; };
 		2953C4B317BE129E001DA8CF /* librbe_components.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2953C4AF17BE129D001DA8CF /* librbe_components.a */; };
 		29A1B10817C377A30012C3FF /* libwebrtc_vp8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 29A1B10717C377A30012C3FF /* libwebrtc_vp8.a */; };
+		3E7FC8DE18BCDB0D00101184 /* iMASMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */; };
+		3E7FC8DF18BCDB0D00101184 /* iMASFlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8D718BCDB0D00101184 /* iMASFlipsideViewController.m */; };
+		3E7FC8E018BCDB0D00101184 /* iMASAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8D918BCDB0D00101184 /* iMASAppDelegate.m */; };
+		3E7FC8E118BCDB0D00101184 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */; };
+		3E7FC8E218BCDB0D00101184 /* APViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8DC18BCDB0D00101184 /* APViewController.m */; };
+		3E7FC8E718BCDB9300101184 /* libSecureFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E7FC8CC18BCD95B00101184 /* libSecureFoundation.a */; };
+		3E7FC8E918BCDBA900101184 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E7FC8E818BCDBA900101184 /* CoreData.framework */; };
+		3E7FC8EB18BCDBDA00101184 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E7FC8EA18BCDBDA00101184 /* Security.framework */; };
+		3E7FC8EC18BCE37200101184 /* AppPassword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E7FC8D418BCD98A00101184 /* AppPassword.framework */; };
+		3E7FC8ED18BCE44B00101184 /* AppPassword.framework in Resources */ = {isa = PBXBuildFile; fileRef = 3E7FC8D418BCD98A00101184 /* AppPassword.framework */; };
+		3E7FC8EF18BCF20200101184 /* AppPassword.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E7FC8EE18BCF20200101184 /* AppPassword.framework */; };
 		4F995B31173B6937007F179A /* libaudio_coding_module.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F995B01173B6937007F179A /* libaudio_coding_module.a */; };
 		4F995B32173B6937007F179A /* libaudio_conference_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F995B02173B6937007F179A /* libaudio_conference_mixer.a */; };
 		4F995B33173B6937007F179A /* libaudio_device.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F995B03173B6937007F179A /* libaudio_device.a */; };
@@ -118,6 +129,20 @@
 			remoteGlobalIDString = 4819438D16CE96B90016DB79;
 			remoteInfo = AppPassword;
 		};
+		3E7FC8E318BCDB2300101184 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E7FC8CF18BCD98900101184 /* AppPassword.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4819438C16CE96B90016DB79;
+			remoteInfo = AppPassword;
+		};
+		3E7FC8E518BCDB2600101184 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3B89357B162C92F1003750B6;
+			remoteInfo = SecureFoundation;
+		};
 		FE234D8F184FD5CF0080000D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */;
@@ -202,6 +227,18 @@
 		29A1B10717C377A30012C3FF /* libwebrtc_vp8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwebrtc_vp8.a; path = libs/libwebrtc_vp8.a; sourceTree = "<group>"; };
 		3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SecureFoundation.xcodeproj; path = ../vendor/securefoundation/SecureFoundation.xcodeproj; sourceTree = "<group>"; };
 		3E7FC8CF18BCD98900101184 /* AppPassword.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppPassword.xcodeproj; path = "../vendor/app-password/AppPassword.xcodeproj"; sourceTree = "<group>"; };
+		3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMASMainViewController.m; sourceTree = "<group>"; };
+		3E7FC8D618BCDB0D00101184 /* iMASMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMASMainViewController.h; sourceTree = "<group>"; };
+		3E7FC8D718BCDB0D00101184 /* iMASFlipsideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMASFlipsideViewController.m; sourceTree = "<group>"; };
+		3E7FC8D818BCDB0D00101184 /* iMASFlipsideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMASFlipsideViewController.h; sourceTree = "<group>"; };
+		3E7FC8D918BCDB0D00101184 /* iMASAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMASAppDelegate.m; sourceTree = "<group>"; };
+		3E7FC8DA18BCDB0D00101184 /* iMASAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMASAppDelegate.h; sourceTree = "<group>"; };
+		3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
+		3E7FC8DC18BCDB0D00101184 /* APViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APViewController.m; sourceTree = "<group>"; };
+		3E7FC8DD18BCDB0D00101184 /* APViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APViewController.h; sourceTree = "<group>"; };
+		3E7FC8E818BCDBA900101184 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		3E7FC8EA18BCDBDA00101184 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		3E7FC8EE18BCF20200101184 /* AppPassword.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppPassword.framework; sourceTree = "<group>"; };
 		4F995B01173B6937007F179A /* libaudio_coding_module.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaudio_coding_module.a; path = libs/libaudio_coding_module.a; sourceTree = "<group>"; };
 		4F995B02173B6937007F179A /* libaudio_conference_mixer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaudio_conference_mixer.a; path = libs/libaudio_conference_mixer.a; sourceTree = "<group>"; };
 		4F995B03173B6937007F179A /* libaudio_device.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libaudio_device.a; path = libs/libaudio_device.a; sourceTree = "<group>"; };
@@ -282,8 +319,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE7555751850D57C00C30C60 /* libProtocolBuffersTouch.a in Frameworks */,
+				3E7FC8EC18BCE37200101184 /* AppPassword.framework in Frameworks */,
 				FE2A3869182D989D00E10046 /* QuartzCore.framework in Frameworks */,
+				3E7FC8EB18BCDBDA00101184 /* Security.framework in Frameworks */,
+				3E7FC8E918BCDBA900101184 /* CoreData.framework in Frameworks */,
+				3E7FC8E718BCDB9300101184 /* libSecureFoundation.a in Frameworks */,
+				FE7555751850D57C00C30C60 /* libProtocolBuffersTouch.a in Frameworks */,
 				FE2A3867182D981300E10046 /* OpenGLES.framework in Frameworks */,
 				2945DB3517C21D60004BEFD1 /* libsqlite3.dylib in Frameworks */,
 				2945DB3317C21D25004BEFD1 /* libstdc++.dylib in Frameworks */,
@@ -358,6 +399,7 @@
 				FE680E76182AE45F00C0D516 /* libisac_neon.a in Frameworks */,
 				FE680E77182AE45F00C0D516 /* libvpx_asm_offsets_vp8.a in Frameworks */,
 				FE680E78182AE45F00C0D516 /* libvpx_asm_offsets_vpx_scale.a in Frameworks */,
+				3E7FC8EF18BCF20200101184 /* AppPassword.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +524,8 @@
 		4FBCC0421728E929004C8C0B = {
 			isa = PBXGroup;
 			children = (
+				3E7FC8EA18BCDBDA00101184 /* Security.framework */,
+				3E7FC8E818BCDBA900101184 /* CoreData.framework */,
 				3E7FC8CF18BCD98900101184 /* AppPassword.xcodeproj */,
 				3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */,
 				FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */,
@@ -507,6 +551,7 @@
 		4FBCC04D1728E929004C8C0B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3E7FC8EE18BCF20200101184 /* AppPassword.framework */,
 				4F995B90173C03A1007F179A /* AudioToolbox.framework */,
 				4F995B61173B694B007F179A /* AVFoundation.framework */,
 				4F995B67173B6970007F179A /* CoreAudio.framework */,
@@ -522,6 +567,15 @@
 		4FBCC0541728E929004C8C0B /* AppRTCDemo */ = {
 			isa = PBXGroup;
 			children = (
+				3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */,
+				3E7FC8D618BCDB0D00101184 /* iMASMainViewController.h */,
+				3E7FC8D718BCDB0D00101184 /* iMASFlipsideViewController.m */,
+				3E7FC8D818BCDB0D00101184 /* iMASFlipsideViewController.h */,
+				3E7FC8D918BCDB0D00101184 /* iMASAppDelegate.m */,
+				3E7FC8DA18BCDB0D00101184 /* iMASAppDelegate.h */,
+				3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */,
+				3E7FC8DC18BCDB0D00101184 /* APViewController.m */,
+				3E7FC8DD18BCDB0D00101184 /* APViewController.h */,
 				FECDB9A2184E8080007C2286 /* Svmp.pb.m */,
 				FE75554E184FD6DF00C30C60 /* Svmp.pb.h */,
 				186CA7571836D3DB00CE8212 /* VideoView.h */,
@@ -579,6 +633,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				3E7FC8E618BCDB2600101184 /* PBXTargetDependency */,
+				3E7FC8E418BCDB2300101184 /* PBXTargetDependency */,
 				FE755574184FDF7B00C30C60 /* PBXTargetDependency */,
 			);
 			name = AppRTCDemo;
@@ -684,10 +740,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E7FC8ED18BCE44B00101184 /* AppPassword.framework in Resources */,
 				4FEE3E531743C94D0005814A /* ios_channel.html in Resources */,
 				4FBCC0611728E929004C8C0B /* Default.png in Resources */,
 				4FBCC06B1728E929004C8C0B /* APPRTCViewController.xib in Resources */,
 				4FEE3EB71746A3810005814A /* Icon.png in Resources */,
+				3E7FC8E118BCDB0D00101184 /* MainStoryboard.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,12 +763,26 @@
 				186CA7591836D3DB00CE8212 /* VideoView.m in Sources */,
 				4FD7F5011732E1C2009295E5 /* APPRTCAppClient.m in Sources */,
 				FECDB9A3184E8080007C2286 /* Svmp.pb.m in Sources */,
+				3E7FC8DE18BCDB0D00101184 /* iMASMainViewController.m in Sources */,
+				3E7FC8DF18BCDB0D00101184 /* iMASFlipsideViewController.m in Sources */,
+				3E7FC8E018BCDB0D00101184 /* iMASAppDelegate.m in Sources */,
+				3E7FC8E218BCDB0D00101184 /* APViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3E7FC8E418BCDB2300101184 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AppPassword;
+			targetProxy = 3E7FC8E318BCDB2300101184 /* PBXContainerItemProxy */;
+		};
+		3E7FC8E618BCDB2600101184 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SecureFoundation;
+			targetProxy = 3E7FC8E518BCDB2600101184 /* PBXContainerItemProxy */;
+		};
 		FE755574184FDF7B00C30C60 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = ProtocolBuffersTouch;
@@ -796,6 +868,10 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_CW_ASM_SYNTAX = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -855,6 +931,10 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "compiler-default";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_CW_ASM_SYNTAX = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
