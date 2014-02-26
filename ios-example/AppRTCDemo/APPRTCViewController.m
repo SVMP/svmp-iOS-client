@@ -80,9 +80,9 @@
   if ([self connectedToInternet] == NO) {
       NSLog(@"NO INTERNET connection!");
   }
-    NSData* hostData = [IMSKeychain passwordDataForService:@"host" account:@"1"];
+    NSData* hostData = [IMSKeychain securePasswordDataForService:@"host" account:@"1"];
     NSString * hostStr = [[NSString alloc] initWithData:hostData encoding:NSUTF8StringEncoding];
-    NSData* portData = [IMSKeychain passwordDataForService:@"port" account:@"1"];
+    NSData* portData = [IMSKeychain securePasswordDataForService:@"port" account:@"1"];
     NSString * portStr = [[NSString alloc] initWithData:portData encoding:NSUTF8StringEncoding];
     
     //** run directly
@@ -131,9 +131,9 @@
     
     //NSString *url =
     //    [NSString stringWithFormat:@"apprtc://apprtc.appspot.com/?r=%@", room];
-    NSData* hostData = [IMSKeychain passwordDataForService:@"host" account:@"1"];
+    NSData* hostData = [IMSKeychain securePasswordDataForService:@"host" account:@"1"];
     NSString * hostStr = [[NSString alloc] initWithData:hostData encoding:NSUTF8StringEncoding];
-    NSData* portData = [IMSKeychain passwordDataForService:@"port" account:@"1"];
+    NSData* portData = [IMSKeychain securePasswordDataForService:@"port" account:@"1"];
     NSString * portStr = [[NSString alloc] initWithData:portData encoding:NSUTF8StringEncoding];
     
     NSString *url =
