@@ -519,7 +519,10 @@ int cnt;
     NSMutableArray *ICEServers = [NSMutableArray array];
     for (NSDictionary *server in servers) {
         NSString *url = [server objectForKey:@"url"];
-        NSString *username = @"gganley"; //json[@"username"];
+        
+        NSData* userData = [IMSKeychain securePasswordDataForService:@"user" account:@"1"];
+        NSString * username = [[NSString alloc] initWithData:userData encoding:NSUTF8StringEncoding];
+        
         NSString *credential = @""; //[server objectForKey:@"credential"];
         if (!username) {
             username = @"";
@@ -591,8 +594,16 @@ int cnt;
     
     AuthRequest_Builder* authData = [AuthRequest builder];
     [authData setType:AuthRequest_AuthRequestTypeAuthentication];
-    [authData setUsername:@"gganley"];
-    [authData setPassword:@"g"];
+    
+    NSData* userData = [IMSKeychain securePasswordDataForService:@"user" account:@"1"];
+    NSString * userStr = [[NSString alloc] initWithData:userData encoding:NSUTF8StringEncoding];
+    
+    NSData* passData = [IMSKeychain securePasswordDataForService:@"pass" account:@"1"];
+    NSString * passStr = [[NSString alloc] initWithData:passData encoding:NSUTF8StringEncoding];
+    
+    [authData setUsername:userStr];
+    [authData setPassword:passStr];
+    
     //** leave sessionToken blank, server will provide one
     // [authData setSessionToken:@""];
     AuthRequest* ar = [authData build];
