@@ -55,10 +55,18 @@
 {
      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Disconnect device?"
      message:@"Do you want to disconnect from the android device?"
-     delegate:nil
+     delegate:self
      cancelButtonTitle:@"No"
      otherButtonTitles:@"Yes", nil];
      [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1)
+    {
+        exit(0);
+    }
 }
 
 - (void)viewDidLoad {
@@ -100,7 +108,7 @@
     CGFloat screenHeight = screenRect.size.height;
     [button setTitle:@"i" forState:UIControlStateNormal];
     NSLog(@"%f -- %f", screenWidth, screenHeight);
-    button.frame = CGRectMake(screenWidth - 25, screenHeight - 45, 25.0, 25.0);
+    button.frame = CGRectMake(screenWidth - 22, screenHeight - 42, 22.0, 22.0);
     [self.view addSubview:button];
 
     
