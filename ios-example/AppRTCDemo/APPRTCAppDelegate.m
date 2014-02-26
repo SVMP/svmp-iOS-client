@@ -34,6 +34,7 @@
  
 
 #import "APPRTCAppDelegate.h"
+#import "APViewController.h"
 
 #import "APPRTCViewController.h"
 #import "RTCICECandidate.h"
@@ -195,13 +196,30 @@
    // [self.window makeKeyAndVisible];
 }
 
+- (void)validUserAccess:(APViewController *)controller {
+    NSLog(@"validUserAccess - Delegate");
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    id contID = [storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
+    
+    self.window.rootViewController = contID;
+    [self.window makeKeyAndVisible];
+}
+
+
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
   [RTCPeerConnectionFactory initializeSSL];
 
     
+    
   self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    APViewController *apc = [[APViewController alloc] init];
+    apc.delegate = self;
+    self.window.rootViewController = apc; //navController;
+    [self.window makeKeyAndVisible];
 /*  self.viewController =
       [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
                                             bundle:nil];
@@ -212,12 +230,12 @@
   //self.viewController = [storyboard instantiateViewControllerWithIdentifier:@"myId"];
    self.window.rootViewController = self.viewController;
   [self.window makeKeyAndVisible]; */
-    
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+    /*
+   UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
                                 @"MainStoryboard" bundle:[NSBundle mainBundle]];
     self.window.rootViewController = [storyboard instantiateInitialViewController];
     
-    [self.window makeKeyAndVisible];
+    [self.window makeKeyAndVisible];*/
   [self displayLogMessage:@"*** HERE in didFinishLaunchingWithOptions !!!!!"];
   return YES;
 }

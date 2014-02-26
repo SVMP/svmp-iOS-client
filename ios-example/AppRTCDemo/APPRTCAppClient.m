@@ -36,7 +36,7 @@
 #import "APPRTCAppDelegate.h"
 #import "APPRTCViewController.h"
 #import <dispatch/dispatch.h>
-
+#import <SecureFoundation/SecureFoundation.h>
 #import "GAEChannelClient.h"
 #import "RTCICEServer.h"
 
@@ -563,8 +563,15 @@ int cnt;
 	
 	CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
+    
+    NSData* hostData = [IMSKeychain passwordDataForService:@"host" account:@"1"];
+    NSString * hostStr = [[NSString alloc] initWithData:hostData encoding:NSUTF8StringEncoding];
+    NSData* portData = [IMSKeychain passwordDataForService:@"port" account:@"1"];
+    NSString * portStr = [[NSString alloc] initWithData:portData encoding:NSUTF8StringEncoding];
+    
+    
     //** IP address of the PROXY SERVER
-	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)@"192.168.1.3", 8002, &readStream, &writeStream);
+	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)hostStr, [portStr integerValue], &readStream, &writeStream);
 	
 	inputStream = (NSInputStream *)CFBridgingRelease(readStream);
 	outputStream = (NSOutputStream *)CFBridgingRelease(writeStream);

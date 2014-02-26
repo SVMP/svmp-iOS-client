@@ -39,6 +39,12 @@ bool class_vector = FALSE;
 //** obfuscated logout var
 bool obj_var = FALSE;
 
+-(id) init {
+    self = [super init];
+    return self;
+}
+
+
 -(id)initWithParameter: (int8_t)thaThing {
     self = [super init];
     if (self) {

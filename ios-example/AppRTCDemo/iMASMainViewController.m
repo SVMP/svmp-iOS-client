@@ -50,7 +50,6 @@
     // Load up the form from the keychain
     NSData* hostData = [IMSKeychain passwordDataForService:@"host" account:@"1"];
     NSString * hostStr = [[NSString alloc] initWithData:hostData encoding:NSUTF8StringEncoding];
-    NSLog(@"****%@", hostStr);
     self.hostText.text = hostStr;
     
     NSData* portData = [IMSKeychain passwordDataForService:@"port" account:@"1"];
@@ -101,7 +100,6 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSInteger row;
-    NSLog(@"--%@", self.hostText.text);
     [IMSKeychain setPassword:self.hostText.text forService:@"host" account:@"1"];
     [IMSKeychain setPassword:self.portText.text forService:@"port" account:@"1"];
     [IMSKeychain setPassword:self.userNameText.text forService:@"user" account:@"1"];
@@ -111,14 +109,6 @@
     [IMSKeychain setPassword:[NSString stringWithFormat:@"%d", row] forService:@"enc" account:@"1"];
     row = [self.encryptionPicker selectedRowInComponent:1];
     [IMSKeychain setPassword:[NSString stringWithFormat:@"%d", row] forService:@"auth" account:@"1"];
-
-    
-    if ([[segue identifier] isEqualToString:@"showAlternate"]) {
-       // [[segue destinationViewController] setDelegate:self];
-     //   UIApplicationMain(0, nil, nil, NSStringFromClass([APPRTCAppDelegate class]));
-        iMASAppDelegate *appDelegate = (iMASAppDelegate *)[[UIApplication sharedApplication] delegate];
-        [appDelegate callNewDelegate];
-    }
     
 }
 
@@ -164,12 +154,21 @@
 }
 
 - (IBAction)connectTouched:(id)sender {
-    // [self.window makeKeyAndVisible];
+    NSInteger row;
+    [IMSKeychain setPassword:self.hostText.text forService:@"host" account:@"1"];
+    [IMSKeychain setPassword:self.portText.text forService:@"port" account:@"1"];
+    [IMSKeychain setPassword:self.userNameText.text forService:@"user" account:@"1"];
+    [IMSKeychain setPassword:self.passwordText.text forService:@"pass" account:@"1"];
+    
+    row = [self.encryptionPicker selectedRowInComponent:0];
+    [IMSKeychain setPassword:[NSString stringWithFormat:@"%d", row] forService:@"enc" account:@"1"];
+    row = [self.encryptionPicker selectedRowInComponent:1];
+    [IMSKeychain setPassword:[NSString stringWithFormat:@"%d", row] forService:@"auth" account:@"1"];
     self.secondViewController =
     [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
                                            bundle:nil];
     [self presentViewController:self.secondViewController animated:YES completion:nil];
 
-
+    
 }
 @end

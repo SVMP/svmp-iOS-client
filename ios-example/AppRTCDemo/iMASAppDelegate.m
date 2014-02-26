@@ -21,20 +21,22 @@
 //@synthesize navigationController=_navigationController;
 
 - (void)performLaunchSteps {
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
     APViewController *apc = [[APViewController alloc] init];
     apc.delegate = self;
     self.window.rootViewController = apc; //navController;
     [self.window makeKeyAndVisible];
     
+    /*
     
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   
-    
+   
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
      @"MainStoryboard" bundle:[NSBundle mainBundle]];
     self.window.rootViewController = [storyboard instantiateInitialViewController];
     
-    [self.window makeKeyAndVisible];
+    [self.window makeKeyAndVisible];*/
     /*
     iMASMainViewController *mv = [[iMASMainViewController alloc] init];
     self.window.rootViewController = mv;

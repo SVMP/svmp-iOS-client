@@ -37,6 +37,10 @@
 #define VIDEO_WIDTH 320
 #define VIDEO_HEIGHT 470
 
+-(void) disconnectMenu {
+    NSLog(@"HERE");
+}
+
 static void init(VideoView *self) {
     
     UIView<RTCVideoRenderView> *renderView = [RTCVideoRenderer newRenderViewWithFrame:CGRectMake(200, 100, 240, 180)];

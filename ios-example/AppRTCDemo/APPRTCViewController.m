@@ -37,6 +37,7 @@
 #import "RTCVideoRenderer.h"
 #import "VideoView.h"
 #import <QuartzCore/QuartzCore.h>
+#import <SecureFoundation/SecureFoundation.h>
 
 @interface APPRTCViewController ()
 
@@ -50,8 +51,14 @@
 @synthesize videoRenderer = _videoRenderer;
 @synthesize videoView = _videoView;
 
--(void)disconnectMenu {
-    NSLog(@"HERE");
+- (void)disconnectMenu:(UIButton*)button
+{
+     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Disconnect device?"
+     message:@"Do you want to disconnect from the android device?"
+     delegate:nil
+     cancelButtonTitle:@"No"
+     otherButtonTitles:@"Yes", nil];
+     [alert show];
 }
 
 - (void)viewDidLoad {
@@ -73,15 +80,18 @@
   if ([self connectedToInternet] == NO) {
       NSLog(@"NO INTERNET connection!");
   }
+    NSData* hostData = [IMSKeychain passwordDataForService:@"host" account:@"1"];
+    NSString * hostStr = [[NSString alloc] initWithData:hostData encoding:NSUTF8StringEncoding];
+    NSData* portData = [IMSKeychain passwordDataForService:@"port" account:@"1"];
+    NSString * portStr = [[NSString alloc] initWithData:portData encoding:NSUTF8StringEncoding];
     
     //** run directly
     NSString *url =
-        [NSString stringWithFormat:@"apprtc://192.168.1.3:8002/?r="];
+        [NSString stringWithFormat:@"apprtc://%@:%@/?r=", hostStr, portStr];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
     
     //** launch Video View
     [self setVideoCapturer];
-    
     //** add button
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [button addTarget:self action:@selector(disconnectMenu:) forControlEvents:UIControlEventTouchUpInside];
@@ -90,8 +100,10 @@
     CGFloat screenHeight = screenRect.size.height;
     [button setTitle:@"i" forState:UIControlStateNormal];
     NSLog(@"%f -- %f", screenWidth, screenHeight);
-    button.frame = CGRectMake(screenWidth - 20, screenHeight - 40, 20.0, 20.0);
+    button.frame = CGRectMake(screenWidth - 25, screenHeight - 45, 25.0, 25.0);
     [self.view addSubview:button];
+
+    
 }
 
 -(void)cancelNumberPad{
@@ -119,8 +131,13 @@
     
     //NSString *url =
     //    [NSString stringWithFormat:@"apprtc://apprtc.appspot.com/?r=%@", room];
+    NSData* hostData = [IMSKeychain passwordDataForService:@"host" account:@"1"];
+    NSString * hostStr = [[NSString alloc] initWithData:hostData encoding:NSUTF8StringEncoding];
+    NSData* portData = [IMSKeychain passwordDataForService:@"port" account:@"1"];
+    NSString * portStr = [[NSString alloc] initWithData:portData encoding:NSUTF8StringEncoding];
+    
     NSString *url =
-        [NSString stringWithFormat:@"apprtc://192.168.1.3:8002/?r=%@", room];
+        [NSString stringWithFormat:@"apprtc://%@:%@/?r=%@", hostStr, portStr, room];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
     
     //** launch Video View
@@ -262,7 +279,8 @@
     //----- START THE CAPTURE SESSION RUNNING -----
 	// ** GG 1/16/14 SVMP does not need video streamed from client to the server...
     //[self.captureSession startRunning];
-    
+         
+
 }
 #endif
 
