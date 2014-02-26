@@ -35,6 +35,7 @@
 		3E3EB82E18BE73FF00CB2739 /* APComplexPass_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E3EB82A18BE73FE00CB2739 /* APComplexPass_iPhone.storyboard */; };
 		3E3EB82F18BE73FF00CB2739 /* APQuestionPass_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E3EB82B18BE73FE00CB2739 /* APQuestionPass_iPad.storyboard */; };
 		3E3EB83018BE73FF00CB2739 /* APQuestionPass_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E3EB82C18BE73FF00CB2739 /* APQuestionPass_iPhone.storyboard */; };
+		3E3EB83418BE8F0F00CB2739 /* androidLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E3EB83318BE8F0F00CB2739 /* androidLogo.png */; };
 		3E7FC8DE18BCDB0D00101184 /* iMASMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */; };
 		3E7FC8E118BCDB0D00101184 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */; };
 		3E7FC8E218BCDB0D00101184 /* APViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8DC18BCDB0D00101184 /* APViewController.m */; };
@@ -233,6 +234,7 @@
 		3E3EB82A18BE73FE00CB2739 /* APComplexPass_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APComplexPass_iPhone.storyboard; sourceTree = "<group>"; };
 		3E3EB82B18BE73FE00CB2739 /* APQuestionPass_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APQuestionPass_iPad.storyboard; sourceTree = "<group>"; };
 		3E3EB82C18BE73FF00CB2739 /* APQuestionPass_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = APQuestionPass_iPhone.storyboard; sourceTree = "<group>"; };
+		3E3EB83318BE8F0F00CB2739 /* androidLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = androidLogo.png; sourceTree = "<group>"; };
 		3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SecureFoundation.xcodeproj; path = ../vendor/securefoundation/SecureFoundation.xcodeproj; sourceTree = "<group>"; };
 		3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMASMainViewController.m; sourceTree = "<group>"; };
 		3E7FC8D618BCDB0D00101184 /* iMASMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMASMainViewController.h; sourceTree = "<group>"; };
@@ -603,6 +605,7 @@
 		4FBCC0551728E929004C8C0B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				3E3EB83318BE8F0F00CB2739 /* androidLogo.png */,
 				4FBCC0561728E929004C8C0B /* AppRTCDemo-Info.plist */,
 				4FBCC05C1728E929004C8C0B /* AppRTCDemo-Prefix.pch */,
 				4FBCC0601728E929004C8C0B /* Default.png */,
@@ -757,6 +760,7 @@
 				3E3EB82E18BE73FF00CB2739 /* APComplexPass_iPhone.storyboard in Resources */,
 				3E3EB82F18BE73FF00CB2739 /* APQuestionPass_iPad.storyboard in Resources */,
 				3E3EB83018BE73FF00CB2739 /* APQuestionPass_iPhone.storyboard in Resources */,
+				3E3EB83418BE8F0F00CB2739 /* androidLogo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
