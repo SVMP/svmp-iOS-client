@@ -36,8 +36,6 @@
 		3E3EB82F18BE73FF00CB2739 /* APQuestionPass_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E3EB82B18BE73FE00CB2739 /* APQuestionPass_iPad.storyboard */; };
 		3E3EB83018BE73FF00CB2739 /* APQuestionPass_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E3EB82C18BE73FF00CB2739 /* APQuestionPass_iPhone.storyboard */; };
 		3E7FC8DE18BCDB0D00101184 /* iMASMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */; };
-		3E7FC8DF18BCDB0D00101184 /* iMASFlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8D718BCDB0D00101184 /* iMASFlipsideViewController.m */; };
-		3E7FC8E018BCDB0D00101184 /* iMASAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8D918BCDB0D00101184 /* iMASAppDelegate.m */; };
 		3E7FC8E118BCDB0D00101184 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */; };
 		3E7FC8E218BCDB0D00101184 /* APViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8DC18BCDB0D00101184 /* APViewController.m */; };
 		3E7FC8E718BCDB9300101184 /* libSecureFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E7FC8CC18BCD95B00101184 /* libSecureFoundation.a */; };
@@ -238,10 +236,6 @@
 		3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SecureFoundation.xcodeproj; path = ../vendor/securefoundation/SecureFoundation.xcodeproj; sourceTree = "<group>"; };
 		3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMASMainViewController.m; sourceTree = "<group>"; };
 		3E7FC8D618BCDB0D00101184 /* iMASMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMASMainViewController.h; sourceTree = "<group>"; };
-		3E7FC8D718BCDB0D00101184 /* iMASFlipsideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMASFlipsideViewController.m; sourceTree = "<group>"; };
-		3E7FC8D818BCDB0D00101184 /* iMASFlipsideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMASFlipsideViewController.h; sourceTree = "<group>"; };
-		3E7FC8D918BCDB0D00101184 /* iMASAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMASAppDelegate.m; sourceTree = "<group>"; };
-		3E7FC8DA18BCDB0D00101184 /* iMASAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMASAppDelegate.h; sourceTree = "<group>"; };
 		3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		3E7FC8DC18BCDB0D00101184 /* APViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APViewController.m; sourceTree = "<group>"; };
 		3E7FC8DD18BCDB0D00101184 /* APViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APViewController.h; sourceTree = "<group>"; };
@@ -584,10 +578,6 @@
 				3E3EB82218BE73DB00CB2739 /* APSimplePass_iPhone.storyboard */,
 				3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */,
 				3E7FC8D618BCDB0D00101184 /* iMASMainViewController.h */,
-				3E7FC8D718BCDB0D00101184 /* iMASFlipsideViewController.m */,
-				3E7FC8D818BCDB0D00101184 /* iMASFlipsideViewController.h */,
-				3E7FC8D918BCDB0D00101184 /* iMASAppDelegate.m */,
-				3E7FC8DA18BCDB0D00101184 /* iMASAppDelegate.h */,
 				3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */,
 				3E7FC8DC18BCDB0D00101184 /* APViewController.m */,
 				3E7FC8DD18BCDB0D00101184 /* APViewController.h */,
@@ -785,8 +775,6 @@
 				4FD7F5011732E1C2009295E5 /* APPRTCAppClient.m in Sources */,
 				FECDB9A3184E8080007C2286 /* Svmp.pb.m in Sources */,
 				3E7FC8DE18BCDB0D00101184 /* iMASMainViewController.m in Sources */,
-				3E7FC8DF18BCDB0D00101184 /* iMASFlipsideViewController.m in Sources */,
-				3E7FC8E018BCDB0D00101184 /* iMASAppDelegate.m in Sources */,
 				3E7FC8E218BCDB0D00101184 /* APViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
