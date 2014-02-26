@@ -23,7 +23,7 @@
 - (void)viewDidLoad
 {
     iMASAppDelegate *appDelegate = (iMASAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [appDelegate addMenu];
+//    [appDelegate addMenu];
 
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.

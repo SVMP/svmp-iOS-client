@@ -185,18 +185,39 @@
 
 #pragma mark - UIApplicationDelegate methods
 
+- (void) runNextWindow {
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.viewController =
+    [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
+                                           bundle:nil];
+
+    self.window.rootViewController = self.viewController;
+   // [self.window makeKeyAndVisible];
+}
+
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
   [RTCPeerConnectionFactory initializeSSL];
-    
+
     
   self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-  self.viewController =
+/*  self.viewController =
       [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
-                                             bundle:nil];
-  self.window.rootViewController = self.viewController;
-  [self.window makeKeyAndVisible];
+                                            bundle:nil];
+    
+  //UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard" bundle:[NSBundle mainBundle]];
+  //self.viewController = [storyboard instantiateInitialViewController];
+  //self.viewController = [storyboard instantiateViewControllerWithIdentifier:@"myId"];
+   self.window.rootViewController = self.viewController;
+  [self.window makeKeyAndVisible]; */
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+                                @"MainStoryboard" bundle:[NSBundle mainBundle]];
+    self.window.rootViewController = [storyboard instantiateInitialViewController];
+    
+    [self.window makeKeyAndVisible];
   [self displayLogMessage:@"*** HERE in didFinishLaunchingWithOptions !!!!!"];
   return YES;
 }
@@ -239,7 +260,7 @@
 
 - (void)displayLogMessage:(NSString *)message {
   NSLog(@"%@", message);
-  [self.viewController displayText:message];
+ // [self.viewController displayText:message];
 }
 
 #pragma mark - RTCSendMessage method

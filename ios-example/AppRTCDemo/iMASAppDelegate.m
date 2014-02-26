@@ -9,7 +9,7 @@
 #import "iMASAppDelegate.h"
 #import "APViewController.h"
 #import "iMASMainViewController.h"
-
+#import "APPRTCAppDelegate.h"
 
 @implementation iMASAppDelegate
 
@@ -25,6 +25,21 @@
     apc.delegate = self;
     self.window.rootViewController = apc; //navController;
     [self.window makeKeyAndVisible];
+    
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+  
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:
+     @"MainStoryboard" bundle:[NSBundle mainBundle]];
+    self.window.rootViewController = [storyboard instantiateInitialViewController];
+    
+    [self.window makeKeyAndVisible];
+    /*
+    iMASMainViewController *mv = [[iMASMainViewController alloc] init];
+    self.window.rootViewController = mv;
+    [self.window makeKeyAndVisible];*/
+    
 #if 0
     [[[UIAlertView alloc]
       initWithTitle:@"Welcome"
@@ -47,12 +62,18 @@
 }
 
 
+- (void)callNewDelegate
+{
+    APPRTCAppDelegate* apprtc = [[APPRTCAppDelegate alloc] init];
+    [apprtc application:_app didFinishLaunchingWithOptions:nil];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
     //iMASMainViewController *controller = (iMASMainViewController *)self.window.rootViewController;
     //controller.managedObjectContext = self.managedObjectContext;
-    
+    _app = application;
     [self performLaunchSteps];
     
     return YES;

@@ -534,7 +534,6 @@
 				2945DB3417C21D60004BEFD1 /* libsqlite3.dylib */,
 				2945DB3217C21D25004BEFD1 /* libstdc++.dylib */,
 				4FBCC0541728E929004C8C0B /* AppRTCDemo */,
-				4FBCC04D1728E929004C8C0B /* Frameworks */,
 				4F1CC122172F52E50090479F /* libs */,
 				4FBCC04C1728E929004C8C0B /* Products */,
 			);
@@ -562,6 +561,7 @@
 				4FBCC04E1728E929004C8C0B /* UIKit.framework */,
 			);
 			name = Frameworks;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		4FBCC0541728E929004C8C0B /* AppRTCDemo */ = {
@@ -604,6 +604,7 @@
 				4FEE3EB61746A3810005814A /* Icon.png */,
 				4FEE3E511743C92D0005814A /* ios_channel.html */,
 				4FBCC05A1728E929004C8C0B /* main.m */,
+				4FBCC04D1728E929004C8C0B /* Frameworks */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

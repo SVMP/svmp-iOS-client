@@ -50,6 +50,10 @@
 @synthesize videoRenderer = _videoRenderer;
 @synthesize videoView = _videoView;
 
+-(void)disconnectMenu {
+    NSLog(@"HERE");
+}
+
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.textField.delegate = self;
@@ -80,8 +84,7 @@
     
     //** add button
     UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    // [button addTarget:self action:@selector(aMethod:)
-    //forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(disconnectMenu:) forControlEvents:UIControlEventTouchUpInside];
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;

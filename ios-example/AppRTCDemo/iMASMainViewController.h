@@ -7,6 +7,7 @@
 //
 
 #import "iMASFlipsideViewController.h"
+#import "APPRTCViewController.h"
 
 #import <CoreData/CoreData.h>
 
@@ -19,6 +20,8 @@
 @property (strong, nonatomic) IBOutlet UITextField *userNameText;
 @property (strong, nonatomic) IBOutlet UITextField *passwordText;
 @property (strong, nonatomic) IBOutlet UIButton *connectButton;
+@property(strong,nonatomic)APPRTCViewController *secondViewController;
+- (IBAction)connectTouched:(id)sender;
 
 
 @property (strong, nonatomic) IBOutlet UIPickerView *encryptionPicker;

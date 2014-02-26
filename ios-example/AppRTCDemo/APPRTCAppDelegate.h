@@ -65,5 +65,6 @@
 @property (nonatomic, strong)  RTCVideoTrack *localVideoTrack;
 
 - (void) setCandidate:(NSDictionary *)objects;
+- (void) runNextWindow;
 
 @end
