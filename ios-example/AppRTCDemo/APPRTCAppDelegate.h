@@ -66,5 +66,7 @@
 
 - (void) setCandidate:(NSDictionary *)objects;
 - (void) runNextWindow;
+- (void)loadRTCView;
+
 
 @end

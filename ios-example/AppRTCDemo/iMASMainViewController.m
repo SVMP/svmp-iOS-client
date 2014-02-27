@@ -153,11 +153,16 @@
     [IMSKeychain setSecurePassword:[NSString stringWithFormat:@"%d", row] forService:@"enc" account:@"1"];
     row = [self.encryptionPicker selectedRowInComponent:1];
     [IMSKeychain setSecurePassword:[NSString stringWithFormat:@"%d", row] forService:@"auth" account:@"1"];
-    self.secondViewController =
-    [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
-                                           bundle:nil];
-    [self presentViewController:self.secondViewController animated:YES completion:nil];
+   // self.secondViewController =
+   // [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
+   //                                        bundle:nil];
+   // [self presentViewController:self.secondViewController animated:NO completion:nil];
+//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    
+  //  [self presentViewController: [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
+  //                                                                      bundle:nil] animated:NO completion:nil];
+       [UIApplication sharedApplication];
+        APPRTCAppDelegate *appDelegate = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
+       [appDelegate loadRTCView];
 }
 @end

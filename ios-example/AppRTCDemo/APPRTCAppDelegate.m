@@ -206,16 +206,23 @@
     [self.window makeKeyAndVisible];
 }
 
+- (void)loadRTCView {
+    NSLog(@"Loading RTC");
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.viewController = [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController" bundle:nil];
+    self.window.rootViewController = self.viewController;
+    [self.window makeKeyAndVisible];
+}
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
   [RTCPeerConnectionFactory initializeSSL];
-
-    
     
   self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+
+     // [self presentViewController:self.secondViewController animated:NO completion:nil];
+     //    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   APViewController *apc = [[APViewController alloc] init];
   apc.delegate = self;
   self.window.rootViewController = apc; //navController;
