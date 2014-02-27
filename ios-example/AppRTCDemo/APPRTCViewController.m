@@ -45,6 +45,10 @@
 
 @implementation APPRTCViewController
 
+BOOL isShowingLandscapeView = NO;
+UIButton *button;
+
+
 @synthesize textField = _textField;
 @synthesize textInstructions = _textInstructions;
 @synthesize textOutput = _textOutput;
@@ -68,8 +72,21 @@
         [UIApplication sharedApplication];
         APPRTCAppDelegate *appDelegate = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate onClose];
-        
-     //   [appDelegate loadFormView];
+    }
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+
+    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+        button.frame = CGRectMake(screenHeight - 22, screenWidth - 42, 22.0, 22.0);
+    } else if (toInterfaceOrientation == UIInterfaceOrientationPortrait ||
+               toInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown) {
+        button.frame = CGRectMake(screenWidth - 22, screenHeight - 42, 22.0, 22.0);
     }
 }
 
@@ -104,14 +121,14 @@
     
     //** launch Video View
     [self setVideoCapturer];
+    
     //** add button
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [button addTarget:self action:@selector(disconnectMenu:) forControlEvents:UIControlEventTouchUpInside];
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     [button setTitle:@"i" forState:UIControlStateNormal];
-    NSLog(@"%f -- %f", screenWidth, screenHeight);
     button.frame = CGRectMake(screenWidth - 22, screenHeight - 42, 22.0, 22.0);
     [self.view addSubview:button];
 

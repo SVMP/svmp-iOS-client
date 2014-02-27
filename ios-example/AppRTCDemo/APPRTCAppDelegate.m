@@ -536,10 +536,9 @@
 
 - (void)onClose {
   [self displayLogMessage:@"GAE onClose."];
-  [self disconnect];
-  [NSThread sleepForTimeInterval:3];
-    
-  [self loadFormView];
+  [self disconnect];    
+  // [self loadFormView];
+    exit(0);
 }
 
 int cnt = 0;
