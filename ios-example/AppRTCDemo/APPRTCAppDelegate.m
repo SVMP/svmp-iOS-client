@@ -539,7 +539,8 @@
   [self disconnect];
   [NSThread sleepForTimeInterval:3];
     
-  [self loadFormView];
+  // [self loadFormView];
+    exit(0);
 }
 
 int cnt = 0;
