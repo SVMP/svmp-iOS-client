@@ -58,5 +58,6 @@
 - (void)disconnectMenu;
 - (void)displayText:(NSString *)text;
 - (void)resetUI;
+- (void)onClose;
 
 @end

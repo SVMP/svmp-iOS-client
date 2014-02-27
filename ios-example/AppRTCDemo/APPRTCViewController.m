@@ -65,6 +65,10 @@
 {
     if (buttonIndex == 1)
     {
+        [UIApplication sharedApplication];
+        APPRTCAppDelegate *appDelegate = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate onClose];
+        
         exit(0);
     }
 }
