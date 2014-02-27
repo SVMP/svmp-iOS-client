@@ -186,6 +186,7 @@
 
 #pragma mark - UIApplicationDelegate methods
 
+/*
 - (void) runNextWindow {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.viewController =
@@ -195,10 +196,13 @@
     self.window.rootViewController = self.viewController;
    // [self.window makeKeyAndVisible];
 }
-
+*/
 - (void)validUserAccess:(APViewController *)controller {
     NSLog(@"validUserAccess - Delegate");
-    
+    [self loadFormView];
+}
+
+- (void)loadFormView {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     id contID = [storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
     
@@ -533,6 +537,9 @@
 - (void)onClose {
   [self displayLogMessage:@"GAE onClose."];
   [self disconnect];
+  [NSThread sleepForTimeInterval:3];
+    
+  [self loadFormView];
 }
 
 int cnt = 0;

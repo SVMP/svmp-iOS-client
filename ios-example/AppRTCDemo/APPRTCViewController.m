@@ -69,7 +69,7 @@
         APPRTCAppDelegate *appDelegate = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
         [appDelegate onClose];
         
-        exit(0);
+     //   [appDelegate loadFormView];
     }
 }
 
