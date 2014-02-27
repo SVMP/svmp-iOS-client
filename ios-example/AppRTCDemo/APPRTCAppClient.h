@@ -62,7 +62,7 @@
 @property (strong, retain) NSData *inputBuffer;
 
 
-- (void)connectToRoom:(NSURL *)room;
+- (void)sendAuthPacket;
 - (void)sendData:(NSData *)data;
 - (void)sendSVMPMessage:(Request *) request;
 

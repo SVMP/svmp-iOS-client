@@ -85,6 +85,8 @@ int cnt;
     _sendQueue = [NSMutableArray array];
     // Uncomment to see Request/Response logging.
     _verboseLogging = YES;
+    
+   //** open socket to SVMP proxy server
    [self initSVMPCommunication];
    cnt = 0;
       
@@ -95,20 +97,11 @@ int cnt;
 
 #pragma mark - Public methods
 
-//*****************
-//*****************
-- (void)connectToRoom:(NSURL *)url {
-  //NSURLRequest *request = [self getRequestFromUrl:url];
-  //[NSURLConnection connectionWithRequest:request delegate:self];
-
-  //** connect to SVMP server
-  [self sendAuthPacket];
-}
 
 //*****************
 //*****************
 - (void)sendData:(NSData *)data {
-    NSLog(@"*** HERE in sendData 000");
+    // NSLog(@"*** HERE in sendData 000");
     
     
     //** SVMP wrap
@@ -123,20 +116,9 @@ int cnt;
     [rBuild setType:Request_RequestTypeWebrtc];
     [rBuild setWebrtcMsg:rtcmsg];
     Request *request = [rBuild build];
-    //NSData  *rdata = [request data];
-
-    /*
-    WebRTCMessage.Builder rtcmsg = WebRTCMessage.newBuilder();
-    rtcmsg.setJson(msg);
-    
-    sendMessage(Request.newBuilder()
-                .setType(RequestType.WEBRTC)
-                .setWebrtcMsg(rtcmsg)
-                .build());
-    */
     
   @synchronized(self) {
-    [self maybeLogMessage:@"Send message - Add to sendQ"];
+    //[self maybeLogMessage:@"Send message - Add to sendQ"];
     [self.sendQueue addObject:request];
   }
   [self requestQueueDrainInBackground];
@@ -204,24 +186,14 @@ int cnt;
 //*****************
 //*****************
 - (void)requestQueueDrainInBackground {
-  NSLog(@"*** HERE in requestQueueDrainInBackground");
+  //NSLog(@"*** HERE in requestQueueDrainInBackground");
   dispatch_async(self.backgroundQueue, ^(void) {
-    // TODO(hughv): This can block the UI thread.  Fix.
     @synchronized(self) {
-      NSLog(@"*** HERE in SYNC of requestQueueDrainInBackground");
+      NSLog(@"*** Sending Message to SVMP proxy");
         
-      /*if ([self.postMessageUrl length] < 1) {
-        return;
-      }*/
-
       Request *req;
       for (req in self.sendQueue) {
           [self sendSVMPMessage:req];
-       /*NSString *url = [NSString stringWithFormat:@"%@/%@",
-                         self.baseURL,
-                         self.postMessageUrl];
-        [self sendData:data withUrl:url]; 
-       */
       }
       
 
@@ -280,50 +252,17 @@ int cnt;
 - (void)updateICEServers:(NSMutableArray *)ICEServers
           withTurnServer:(NSString *)turnServerUrl {
     
-  if ([turnServerUrl length] < 1) {
-    [self.ICEServerDelegate onICEServers:ICEServers];
-    return;
-  }
-
-  dispatch_async(self.backgroundQueue, ^(void) {
-
-/* SVMP turn off this send, we already have the turnserver
-     NSMutableURLRequest *request = [NSMutableURLRequest
-        requestWithURL:[NSURL URLWithString:turnServerUrl]];
-    [request addValue:@"Mozilla/5.0" forHTTPHeaderField:@"user-agent"];
-    [request addValue:@"https://apprtc.appspot.com"
-        forHTTPHeaderField:@"origin"];
-    NSURLResponse *response;
-    NSError *error;
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:request
-                                                 returningResponse:&response
-                                                             error:&error];
-    if (!error) {
-      NSDictionary *json = [NSJSONSerialization JSONObjectWithData:responseData
-                                                           options:0
-                                                             error:&error];
-      NSAssert(!error, @"Unable to parse.  %@", error.localizedDescription);
-      NSString *username = json[@"username"];
-      NSString *password = json[@"password"];
-      NSArray* uris = json[@"uris"];
-      for (int i = 0; i < [uris count]; ++i) {
-        NSString *turnServer = [uris objectAtIndex:i];
-        RTCICEServer *ICEServer =
-          [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:turnServer]
-                                   username:username
-                                   password:password];
-        NSLog(@"Added ICE Server: %@", ICEServer);
-        [ICEServers addObject:ICEServer];
-      }
-    } else {
-      NSLog(@"Unable to get TURN server.  Error: %@", error.description);
+    NSLog(@"SEQ9-Launching background ICEServers");
+    if ([turnServerUrl length] < 1) {
+        [self.ICEServerDelegate onICEServers:ICEServers];
+        return;
     }
- */
 
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-      [self.ICEServerDelegate onICEServers:ICEServers];
+    dispatch_async(self.backgroundQueue, ^(void) {
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            [self.ICEServerDelegate onICEServers:ICEServers];
+        });
     });
-  });
 }
 
 #pragma mark - NSURLConnectionDataDelegate methods
@@ -372,6 +311,7 @@ int cnt;
 //**
 //**
 
+#if 0
 //*****************
 //*****************
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
@@ -462,6 +402,7 @@ int cnt;
       [[GAEChannelClient alloc] initWithToken:self.token
                                      delegate:self.messageHandler];
 }
+#endif
 
 
 //*****************
@@ -469,30 +410,8 @@ int cnt;
 - (void)processSVMPVideoParams:(Response *)resp {
     //** processing room params
     
-    NSLog(@"vid params: %@", [resp videoInfo]);
+    NSLog(@"SVMP server vid params: %@", [resp videoInfo]);
 
-/*
-    NSString *fullUrl = [[[connection originalRequest] URL] absoluteString];
-    NSRange queryRange = [fullUrl rangeOfString:@"?"];
-    self.baseURL = [fullUrl substringToIndex:queryRange.location];
-    [self maybeLogMessage:
-     [NSString stringWithFormat:@"Base URL: %@", self.baseURL]];
-    
-    self.token = [self findVar:@"channelToken" strippingQuotes:YES];
-    if (!self.token)
-        return;
-    [self maybeLogMessage:[NSString stringWithFormat:@"Token: %@", self.token]];
-    
-    NSString* roomKey = [self findVar:@"roomKey" strippingQuotes:YES];
-    NSString* me = [self findVar:@"me" strippingQuotes:YES];
-    if (!roomKey || !me)
-        return;
-    self.postMessageUrl =
-    [NSString stringWithFormat:@"/message?r=%@&u=%@", roomKey, me];
-    [self maybeLogMessage:[NSString stringWithFormat:@"POST message URL: %@",
-                           self.postMessageUrl]];
-*/
-    
     //** pcConfig
     NSString* pcConfig = [[resp videoInfo] pcConstraints]; //[self findVar:@"pcConfig" strippingQuotes:NO];
     if (!pcConfig)
@@ -539,20 +458,17 @@ int cnt;
         [[RTCICEServer alloc] initWithURI:[NSURL URLWithString:url]
                                  username:username
                                  password:credential];
-        NSLog(@"Added ICE Server: %@", ICEServer);
+        NSLog(@"SEQ8-Added ICE Server: %@", ICEServer);
         [ICEServers addObject:ICEServer];
     }
     [self updateICEServers:ICEServers withTurnServer:turnServerUrl];
     
-    [self maybeLogMessage:
-     [NSString stringWithFormat:@"About to open GAE with token:  %@",  self.token]];
-    
-    self.gaeChannel =
-    [[GAEChannelClient alloc] initWithToken:self.token
-                                   delegate:self.messageHandler];
-    
-    //** create offer
-    // [(APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate] onOpen];
+    //** GG this code no longer does anything of value
+    //[self maybeLogMessage:
+    // [NSString stringWithFormat:@"SEQ10-About to open GAE with token:  %@",  self.token]];
+    //self.gaeChannel =
+    //[[GAEChannelClient alloc] initWithToken:self.token
+    //                               delegate:self.messageHandler];
 }
 
 
@@ -564,6 +480,7 @@ int cnt;
 //**
 - (void) initSVMPCommunication {
 	
+    NSLog(@"SEQ5-Connecting socket to SVMP proxy server");
 	CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
     
@@ -596,8 +513,10 @@ int cnt;
 }
 
 
-//** connect to room
+
 - (void)sendAuthPacket {
+    
+    NSLog(@"SEQ6-Sending SVMP Auth Packet");
     
     AuthRequest_Builder* authData = [AuthRequest builder];
     [authData setType:AuthRequest_AuthRequestTypeAuthentication];
@@ -628,7 +547,7 @@ int cnt;
 
 - (void) writeLenToStream:(PBCodedOutputStream *)os length:(uint16_t)len {
 
-    NSLog(@"length: %d", len);
+    //NSLog(@"length: %d", len);
     //** break up lenght into two bytes to be added to front of packet, since Java does not deal well with unsigned numbers, need to encode
     //** data into bytes this way.  Took many hours to figure out this byte stuffing technique
     uint8_t h = (len >>7) & 0xff;
@@ -636,7 +555,7 @@ int cnt;
     //** hack!
     if (len < 860 && len > 840)
       l |= 0x80;
-    NSLog(@"h:%02X l:%02X", h,l);
+    //NSLog(@"h:%02X l:%02X", h,l);
     
     //** prepend it to message, such that Request.parseDelimitedFrom(in) can parse it properly
     [os writeRawByte:l];
@@ -652,7 +571,7 @@ int cnt;
 }
 
 
-/*
+#if 0
 - (uint16_t) readLenFromInt:(int)input {
     
     NSLog(@"length: %d", input);
@@ -672,38 +591,18 @@ int cnt;
     }
 
 }
-*/
+#endif
 
 - (void)sendSVMPMessage:(Request *) request {
 
 
     //** get length
     NSData* n = [request data];
-    NSLog(@"sendSVMPMessage type:%u", [request type]);
-    NSLog(@"sendSVMPMessage Request:%@", request);
+    //NSLog(@"sendSVMPMessage type:%u", [request type]);
+    //NSLog(@"sendSVMPMessage Request:%@", request);
     
-/*
-    uint16_t len = [n length];
-    
-    NSLog(@"length: %d", len);
-    //** break up lenght into two bytes to be added to front of packet, since Java does not deal well with unsigned numbers, need to encode
-    //** data into bytes this way.  Took many hours to figure out this byte stuffing technique
-    uint8_t h = (len >>7) & 0xff;
-    uint8_t l = (len & 0xff);
-    NSLog(@"h:%02X l:%02X", h,l);
-*/
- 
     PBCodedOutputStream* os = [PBCodedOutputStream streamWithOutputStream:outputStream];
     
-/*    //** prepend it to message, such that Request.parseDelimitedFrom(in) can parse it properly
-    [os writeRawByte:l];
-    if (len > 127) {
-        //** java side expects the packet to be led with a 32 bit length number
-        [os writeRawByte:h];
-        //[os writeRawByte:0xff];
-        //[os writeRawByte:0];
-    }
- */
     [self writeLenToStream:os length:[n length]];
     [request writeToCodedOutputStream:os];
     [os flush];
@@ -722,7 +621,7 @@ int cnt;
 			
 		case NSStreamEventOpenCompleted:
 		{
-            NSLog(@"Stream opened");
+            //NSLog(@"Stream opened");
 			break;
 		}
         case NSStreamEventHasBytesAvailable:
@@ -740,7 +639,7 @@ int cnt;
 					if (len > 0) {
                         //** get length of recieved buffer
                         int plen = buffer[0];
-                        NSLog(@"len: %i %i", len, plen);
+                        //NSLog(@"len: %i %i", len, plen);
                         int offset = 1;
                         if (len - plen > 1) {
                             offset = 2;
@@ -751,7 +650,7 @@ int cnt;
                         //** copy into object and keep a handle to it.
                         inputBuffer = [NSData dataWithBytes:(buffer + offset) length:len];
                         int t = [inputBuffer length];
-                        NSLog(@"input buffer len: %d", t);
+                        //NSLog(@"input buffer len: %d", t);
                         //NSData *dataData = [NSData dataWithBytes:buffer length:sizeof(buffer)];
                        // NSLog(@"buf ...%@...", dataData);
                          //NSString *str = [[NSString alloc] initWithData:inputBuffer encoding:NSUTF8StringEncoding];
@@ -765,7 +664,7 @@ int cnt;
         }
 		case NSStreamEventHasSpaceAvailable:
         {
-			NSLog(@"NSStreamEventHasSpaceAvailable");
+			//NSLog(@"NSStreamEventHasSpaceAvailable");
             //[outputStream write:0 maxLength:1]; //[msg length]];
             //NSString *response  = [NSString stringWithFormat:@"foobar"];
             //NSData *data = [[NSData alloc] initWithData:[response dataUsingEncoding:NSASCIIStringEncoding]];
@@ -792,15 +691,12 @@ int cnt;
     
 }
 
-//int cnt = 0;
 //*****************
 //*****************
 //**
 //**
 - (void) messageReceived:(NSData *)data length:(int) len {
-//- (void) messageReceived:(PBCodedInputStream*) input {
     
-    //Response *resp = [Request parseFromCodedInputStream:input];
     Response *resp;
     @try
     {
@@ -808,7 +704,6 @@ int cnt;
     }
     @catch(NSException* ex)
     {
-        NSLog(@"Error parsing incoming MSG, likely a GAE candidate");
         //NSLog(@"Bug captured data:%@", data);
         //NSString *message = [[resp webrtcMsg] json];
         //NSLog(@"Your msg - %@", message);
@@ -820,7 +715,12 @@ int cnt;
         NSError *error = nil;
         NSData *jsonBuf;
         NSDictionary *objects;
-        NSLog(@"Data len: %d", [data length]);
+        //NSLog(@"Data len: %d", [data length]);
+        if ([data length] < 100 )
+            NSLog(@"Error parsing incoming MSG, likely Android VM needs restart");
+        else
+           NSLog(@"Trapping err on incoming MSG, likely a GAE candidate");
+            
         for (int i = 0; i < [data length]; i++)
         {
             if ( (unsigned char)bytes[i] == '{' && start == 0 ) {
@@ -846,14 +746,13 @@ int cnt;
                 continue;
             }
         }
-        NSLog(@"END exception handle");
         
         //**
         return;
     }
 
     Response_ResponseType rt = [resp type];
-    NSLog(@"resp type: %u", rt);
+    //NSLog(@"resp type: %u", rt);
     
     if ( rt ==  Response_ResponseTypeAuth )
     {
@@ -883,37 +782,20 @@ int cnt;
         NSLog(@"Response_ResponseTypeVmready  - VM READY!!");
         
         //** advance state machine
-        NSLog(@"Querying for webrtc channel info");
+        NSLog(@"SEQ7-Querying for webrtc channel info");
         
         Request_Builder* rBuild = [Request builder];
         [rBuild setType:Request_RequestTypeVideoParams];
         
         Request* request = [rBuild build];
         [self sendSVMPMessage:request];
-/*
-        toastMe( "Querying for webrtc channel info" );
-        
-        // send video info request
-        Request.Builder req = Request.newBuilder();
-        req.setType(RequestType.VIDEO_PARAMS);
-        req.build().writeDelimitedTo(socketOut);
-*/
     }
     else if ( rt == Response_ResponseTypeVidstreaminfo ) { // || [resp videoInfo] ) {
         NSLog(@"Response_ResponseTypeVidstreaminfo  - VIDEO params!!");
         
-        NSLog(@"vid params: %@", [resp videoInfo]);
+        //** DEBUG NSLog(@"vid params: %@", [resp videoInfo]);
         //if (++cnt < 2)
         [self processSVMPVideoParams:resp];
-        
-/*
-        // get video info response
-        Response resp = Response.parseDelimitedFrom(socketIn);
-        
-        // parse it and populate a SignalingParams
-        if (resp.getType() == ResponseType.VIDSTREAMINFO || resp.hasVideoInfo())
-            return getParametersForRoom(resp.getVideoInfo());
-*/
     }
     else if ( rt == Response_ResponseTypeWebrtc || rt == Response_ResponseTypeVideostop ) {
         NSLog(@"Response_ResponseTypeWebrtc  - WEBRTC!!");

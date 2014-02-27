@@ -50,7 +50,7 @@
 
 - (id)initWithToken:(NSString *)token delegate:(id<GAEMessageHandler>)delegate {
   self = [super init];
-  NSLog(@"*** HERE IN initWithToken");
+  NSLog(@"SEQ11-GAEChannelClient ... HERE IN initWithToken");
 
   if (self) {
     _webView = [[UIWebView alloc] init];

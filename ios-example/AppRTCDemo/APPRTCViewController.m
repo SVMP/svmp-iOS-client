@@ -90,21 +90,13 @@ UIButton *button;
   [super viewDidLoad];
     
     if ([self connectedToInternet] == NO) {
-        NSLog(@"NO INTERNET connection!");
+        NSLog(@"*** NO INTERNET connection found!");
     }
 
-    
-    //** get the host and port data from the iMAS keychain
-    NSData* hostData = [IMSKeychain securePasswordDataForService:@"host" account:@"1"];
-    NSString * hostStr = [[NSString alloc] initWithData:hostData encoding:NSUTF8StringEncoding];
-    NSData* portData = [IMSKeychain securePasswordDataForService:@"port" account:@"1"];
-    NSString * portStr = [[NSString alloc] initWithData:portData encoding:NSUTF8StringEncoding];
-    
-    //** connect to SVMP proxy server
-    NSString *url =
-        [NSString stringWithFormat:@"apprtc://%@:%@/?r=", hostStr, portStr];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-    
+
+    APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [ad launchSvmpAppClient];
+
     //** Add video view to this view
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-80);
     _videoView = [[VideoView alloc] initWithFrame:frame];
@@ -123,6 +115,9 @@ UIButton *button;
     
 }
 
+- (void) videoReady {
+    [_videoView cancelLoadingAndInitTouch];
+}
 
 - (BOOL) connectedToInternet
 {

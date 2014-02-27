@@ -45,6 +45,7 @@
 - (void)sendData:(NSData *)data;
 // Logging helper.
 - (void)displayLogMessage:(NSString *)message;
+- (void)videoStart;
 
 @end
 
@@ -64,9 +65,10 @@
 @property (strong, nonatomic) APPRTCAppClient *client;
 @property (nonatomic, strong)  RTCVideoTrack *localVideoTrack;
 
+- (BOOL) launchSvmpAppClient;
 - (void) setCandidate:(NSDictionary *)objects;
 - (void) runNextWindow;
-- (void)loadRTCView;
+- (void) loadRTCView;
 - (void) loadFormView;
 
 

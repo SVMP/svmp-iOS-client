@@ -51,4 +51,6 @@
 @property (weak, nonatomic) RTCVideoRenderer *videoRenderer;
 @property (strong, nonatomic) VideoView *videoView;
 
+- (void) videoReady;
+
 @end

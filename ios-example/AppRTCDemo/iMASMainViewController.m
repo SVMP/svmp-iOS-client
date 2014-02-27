@@ -143,6 +143,8 @@
 }
 
 - (IBAction)connectTouched:(id)sender {
+
+    //** Connect buttom pressed, auto save form fields to secure keychain
     NSInteger row;
     [IMSKeychain setSecurePassword:self.hostText.text forService:@"host" account:@"1"];
     [IMSKeychain setSecurePassword:self.portText.text forService:@"port" account:@"1"];
@@ -153,16 +155,11 @@
     [IMSKeychain setSecurePassword:[NSString stringWithFormat:@"%d", row] forService:@"enc" account:@"1"];
     row = [self.encryptionPicker selectedRowInComponent:1];
     [IMSKeychain setSecurePassword:[NSString stringWithFormat:@"%d", row] forService:@"auth" account:@"1"];
-   // self.secondViewController =
-   // [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
-   //                                        bundle:nil];
-   // [self presentViewController:self.secondViewController animated:NO completion:nil];
-//    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
-  //  [self presentViewController: [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
-  //                                                                      bundle:nil] animated:NO completion:nil];
-       [UIApplication sharedApplication];
-        APPRTCAppDelegate *appDelegate = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
-       [appDelegate loadRTCView];
+    
+    //** bring up App RTC view
+    NSLog(@"SEQ3-Connect button pressed ...");
+    [UIApplication sharedApplication];
+    APPRTCAppDelegate *appDelegate = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate loadRTCView];
 }
 @end

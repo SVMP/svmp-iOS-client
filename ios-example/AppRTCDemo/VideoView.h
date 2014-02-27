@@ -23,6 +23,7 @@
 - (void)renderVideoTrackInterface:(RTCVideoTrack *)track;
 - (void)setVideoOrientation:(UIInterfaceOrientation)videoOrientation;
 - (BOOL)handleScreenInfoResponse:(Response *) msg;
+- (void)cancelLoadingAndInitTouch;
 
 - (void)pause:(id)sender;
 - (void)resume:(id)sender;

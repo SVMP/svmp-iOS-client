@@ -70,93 +70,104 @@
 
 
 - (id)initWithDelegate:(id<APPRTCSendMessage>)delegate {
-  if (self = [super init]) {
-    _delegate = delegate;
-  }
-  return self;
+   NSLog(@"SEQ11- *** PeerObserver (PCO) init");
+
+    if (self = [super init]) {
+      _delegate = delegate;
+   }
+   return self;
 }
 
 - (void)peerConnectionOnError:(RTCPeerConnection *)peerConnection {
-  NSLog(@"PCO onError.");
-  NSAssert(NO, @"PeerConnection failed.");
+    NSLog(@"PCO onError.");
+    NSAssert(NO, @"PeerConnection failed.");
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection
     signalingStateChanged:(RTCSignalingState)stateChanged {
-  NSLog(@"PCO onSignalingStateChange: %d", stateChanged);
+    NSLog(@"PCO onSignalingStateChange: %d", stateChanged);
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection
              addedStream:(RTCMediaStream *)stream {
-  NSLog(@"PCO onAddStream.");
-  dispatch_async(dispatch_get_main_queue(), ^(void) {
-    //** SVMP does not provide audio ...
-    //NSAssert([stream.audioTracks count] >= 1,
-    //         @"Expected at least 1 audio stream");
+    NSLog(@"PCO onAddStream.");
+    dispatch_async(dispatch_get_main_queue(), ^(void) {
+        //** SVMP does not provide audio ...
+        //NSAssert([stream.audioTracks count] >= 1,
+        //         @"Expected at least 1 audio stream");
 
-    NSAssert([stream.videoTracks count] >= 1,
-             @"Expected at least 1 video stream");
+        NSAssert([stream.videoTracks count] >= 1,
+                 @"Expected at least 1 video stream");
       
-    if ([stream.videoTracks count] > 0) {
-        [[self videoView] renderVideoTrackInterface:[stream.videoTracks objectAtIndex:0]];
-        //[[self delegate] whiteboardConnection:self renderRemoteVideo:[stream.videoTracks objectAtIndex:0]];
-    }
-  });
+        if ([stream.videoTracks count] > 0) {
+            [[self videoView] renderVideoTrackInterface:[stream.videoTracks objectAtIndex:0]];
+        }
+    });
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection
          removedStream:(RTCMediaStream *)stream {
-  NSLog(@"PCO onRemoveStream.");
+    NSLog(@"PCO onRemoveStream.");
     [stream removeVideoTrack:[stream.videoTracks objectAtIndex:0]];
 }
 
 - (void)
     peerConnectionOnRenegotiationNeeded:(RTCPeerConnection *)peerConnection {
-  NSLog(@"PCO onRenegotiationNeeded.");
-  // TODO(hughv): Handle this.
+    NSLog(@"PCO onRenegotiationNeeded.");
+    // TODO(hughv): Handle this.
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection
        gotICECandidate:(RTCICECandidate *)candidate {
-  NSLog(@"PCO onICECandidate.\n  Mid[%@] Index[%d] Sdp[%@]",
-        candidate.sdpMid,
-        candidate.sdpMLineIndex,
-        candidate.sdp);
-  NSDictionary *json =
-      @{ @"type" : @"candidate",
-         
-         //3.46 change label to sdpMLineIndex @"label" : [NSNumber numberWithInt:candidate.sdpMLineIndex],
-         @"sdpMLineIndex" : [NSNumber numberWithInt:candidate.sdpMLineIndex],
-         
-         //3.46 change ID to sdpMid ... @"id" : candidate.sdpMid,
-         @"sdpMid" : candidate.sdpMid,
-         @"candidate" : candidate.sdp };
-  NSError *error;
-  NSData *data =
-      [NSJSONSerialization dataWithJSONObject:json options:0 error:&error];
-  if (!error) {
-    [_delegate sendData:data];
-  } else {
-    NSAssert(NO, @"Unable to serialize JSON object with error: %@",
-             error.localizedDescription);
-  }
+ 
+    NSLog(@"PCO onICECandidate.\n  Mid[%@] Index[%d] Sdp[%@]",
+          candidate.sdpMid,
+          candidate.sdpMLineIndex,
+          candidate.sdp);
+    NSDictionary *json =
+        @{ @"type" : @"candidate",
+           //3.46 change label to sdpMLineIndex @"label" : [NSNumber numberWithInt:candidate.sdpMLineIndex],
+           @"sdpMLineIndex" : [NSNumber numberWithInt:candidate.sdpMLineIndex],
+           //3.46 change ID to sdpMid ... @"id" : candidate.sdpMid,
+           @"sdpMid" : candidate.sdpMid,
+           @"candidate" : candidate.sdp };
+
+        NSError *error;
+    NSData *data =
+        [NSJSONSerialization dataWithJSONObject:json options:0 error:&error];
+    if (!error) {
+        [_delegate sendData:data];
+    } else {
+        NSAssert(NO, @"Unable to serialize JSON object with error: %@",
+                 error.localizedDescription);
+    }
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection
-    iceGatheringChanged:(RTCICEGatheringState)newState {
-  NSLog(@"PCO onIceGatheringChange. %d", newState);
+        iceGatheringChanged:(RTCICEGatheringState)newState {
+ 
+    NSLog(@"PCO onIceGatheringChange. %d", newState);
 }
 
 - (void)peerConnection:(RTCPeerConnection *)peerConnection
     iceConnectionChanged:(RTCICEConnectionState)newState {
-  NSLog(@"PCO onIceConnectionChange. %d", newState);
-  if (newState == RTCICEConnectionConnected)
-    [self displayLogMessage:@"ICE Connection Connected."];
-  NSAssert(newState != RTCICEConnectionFailed, @"ICE Connection failed!");
+    
+    NSLog(@"PCO onIceConnectionChange. %d", newState);
+    if (newState == RTCICEConnectionConnected)
+        [self displayLogMessage:@"ICE Connection Connected."];
+    NSAssert(newState != RTCICEConnectionFailed, @"ICE Connection failed!");
+
+    //** LAST item in video setup
+    if (newState == 2) {
+        NSLog(@"SEQ22-*** VIDEO STREAM START !!");
+        [_delegate videoStart];
+    }
+    
+    
 }
 
 - (void)displayLogMessage:(NSString *)message {
-  [_delegate displayLogMessage:message];
+    [_delegate displayLogMessage:message];
 }
 
 @end
@@ -186,22 +197,17 @@
 
 #pragma mark - UIApplicationDelegate methods
 
-/*
 - (void) runNextWindow {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.viewController =
-    [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController"
-                                           bundle:nil];
-
-    self.window.rootViewController = self.viewController;
-   // [self.window makeKeyAndVisible];
+    ;
 }
-*/
+
+//** iMAS app passcode was successful
 - (void)validUserAccess:(APViewController *)controller {
-    NSLog(@"validUserAccess - Delegate");
+    NSLog(@"SEQ2-successful login, loading connection screen");
     [self loadFormView];
 }
 
+//** load connection page
 - (void)loadFormView {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     id contID = [storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
@@ -211,7 +217,7 @@
 }
 
 - (void)loadRTCView {
-    NSLog(@"Loading RTC");
+    NSLog(@"SEQ4-Loading AppRTC video view");
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.viewController = [[APPRTCViewController alloc] initWithNibName:@"APPRTCViewController" bundle:nil];
     self.window.rootViewController = self.viewController;
@@ -221,19 +227,22 @@
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-  [RTCPeerConnectionFactory initializeSSL];
+    NSLog(@"SEQ1-Welcome to SVMP RTC Demo App!");
+    [RTCPeerConnectionFactory initializeSSL];
     
-  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-     // [self presentViewController:self.secondViewController animated:NO completion:nil];
-     //    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-  APViewController *apc = [[APViewController alloc] init];
-  apc.delegate = self;
-  self.window.rootViewController = apc; //navController;
-  [self.window makeKeyAndVisible];
+    //** load iMAS app password view
+    APViewController *apc = [[APViewController alloc] init];
+    apc.delegate = self;
+    self.window.rootViewController = apc;
+    [self.window makeKeyAndVisible];
 
-  [self displayLogMessage:@"*** HERE in didFinishLaunchingWithOptions !!!!!"];
-  return YES;
+    return YES;
+}
+
+-(void) videoStart {
+    [_viewController videoReady];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -257,23 +266,25 @@
 //**********************
 //**
 //**
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-  if (self.client) {
-    return NO;
-  }
-  self.client = [[APPRTCAppClient alloc] init];
-  self.client.ICEServerDelegate = self;
-  self.client.messageHandler = self;
-  [self.client connectToRoom:url];
-  return YES;
+- (BOOL)launchSvmpAppClient {
+    if (self.client) {
+        return NO;
+    }
+    
+    //** initialize the SVMP App Client - handles control comms
+    self.client = [[APPRTCAppClient alloc] init];
+    self.client.ICEServerDelegate = self;
+    self.client.messageHandler = self;
+
+    //** send Auth Packet
+    [self.client sendAuthPacket];
+    return YES;
+    
 }
 
 - (void)displayLogMessage:(NSString *)message {
-  NSLog(@"%@", message);
- // [self.viewController displayText:message];
+    NSLog(@"%@", message);
+
 }
 
 #pragma mark - RTCSendMessage method
@@ -307,39 +318,13 @@
                                                       delegate:self.pcObserver];
     RTCMediaStream *lms =
       [self.peerConnectionFactory mediaStreamWithLabel:@"ARDAMS"];
-    NSLog(@"Adding Audio and Video devices ...");
+    NSLog(@"SEQ12-Adding Audio and Video devices ...");
     //** SVMP remove audio track
     //[lms addAudioTrack:[self.peerConnectionFactory audioTrackWithID:@"ARDAMSa0"]];
     
   
     //**  http://code.google.com/p/webrtc/issues/detail?id=2246
   
-#if 0
-    //** GG 1/16/14... SVMP server does not expect a video upload
-    NSString *cameraID = nil;
-    //** back camera
-    //AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    //cameraID = [captureDevice localizedName];
-
-    //** front camera
-    for (AVCaptureDevice *captureDevice in [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] ) {
-        if (!cameraID || captureDevice.position == AVCaptureDevicePositionFront) {
-            cameraID = [captureDevice localizedName];
-        }
-    }
-    
-    RTCVideoCapturer *capturer = [RTCVideoCapturer capturerWithDeviceName:cameraID];
-    RTCVideoSource *videoSource = [self.peerConnectionFactory videoSourceWithCapturer:capturer constraints:nil];
-    [self setLocalVideoTrack:[self.peerConnectionFactory videoTrackWithID:@"ARDAMSv0" source:videoSource]];
-    if ([self localVideoTrack]) {
-        [lms addVideoTrack:[self localVideoTrack]];
-    }
-
-    //** this adds the local camera video feed to the view as a preview
-    //[self.viewController.videoView renderVideoTrackInterface:[self localVideoTrack]];
-    // [[self localVideoTrack] addRenderer:self.viewController.videoRenderer];
-#endif
-    
     //** pass the videoView to the observer, for later rendering
     self.pcObserver.videoView = self.viewController.videoView;
 
@@ -347,26 +332,12 @@
     [self.peerConnection addStream:lms constraints:_constraints];
 
 
-    [self displayLogMessage:@"onICEServers - add local stream."];
-    NSLog(@"Adding Audio and Video devices ... DONE");
+    //[self displayLogMessage:@"onICEServers - add local stream."];
+    //NSLog(@"Adding Audio and Video devices ... DONE");
     
     //** create offer
     [self onOpen];
 }
-
-#if 0
-    //** may need this in the future
-- (void)stopLocalVideo {
-        if ([self localVideoTrack]) {
-            [[self delegate] whiteboardConnection:self newLocalVideoTrack:nil];
-            
-            [self setLocalVideoTrack:nil];
-            [self setVideoSource:nil];
-        }
-    }
-#endif
-
-
 
 #pragma mark - GAEMessageHandler methods
 
@@ -378,18 +349,18 @@
     [self displayLogMessage:@"GAE onOpen - create offer."];
     
     //** SVMP audio to false
-    RTCPair *audio =
-        [[RTCPair alloc] initWithKey:@"OfferToReceiveAudio" value:@"false"];
+    RTCPair *audio = [[RTCPair alloc] initWithKey:@"OfferToReceiveAudio" value:@"false"];
+    
     //** video added
-    RTCPair *video =
-        [[RTCPair alloc] initWithKey:@"OfferToReceiveVideo" value:@"true"];
+    RTCPair *video = [[RTCPair alloc] initWithKey:@"OfferToReceiveVideo" value:@"true"];
     NSArray *mandatory = @[ audio , video ];
 
     RTCMediaConstraints *constraints =
       [[RTCMediaConstraints alloc] initWithMandatoryConstraints:mandatory
                                             optionalConstraints:nil];
+    [self displayLogMessage:@"SEQ13-PC - createOffer."];
     [self.peerConnection createOfferWithDelegate:self constraints:constraints];
-    [self displayLogMessage:@"PC - createOffer."];
+
 }
 
 //**********************
@@ -398,7 +369,7 @@
 //**
 //** SVMP, candidates
 - (void) setCandidate:(NSDictionary *)objects {
-    NSLog(@"GAE CANDIDATE");
+    NSLog(@"SEQ21-SET GAE CANDIDATE");
     
     NSString *mid = [objects objectForKey:@"sdpMid"];
     NSNumber *sdpLineIndex = [objects objectForKey:@"sdpMLineIndex"];
@@ -505,13 +476,13 @@
           //** OFFER and ANSWER
           } else if (([value compare:@"offer"] == NSOrderedSame) ||
                      ([value compare:@"answer"] == NSOrderedSame)) {
-            NSLog(@"OFFER and ANSWER");
+            NSLog(@"SEQ-20 OFFER and ANSWER");
               
             NSString *sdpString = [objects objectForKey:@"sdp"];
             RTCSessionDescription *sdp = [[RTCSessionDescription alloc]
                 initWithType:value sdp:[APPRTCAppDelegate preferISAC:sdpString]];
             [self.peerConnection setRemoteDescriptionWithDelegate:self sessionDescription:sdp];
-            [self displayLogMessage:@"PC - setRemoteDescription."];
+            //[self displayLogMessage:@"PC - setRemoteDescription."];
 
           //** BYE
           } else if ([value compare:@"bye"] == NSOrderedSame) {
@@ -533,13 +504,15 @@
     
 }
 
+//**
+//** client side video shutdown
 - (void)onClose {
-  [self displayLogMessage:@"GAE onClose."];
-  [self disconnect];    
-  // [self loadFormView];
+    [self displayLogMessage:@"GAE onClose."];
+    [self disconnect];
     exit(0);
 }
 
+//** onError with retrys
 int cnt = 0;
 - (void)onError:(int)code withDescription:(NSString *)description {
   [self displayLogMessage:
@@ -564,13 +537,15 @@ int cnt = 0;
 // match, or nil if no match was found.
 + (NSString *)firstMatch:(NSRegularExpression *)pattern
               withString:(NSString *)string {
-  NSTextCheckingResult* result =
+  
+    NSTextCheckingResult* result =
     [pattern firstMatchInString:string
                         options:0
                           range:NSMakeRange(0, [string length])];
-  if (!result)
-    return nil;
-  return [string substringWithRange:[result rangeAtIndex:1]];
+    if (!result)
+        return nil;
+
+    return [string substringWithRange:[result rangeAtIndex:1]];
 }
 
 //**********************
@@ -641,17 +616,16 @@ int cnt = 0;
     return;
   }
 
-  [self displayLogMessage:@"SDP onSuccess(SDP) - set local description. GG"];
-  [self displayLogMessage:@"**** FOO BAR"];
+  [self displayLogMessage:@"SEQ14-SDP onSuccess(SDP) - set local description. GG"];
   RTCSessionDescription* sdp =
       [[RTCSessionDescription alloc]
           initWithType:origSdp.type
                    sdp:[APPRTCAppDelegate preferISAC:origSdp.description]];
+    
+  [self displayLogMessage:@"SEQ15-PC setLocalDescription."];
   [self.peerConnection setLocalDescriptionWithDelegate:self
                                     sessionDescription:sdp];
-  [self displayLogMessage:@"PC setLocalDescription."];
   dispatch_async(dispatch_get_main_queue(), ^(void) {
-    [self displayLogMessage:@"*** FOOBAR"];
     NSDictionary *json = @{ @"type" : sdp.type, @"sdp" : sdp.description };
     NSError *error;
     NSData *data =
@@ -659,6 +633,7 @@ int cnt = 0;
     NSAssert(!error,
              @"%@",
              [NSString stringWithFormat:@"Error: %@", error.description]);
+      
     [self sendData:data];
   });
 }

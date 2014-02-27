@@ -102,6 +102,19 @@ static void init(VideoView *self) {
     
 }
 
+- (void) cancelLoadingAndInitTouch {
+    //** return for now, not working, needs debug
+    return;
+    /*
+    //** init with Android VM
+    [self sendScreenInfo];
+
+    //** remove loading label
+    [loadingLabel removeFromSuperview];
+
+    return; */
+}
+
 - (BOOL)handleScreenInfoResponse:(Response *) msg {
     NSLog(@"ScreenInfo response START");
     if ( ![msg hasScreenInfo] )
@@ -229,7 +242,7 @@ static void init(VideoView *self) {
 
 }
 
-int once = 1;
+int once = 1; //disable
 //** handle tap
 - (void)handleTap:(UITapGestureRecognizer *)recognizer {
     TouchEvent_Builder *eventMsg;
