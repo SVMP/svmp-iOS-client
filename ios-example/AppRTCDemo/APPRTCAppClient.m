@@ -587,6 +587,13 @@ int cnt;
 	
 }
 
+- (void)shutdown {
+     NSLog(@"APClient shutdown!");
+    [inputStream close];
+    [inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    [outputStream close];
+    [outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+}
 
 
 //** connect to room

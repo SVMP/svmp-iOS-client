@@ -287,6 +287,7 @@ int once = 1;
 
 
 //** handle tap
+int x = 0;
 - (void)handleDoubleTap:(UITapGestureRecognizer *)recognizer {
     TouchEvent_Builder *eventMsg;
     TouchEvent_PointerCoords_Builder *p;
@@ -299,7 +300,7 @@ int once = 1;
     
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    eventMsg = [TouchEvent builder];
+/*    eventMsg = [TouchEvent builder];
     p = [TouchEvent_PointerCoords builder];
     
     //** SEND DOWN
@@ -310,7 +311,18 @@ int once = 1;
     [msg setType:Request_RequestTypeTouchevent];
     [msg setTouch:[eventMsg build]];
     request = [msg build];
+  */
     
+    // create a RotationInfo Builder
+    RotationInfo_Builder *riBuilder = [RotationInfo builder];
+    [riBuilder setRotation: (x++ % 4)];
+    
+    // pack RotationInfo into Request wrapper
+    msg = [Request builder];
+    [msg setType:Request_RequestTypeRotationInfo];
+    [msg setRotationInfo:[riBuilder build]];
+    request = [msg build];
+
     [ad.client sendSVMPMessage:request];
 }
 
