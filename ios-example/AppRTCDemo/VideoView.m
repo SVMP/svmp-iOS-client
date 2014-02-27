@@ -32,6 +32,7 @@
     bool gotScreenInfo = false;
     float firstX = 0.0;
     float firstY = 0.0;
+    UILabel *loadingLabel;
 
 //** Resize the video
 #define VIDEO_WIDTH 320
@@ -67,7 +68,18 @@ static void init(VideoView *self) {
     //** rounded corners of frame
     // [[self layer] setCornerRadius:VIDEO_HEIGHT/2.0];
     [[self layer] setMasksToBounds:YES];
-    [self setBackgroundColor:[UIColor redColor]];
+    [self setBackgroundColor:[UIColor darkGrayColor]];
+    
+    //** hack in LOADING text...
+    loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 150, 24)];
+    
+    [loadingLabel setTextColor:[UIColor whiteColor]];
+    [loadingLabel setBackgroundColor:[UIColor darkGrayColor]];
+    [loadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 24.0f]];
+    [loadingLabel setText:@"Loading..."];
+    loadingLabel.center = CGPointMake(VIDEO_WIDTH/2, VIDEO_HEIGHT/2);
+    [self addSubview:loadingLabel];
+
     
     //** add tap gesture recognizer
     UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
@@ -228,6 +240,8 @@ int once = 1;
     if (once) {
         [self sendScreenInfo];
         once = 0;
+        //** remove loading label
+        [loadingLabel removeFromSuperview];
         return;
     }
     if (!gotScreenInfo) return;
