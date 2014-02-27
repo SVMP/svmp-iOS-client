@@ -41,10 +41,6 @@
 // The view controller that is displayed when AppRTCDemo is loaded.
 @interface APPRTCViewController : UIViewController<UITextFieldDelegate, AVCaptureFileOutputRecordingDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *textField;
-@property (weak, nonatomic) IBOutlet UITextView *textInstructions;
-@property (weak, nonatomic) IBOutlet UITextView *textOutput;
-
 @property (strong, nonatomic) AVCaptureSession *captureSession;
 @property (strong, nonatomic) AVCaptureDeviceInput *videoInput;
 @property (strong, nonatomic) AVCaptureDeviceInput *audioInput;
@@ -54,11 +50,5 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *modeControl;
 @property (weak, nonatomic) RTCVideoRenderer *videoRenderer;
 @property (strong, nonatomic) VideoView *videoView;
-
-
-- (void)disconnectMenu;
-- (void)displayText:(NSString *)text;
-- (void)resetUI;
-- (void)onClose;
 
 @end

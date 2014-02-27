@@ -239,7 +239,6 @@
 - (void)applicationWillResignActive:(UIApplication *)application {
   [self displayLogMessage:@"Application lost focus, connection broken."];
   [self disconnect];
-  [self.viewController resetUI];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
