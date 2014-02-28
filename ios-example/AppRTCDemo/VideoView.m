@@ -312,7 +312,7 @@ int once = 1; //disable
 }
 
 
-
+#if 0
 //** handle tap
 int x = 0;
 - (void)handleDoubleTap:(UITapGestureRecognizer *)recognizer {
@@ -327,7 +327,7 @@ int x = 0;
     
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-/*    eventMsg = [TouchEvent builder];
+    eventMsg = [TouchEvent builder];
     p = [TouchEvent_PointerCoords builder];
     
     //** SEND DOWN
@@ -338,8 +338,8 @@ int x = 0;
     [msg setType:Request_RequestTypeTouchevent];
     [msg setTouch:[eventMsg build]];
     request = [msg build];
-  */
-    
+  
+  /*
     // create a RotationInfo Builder
     RotationInfo_Builder *riBuilder = [RotationInfo builder];
     [riBuilder setRotation: (x++ % 4)];
@@ -349,10 +349,33 @@ int x = 0;
     [msg setType:Request_RequestTypeRotationInfo];
     [msg setRotationInfo:[riBuilder build]];
     request = [msg build];
-
+*/
+    
+    
     [ad.client sendSVMPMessage:request];
 }
+#endif 
 
+- (void)sendVmRotation:(int)orientation {
+    Request_Builder *msg;
+    Request *request;
+    
+    NSLog(@"sending VM rotate - %d", orientation);
+    
+    APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    // create a RotationInfo BuilderDr GD
+    RotationInfo_Builder *riBuilder = [RotationInfo builder];
+    [riBuilder setRotation: orientation];
+    
+    // pack RotationInfo into Request wrapper
+    msg = [Request builder];
+    [msg setType:Request_RequestTypeRotationInfo];
+    [msg setRotationInfo:[riBuilder build]];
+    request = [msg build];
+    
+    [ad.client sendSVMPMessage:request];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {

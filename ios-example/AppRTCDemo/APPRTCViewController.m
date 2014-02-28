@@ -53,30 +53,6 @@ float tol = 0.25;
 @synthesize videoRenderer = _videoRenderer;
 @synthesize videoView = _videoView;
 
-- (void) rotateScreen {
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
-    
-    switch(orientation){
-        case UIInterfaceOrientationPortrait:
-            button.frame = CGRectMake(screenWidth - 22, screenHeight - 42, 22.0, 22.0);
-            break;
-        case UIInterfaceOrientationLandscapeRight:
-            button.frame = CGRectMake(0, screenHeight - 42, 22.0, 22.0);
-            break;
-        case UIInterfaceOrientationPortraitUpsideDown:
-            button.frame = CGRectMake(0, 0, 22.0, 22.0);
-            break;
-        case UIInterfaceOrientationLandscapeLeft:
-            button.frame = CGRectMake(screenWidth - 22, 0, 22.0, 22.0);
-            break;
-    }
-    NSLog(@"%d", orientation);
-    [_videoView setVideoOrientation:orientation];
-    
-}
-
 
 - (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration
 {
@@ -85,16 +61,36 @@ float tol = 0.25;
 	float yy = [acceleration y];
 	float angle = atan2(yy, xx);
     UIInterfaceOrientation newOrientation = orientation;
+    int android_orientation = 0;
     
-	if(angle >= -2.25 + tol && angle <= -0.75 - tol) newOrientation = UIInterfaceOrientationPortrait;
-	else if(angle >= -0.75 + tol && angle <= 0.75 - tol) newOrientation = UIInterfaceOrientationLandscapeRight;
-	else if(angle >= 0.75 + tol && angle <= 2.25 - tol) newOrientation = UIInterfaceOrientationPortraitUpsideDown;
-	else if(angle <= -2.25 - tol || angle >= 2.25 + tol) newOrientation = UIInterfaceOrientationLandscapeLeft;
+    /* Android rotation values
+    * 0: Surface.ROTATION_0
+    * 1: Surface.ROTATION_90
+    * 2: Surface.ROTATION_180
+    * 3: Surface.ROTATION_270
+     */
+    
+	if(angle >= -2.25 + tol && angle <= -0.75 - tol) {
+        newOrientation = UIInterfaceOrientationPortrait;
+        android_orientation = 0;
+    }
+	else if(angle >= -0.75 + tol && angle <= 0.75 - tol) {
+        newOrientation = UIInterfaceOrientationLandscapeRight;
+        android_orientation = 1;
+    }
+	else if(angle >= 0.75 + tol && angle <= 2.25 - tol) {
+        newOrientation = UIInterfaceOrientationPortraitUpsideDown;
+        android_orientation = 2;
+    }
+	else if(angle <= -2.25 - tol || angle >= 2.25 + tol) {
+        newOrientation = UIInterfaceOrientationLandscapeLeft;
+        android_orientation = 3;
+    }
     
     if( orientation != newOrientation){
-        NSLog(@"%d -- %d", orientation, newOrientation);
+        NSLog(@"%d -- %d  AO - %d", orientation, newOrientation, android_orientation);
         orientation = newOrientation;
-        [self rotateScreen];
+        [_videoView sendVmRotation:android_orientation];
     }
 }
 
@@ -155,6 +151,9 @@ float tol = 0.25;
         NSLog(@"*** NO INTERNET connection found!");
     }
 
+    UIAccelerometer *accel = [UIAccelerometer sharedAccelerometer];
+    accel.delegate = self;
+    //accel.updateInterval = 1.0f/60.0f;
 
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     [ad launchSvmpAppClient];

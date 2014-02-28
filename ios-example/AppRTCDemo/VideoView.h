@@ -25,6 +25,7 @@
 - (BOOL)handleScreenInfoResponse:(Response *) msg;
 - (void)cancelLoadingAndInitTouch;
 
+- (void)sendVmRotation:(int)orientation;
 - (void)pause:(id)sender;
 - (void)resume:(id)sender;
 - (void)stop:(id)sender;
