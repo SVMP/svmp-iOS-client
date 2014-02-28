@@ -59,11 +59,11 @@ float tol = 0.50;
 	// Get the current device angle
 	float xx = -[acceleration x];
 	float yy = [acceleration y];
-	float yy = [acceleration z];
+	float zz = [acceleration z];
 	float angle = atan2(yy, xx);
     UIInterfaceOrientation newOrientation = orientation;
     int android_orientation = 0;
-    if( zz < -0.75 || z > 0.75) return;
+    if( zz < -0.75 || zz > 0.75) return;
     /* Android rotation values
     * 0: Surface.ROTATION_0
     * 1: Surface.ROTATION_90
