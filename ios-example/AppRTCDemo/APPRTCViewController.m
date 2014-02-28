@@ -47,9 +47,57 @@
 
 BOOL isShowingLandscapeView = NO;
 UIButton *button;
+UIInterfaceOrientation orientation = UIInterfaceOrientationPortrait;
+float tol = 0.25;
 
 @synthesize videoRenderer = _videoRenderer;
 @synthesize videoView = _videoView;
+
+- (void) rotateScreen {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    
+    switch(orientation){
+        case UIInterfaceOrientationPortrait:
+            button.frame = CGRectMake(screenWidth - 22, screenHeight - 42, 22.0, 22.0);
+            break;
+        case UIInterfaceOrientationLandscapeRight:
+            button.frame = CGRectMake(0, screenHeight - 42, 22.0, 22.0);
+            break;
+        case UIInterfaceOrientationPortraitUpsideDown:
+            button.frame = CGRectMake(0, 0, 22.0, 22.0);
+            break;
+        case UIInterfaceOrientationLandscapeLeft:
+            button.frame = CGRectMake(screenWidth - 22, 0, 22.0, 22.0);
+            break;
+    }
+    NSLog(@"%d", orientation);
+    [_videoView setVideoOrientation:orientation];
+    
+}
+
+
+- (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration
+{
+	// Get the current device angle
+	float xx = -[acceleration x];
+	float yy = [acceleration y];
+	float angle = atan2(yy, xx);
+    UIInterfaceOrientation newOrientation = orientation;
+    
+	if(angle >= -2.25 + tol && angle <= -0.75 - tol) newOrientation = UIInterfaceOrientationPortrait;
+	else if(angle >= -0.75 + tol && angle <= 0.75 - tol) newOrientation = UIInterfaceOrientationLandscapeRight;
+	else if(angle >= 0.75 + tol && angle <= 2.25 - tol) newOrientation = UIInterfaceOrientationPortraitUpsideDown;
+	else if(angle <= -2.25 - tol || angle >= 2.25 + tol) newOrientation = UIInterfaceOrientationLandscapeLeft;
+    
+    if( orientation != newOrientation){
+        NSLog(@"%d -- %d", orientation, newOrientation);
+        orientation = newOrientation;
+        [self rotateScreen];
+    }
+}
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {

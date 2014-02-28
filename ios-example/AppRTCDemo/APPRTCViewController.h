@@ -39,7 +39,7 @@
 #import "VideoView.h"
 
 // The view controller that is displayed when AppRTCDemo is loaded.
-@interface APPRTCViewController : UIViewController<UITextFieldDelegate, AVCaptureFileOutputRecordingDelegate>
+@interface APPRTCViewController : UIViewController<UITextFieldDelegate, AVCaptureFileOutputRecordingDelegate, UIAccelerometerDelegate>
 
 @property (strong, nonatomic) AVCaptureSession *captureSession;
 @property (strong, nonatomic) AVCaptureDeviceInput *videoInput;
