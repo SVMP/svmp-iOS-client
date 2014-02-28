@@ -51,6 +51,20 @@ UIButton *button;
 @synthesize videoRenderer = _videoRenderer;
 @synthesize videoView = _videoView;
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return NO;
+}
+
+- (NSInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
 - (void)disconnectMenu:(UIButton*)button
 {
      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Disconnect device?"

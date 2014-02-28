@@ -39,6 +39,20 @@ bool class_vector = FALSE;
 //** obfuscated logout var
 bool obj_var = FALSE;
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return NO;
+}
+
+- (NSInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
 -(id) init {
     self = [super init];
     return self;
