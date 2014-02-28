@@ -48,7 +48,7 @@
 BOOL isShowingLandscapeView = NO;
 UIButton *button;
 UIInterfaceOrientation orientation = UIInterfaceOrientationPortrait;
-float tol = 0.25;
+float tol = 0.70;
 
 @synthesize videoRenderer = _videoRenderer;
 @synthesize videoView = _videoView;
