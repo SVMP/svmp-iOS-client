@@ -48,7 +48,7 @@
 BOOL isShowingLandscapeView = NO;
 UIButton *button;
 UIInterfaceOrientation orientation = UIInterfaceOrientationPortrait;
-float tol = 0.70;
+float tol = 0.50;
 
 @synthesize videoRenderer = _videoRenderer;
 @synthesize videoView = _videoView;
@@ -59,10 +59,11 @@ float tol = 0.70;
 	// Get the current device angle
 	float xx = -[acceleration x];
 	float yy = [acceleration y];
+	float yy = [acceleration z];
 	float angle = atan2(yy, xx);
     UIInterfaceOrientation newOrientation = orientation;
     int android_orientation = 0;
-    
+    if( zz < -0.75 || z > 0.75) return;
     /* Android rotation values
     * 0: Surface.ROTATION_0
     * 1: Surface.ROTATION_90
