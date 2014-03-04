@@ -71,12 +71,12 @@ static void init(VideoView *self) {
     [self setBackgroundColor:[UIColor darkGrayColor]];
     
     //** hack in LOADING text...
-    loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 16, 150, 24)];
+    loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(32, 32, 250, 35)];
     
     [loadingLabel setTextColor:[UIColor whiteColor]];
     [loadingLabel setBackgroundColor:[UIColor darkGrayColor]];
-    [loadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 24.0f]];
-    [loadingLabel setText:@"Loading..."];
+    [loadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 18.0f]];
+    [loadingLabel setText:@"Loading... (tap to dismiss)"];
     loadingLabel.center = CGPointMake(VIDEO_WIDTH/2, VIDEO_HEIGHT/2);
     [self addSubview:loadingLabel];
 

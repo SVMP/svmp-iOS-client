@@ -84,7 +84,7 @@ bool obj_var = FALSE;
     self.pass.delegate       = self;
     self.pass.background     = self.background;
   //  self.pass.syntax         = @"^.*(?=.*[a-zA-Z])(?=.*[0-9])(?=.{6,}).*$";
-  //  self.pass.syntaxLabel    = @"length:6 - 1 digit, 1 capital";
+    self.pass.syntaxLabel    = @"simple alpha or alphanumeric";
     self.pass.resetEnabled   = FALSE; //** TRUE - ask user for questions and password resets after 3 failures
                                       //** FALSE - exit(0) after 3 failures
     // ---------------------------------------------------------------

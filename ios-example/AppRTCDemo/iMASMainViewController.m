@@ -68,7 +68,10 @@
     
     NSData* portData = [IMSKeychain securePasswordDataForService:@"port" account:@"1"];
     NSString * portStr = [[NSString alloc] initWithData:portData encoding:NSUTF8StringEncoding];
-    self.portText.text = portStr;
+    if ([portStr length] == 0)
+        self.portText.text = @"8002";
+    else
+        self.portText.text = portStr;
     
     NSData* userData = [IMSKeychain securePasswordDataForService:@"user" account:@"1"];
     NSString * userStr = [[NSString alloc] initWithData:userData encoding:NSUTF8StringEncoding];

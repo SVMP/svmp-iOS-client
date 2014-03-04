@@ -673,7 +673,13 @@ int cnt;
 		}
         case NSStreamEventErrorOccurred:
 		{
-			NSLog(@"Cannot connect to the host!");
+			NSLog(@"Cannot connect to host! - ensure IP address is set correctly");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot connect to host!"
+                                                            message:@"ensure IP address is set correctly."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
 			break;
 		}
 		case NSStreamEventEndEncountered:
@@ -715,35 +721,58 @@ int cnt;
         NSError *error = nil;
         NSData *jsonBuf;
         NSDictionary *objects;
-        //NSLog(@"Data len: %d", [data length]);
-        if ([data length] < 100 )
+        NSLog(@"Data len: %d", [data length]);
+        
+        //** hackery on connect network or VM start issues
+        //** key on data message length
+        if ([data length] < 70 ) {
+            //** length is typically 42
             NSLog(@"Error parsing incoming MSG, likely Android VM needs restart");
-        else
-           NSLog(@"Trapping err on incoming MSG, likely a GAE candidate");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot connect to VM!"
+                                                            message:@"likely Android VM needs restart."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else if ([data length] > 70 &&  [data length] < 120 ) {
+            //** lenght is 110
+            NSLog(@"Error parsing incoming MSG, likely SVMP Proxy IP VM address in Mongo is incorrect");
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot connect to VM!"
+                                                            message:@"SVMP Mongo Proxy IP addr incorrect."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+        }
+        else {
+            //** length is over 300
+            NSLog(@"OK, trapping err on incoming MSG, likely a GAE candidate");
             
-        for (int i = 0; i < [data length]; i++)
-        {
-            if ( (unsigned char)bytes[i] == '{' && start == 0 ) {
-                start = i;
-                continue;
-            }
-            
-            if ( (unsigned char)bytes[i] == '}' && end == 0 ) {
-                end = i;
-                jsonBuf  = [NSData dataWithBytes:([data bytes] + start)
-                                          length:(end - start + 1)];
-                
-                objects     = [NSJSONSerialization JSONObjectWithData:jsonBuf
-                                                        options:NSJSONReadingMutableContainers
-                                                             error:&error];
-                if (error != 0 ) {
-                    NSLog(@"Error parsing candidate info from SERVER!");
-                    break;
+            for (int i = 0; i < [data length]; i++)
+            {
+                if ( (unsigned char)bytes[i] == '{' && start == 0 ) {
+                    start = i;
+                    continue;
                 }
-                NSLog(@"Candidates obj: %@", objects);
-                [(APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate] setCandidate:objects];
-                start = end = 0;
-                continue;
+            
+                if ( (unsigned char)bytes[i] == '}' && end == 0 ) {
+                    end = i;
+                    jsonBuf  = [NSData dataWithBytes:([data bytes] + start)
+                                              length:(end - start + 1)];
+                    
+                    objects     = [NSJSONSerialization JSONObjectWithData:jsonBuf
+                                                            options:NSJSONReadingMutableContainers
+                                                                 error:&error];
+                    if (error != 0 ) {
+                        NSLog(@"Error parsing candidate info from SERVER!");
+                        break;
+                    }
+                    NSLog(@"Candidates obj: %@", objects);
+                    [(APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate] setCandidate:objects];
+                    start = end = 0;
+                    continue;
+                }
             }
         }
         
@@ -813,6 +842,19 @@ int cnt;
     
     //** free this inbound buffer
     inputBuffer = nil;
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        //** sleep for 1.5 seconds
+        [NSThread sleepForTimeInterval:1.5];
+        
+        [UIApplication sharedApplication];
+        APPRTCAppDelegate *appDelegate = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate onClose];
+    }
 }
 
 
