@@ -44,7 +44,7 @@
 
 @property(nonatomic) dispatch_queue_t backgroundQueue;
 @property(nonatomic, copy) NSString *baseURL;
-@property(nonatomic, strong) GAEChannelClient *gaeChannel;
+//@property(nonatomic, strong) GAEChannelClient *gaeChannel;
 @property(nonatomic, copy) NSString *postMessageUrl;
 @property(nonatomic, copy) NSString *pcConfig;
 @property(nonatomic, strong) NSMutableString *roomHtml;
@@ -58,11 +58,11 @@
 @implementation APPRTCAppClient
 
 @synthesize ICEServerDelegate = _ICEServerDelegate;
-@synthesize messageHandler = _messageHandler;
+//@synthesize messageHandler = _messageHandler;
 
 @synthesize backgroundQueue = _backgroundQueue;
 @synthesize baseURL = _baseURL;
-@synthesize gaeChannel = _gaeChannel;
+//@synthesize gaeChannel = _gaeChannel;
 @synthesize postMessageUrl = _postMessageUrl;
 @synthesize pcConfig = _pcConfig;
 @synthesize roomHtml = _roomHtml;
@@ -395,11 +395,11 @@ int cnt;
   }
   [self updateICEServers:ICEServers withTurnServer:turnServerUrl];
 
-  [self maybeLogMessage:
-          [NSString stringWithFormat:@"About to open GAE with token:  %@",
-              self.token]];
-  self.gaeChannel =
-      [[GAEChannelClient alloc] initWithToken:self.token
+  //[self maybeLogMessage:
+  //        [NSString stringWithFormat:@"About to open GAE with token:  %@",
+  //             self.token]];
+  //self.gaeChannel =
+  //    [[GAEChannelClient alloc] initWithToken:self.token
                                      delegate:self.messageHandler];
 }
 #endif

@@ -33,8 +33,8 @@
  */
 
 #import <Foundation/Foundation.h>
-
-#import "GAEChannelClient.h"
+#import "Svmp.pb.h"
+//#import "GAEChannelClient.h"
 
 
 // Called when there are RTCICEServers.
@@ -54,7 +54,7 @@
 @interface APPRTCAppClient : NSObject<NSURLConnectionDataDelegate, NSStreamDelegate>
 
 @property(nonatomic, assign) id<ICEServerDelegate> ICEServerDelegate;
-@property(nonatomic, assign) id<GAEMessageHandler> messageHandler;
+//@property(nonatomic, assign) id<GAEMessageHandler> messageHandler;
 
 //** SVMP comms
 @property (nonatomic, retain) NSInputStream *inputStream;

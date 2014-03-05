@@ -274,7 +274,7 @@
     //** initialize the SVMP App Client - handles control comms
     self.client = [[APPRTCAppClient alloc] init];
     self.client.ICEServerDelegate = self;
-    self.client.messageHandler = self;
+    //self.client.messageHandler = self;
 
     //** send Auth Packet
     [self.client sendAuthPacket];
@@ -675,7 +675,7 @@ int cnt = 0;
   self.peerConnectionFactory = nil;
   self.pcObserver = nil;
   self.client.ICEServerDelegate = nil;
-  self.client.messageHandler = nil;
+  //self.client.messageHandler = nil;
   self.client = nil;
   [RTCPeerConnectionFactory deinitializeSSL];
 }

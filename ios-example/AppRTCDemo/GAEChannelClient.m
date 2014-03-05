@@ -31,7 +31,7 @@
  * Nov 2013
  *
  */
-
+#if 0
 #import "GAEChannelClient.h"
 
 #import "RTCPeerConnectionFactory.h"
@@ -147,3 +147,4 @@
   NSLog(@"%@", message);
 }
 @end
+#endif

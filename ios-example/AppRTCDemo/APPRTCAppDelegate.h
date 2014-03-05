@@ -34,7 +34,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "GAEChannelClient.h"
+//#import "GAEChannelClient.h"
 #import "APPRTCAppClient.h"
 #import "RTCSessionDescriptonDelegate.h"
 #import "RTCVideoTrack.h"
@@ -55,7 +55,6 @@
 // interoperability between the Objcective C implementation of PeerConnection
 // and the apprtc.appspot.com demo webapp.
 @interface APPRTCAppDelegate : UIResponder<ICEServerDelegate,
-                                           GAEMessageHandler,
                                            APPRTCSendMessage,
                                            RTCSessionDescriptonDelegate,
                                            UIApplicationDelegate>
@@ -70,6 +69,7 @@
 - (void) runNextWindow;
 - (void) loadRTCView;
 - (void) loadFormView;
-
+- (void) onMessage:(Response *) resp;
+- (void) onClose;
 
 @end

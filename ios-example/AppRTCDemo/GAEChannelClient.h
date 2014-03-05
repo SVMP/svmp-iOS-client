@@ -31,7 +31,7 @@
  * Nov 2013
  *
  */
-
+#if 0
 #import <UIKit/UIKit.h>
 #import "Svmp.pb.h"
 
@@ -58,3 +58,5 @@
 - (id)initWithToken:(NSString *)token delegate:(id<GAEMessageHandler>)delegate;
 
 @end
+#endif
+
