@@ -94,12 +94,16 @@ static void init(VideoView *self) {
 	[self addGestureRecognizer:panRecognizer];
     
     //** add two finger tap - for Android back button
-    UITapGestureRecognizer *twoTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
-    [twoTapRecognizer setNumberOfTouchesRequired:2];
+    //UITapGestureRecognizer *twoTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+    //[twoTapRecognizer setNumberOfTouchesRequired:2];
         //[twoTapRecognizer numberOfTapsRequired:2]; // setNumberOfTapsRequired:2];
-    [twoTapRecognizer setDelegate:self];
-	[self addGestureRecognizer:twoTapRecognizer];
+    //[twoTapRecognizer setDelegate:self];
+	//[self addGestureRecognizer:twoTapRecognizer];
     
+    UIPinchGestureRecognizer *twoFingerPinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self
+            action:@selector(twoFingerPinch:)];
+    [twoFingerPinch setDelegate:self];
+    [self addGestureRecognizer:twoFingerPinch];
 }
 
 - (void) cancelLoadingAndInitTouch {
@@ -311,6 +315,19 @@ int once = 1; //disable
     [ad.client sendSVMPMessage:request];
 }
 
+float _lastScale = 0;
+
+- (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer  {
+    NSLog(@"twoFingerPinch");
+    
+    if([(UIPinchGestureRecognizer*)recognizer state] == UIGestureRecognizerStateBegan) {
+        _lastScale = 1.0;
+    }
+    CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)recognizer scale]);
+    
+    NSLog(@"scale %f", scale);
+
+}
 
 #if 0
 //** handle tap
