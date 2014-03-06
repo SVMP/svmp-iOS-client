@@ -43,6 +43,7 @@
     NSLog(@"HERE");
 }
 
+
 static void init(VideoView *self) {
     
     UIView<RTCVideoRenderView> *renderView = [RTCVideoRenderer newRenderViewWithFrame:CGRectMake(200, 100, 240, 180)];
@@ -177,7 +178,7 @@ static void init(VideoView *self) {
     
     if (!gotScreenInfo) return;
     
-    NSLog(@"handleMove");
+   // NSLog(@"handleMove");
     
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -188,7 +189,7 @@ static void init(VideoView *self) {
     if ([(UIPanGestureRecognizer*)recognizer state] == UIGestureRecognizerStateBegan) {
         firstX = [recognizer locationInView:self].x;
         firstY = [recognizer locationInView:self].y;
-        NSLog(@"START x: %.2f  y: %.2f", firstX, firstY);
+        //NSLog(@"START x: %.2f  y: %.2f", firstX, firstY);
         
         //** build start of finger movement msg
         p = [TouchEvent_PointerCoords builder];
@@ -217,7 +218,7 @@ static void init(VideoView *self) {
     if ([(UIPanGestureRecognizer*)recognizer state] == UIGestureRecognizerStateEnded) {
         float endX = [recognizer locationInView:self].x;
         float endY = [recognizer locationInView:self].y;
-        NSLog(@"END x: %.2f  y: %.2f", endX, endY);
+        //NSLog(@"END x: %.2f  y: %.2f", endX, endY);
         
         
         //** create and send event msg
@@ -243,7 +244,7 @@ static void init(VideoView *self) {
     
     //**
     //** movement
-    NSLog(@"MOVE x: %.2f + %.2f  y: %.2f + %.2f", firstX, translation.x, firstY, translation.y);
+    //NSLog(@"MOVE x: %.2f + %.2f  y: %.2f + %.2f", firstX, translation.x, firstY, translation.y);
 
     //** create and send event msg
     p = [TouchEvent_PointerCoords builder];
@@ -291,7 +292,7 @@ int once = 1; //disable
     CGPoint tapPoint = [recognizer locationInView:self];
     int tapX = (int) tapPoint.x;
     int tapY = (int) tapPoint.y;
-    NSLog(@"TAPPED X:%d Y:%d", tapX, tapY);
+    //NSLog(@"TAPPED X:%d Y:%d", tapX, tapY);
     
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -307,7 +308,7 @@ int once = 1; //disable
     [p setX:adjX];
     [p setY:adjY];
     [eventMsg addItems:[p build]];
-    NSLog(@"TOUCH DOWN %.2f ; %.2f", adjX, adjY);
+    //NSLog(@"TOUCH DOWN %.2f ; %.2f", adjX, adjY);
     
     msg = [Request builder];
     [msg setType:Request_RequestTypeTouchevent];
@@ -330,7 +331,7 @@ int once = 1; //disable
     [p setX:adjX];
     [p setY:adjY];
     [eventMsg addItems:[p build]];
-    NSLog(@"TOUCH DOWN %.2f ; %.2f", adjX, adjY);
+    //NSLog(@"TOUCH DOWN %.2f ; %.2f", adjX, adjY);
     
     msg = [Request builder];
     [msg setType:Request_RequestTypeTouchevent];
@@ -380,11 +381,6 @@ int x = 0;
 //**
 //**  Pinch and Zoom
 //**
-float _lastScale = 0;
-int _lastTapX = 0;
-int _lastTapY = 0;
-
-int foo = 0;
 - (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer  {
     TouchEvent_Builder *eventMsg;
     TouchEvent_PointerCoords_Builder *p;
@@ -393,28 +389,41 @@ int foo = 0;
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if (!gotScreenInfo) return;
-    if( recognizer.numberOfTouches < 2) return;
+    if( recognizer.numberOfTouches != 2) return;
     //NSLog(@"twoFingerPinch");
     
+    //** get XY of location of fingers (points)
     CGPoint point1 = [recognizer locationOfTouch:0 inView:self];
     CGPoint point2 = [recognizer locationOfTouch:1 inView:self];
+
+    //** scale to android screen
     float scaledX1 = point1.x * xScaleFactor;
     float scaledY1 = point1.y * yScaleFactor;
     float scaledX2 = point2.x * xScaleFactor;
     float scaledY2 = point2.y * yScaleFactor;
     
+    //** key resources
     //** see http://stackoverflow.com/questions/11523423/how-to-generate-zoom-pinch-gesture-for-testing-for-android
     //** http://developer.android.com/reference/android/view/MotionEvent.html#ACTION_POINTER_2_UP
     //** http://rogchap.com/2011/06/10/ios-image-manipulation-with-uigesturerecognizer-scale-move-rotate/
     //** http://www.codeproject.com/Articles/319401/Simple-Gestures-on-Android
-    //** https://developer.apple.com/library/ios/documentation/uikit/reference/UIGestureRecognizer_Class/Reference/Reference.html#//apple_ref/c/econst/UIGestureRecognizerStateChanged
+    //** https://developer.apple.com/library/ios/documentation/uikit/reference/UIGestureRecognizer_Class/Reference/Reference.html#//apple_ref/c/econst/GestureRecognizerStateChanged
     //** http://stackoverflow.com/questions/10309613/find-points-of-pinch-gesture
     
+    //** work through the state machine
     integer_t state = [(UIPinchGestureRecognizer*)recognizer state];
     if(state == UIGestureRecognizerStateBegan) {
-        _lastScale = 1.0;
         //NSLog(@"Begin PINCH TAPPED X:%f Y:%f", point1.x, point1.y);
-
+        /*
+         I/System.out( 1589): ==============
+        I/System.out( 1589): PP3 0
+        I/System.out( 1589): P add x:277.3828 y:146.25
+        I/System.out( 1589): ==============
+        I/System.out( 1589): PP1 :261
+        I/System.out( 1589): P add x:277.3828 y:146.25
+        I/System.out( 1589): P add x:126.5625 y:346.40625
+        */
+        
         //** SEND DOWN
         p = [TouchEvent_PointerCoords builder];
         eventMsg = [TouchEvent builder];
@@ -431,11 +440,13 @@ int foo = 0;
         [msg setTouch:[eventMsg build]];
         request = [msg build];
         [ad.client sendSVMPMessage:request];
+         //NSLog(@"START ACTION DOWN %.2f ; %.2f", scaledX1, scaledY1);
         
         //** SEND DOWN
         p = [TouchEvent_PointerCoords builder];
         eventMsg = [TouchEvent builder];
-        [eventMsg setAction:261]; // android ACTION_DOWN(0)
+        //** 1 << 8 , says that there is a second set of coordinates attached to this event
+        [eventMsg setAction:5 | (1<< 8)]; // x105 = 261 android ACTION_POINTER_DOWN(5) (1 << ACTION_POINTER_INDEX_SHIFT)
         [p clear];
         [p setId:0];
         [p setX:scaledX1];
@@ -447,7 +458,6 @@ int foo = 0;
         [p setX:scaledX2];
         [p setY:scaledY2];
         [eventMsg addItems:[p build]];
-        NSLog(@"START TOUCH DOWN %.2f ; %.2f", point1.x, point1.y);
 
         
         msg = [Request builder];
@@ -455,20 +465,28 @@ int foo = 0;
         [msg setTouch:[eventMsg build]];
         request = [msg build];
         [ad.client sendSVMPMessage:request];
-        
-
-
+        //NSLog(@"START ACTION_POINTER_DOWN X1:%f Y1:%f X2:%f Y2:%f", scaledX1, scaledY1, scaledX2, scaledY2);
     }
     else if (state == UIGestureRecognizerStateChanged) {
         //CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)recognizer scale]);
         //NSLog(@"Change scale %f", scale);
-        NSLog(@"Change PINCH MOVE X1:%f Y1:%f X2:%f Y2:%f", scaledX1, scaledY1, scaledX2, scaledY2);
-
-
+        /*
+         I/System.out( 1589): ==============
+        I/System.out( 1589): PP3 2
+        I/System.out( 1589): P add x:212.34375 y:229.68752
+        I/System.out( 1589): P add x:148.71094 y:316.875
+        I/System.out( 1589): ==============
+        I/System.out( 1589): PP3 2
+        I/System.out( 1589): P add x:210.58594 y:237.65627
+        I/System.out( 1589): P add x:156.09375 y:311.71875
+        */
+        
         // android ACTION_MOVE
         p = [TouchEvent_PointerCoords builder];
         eventMsg = [TouchEvent builder];
-        [eventMsg setAction:(2 | (1 << 8))];
+        //** 1 << 8 , says that there is a second set of coordinates attached to this event
+        [eventMsg setAction:(2 | (1 << 8))]; // x102 = 258 android ACTION_MOVE(2) (1 << ACTION_POINTER_INDEX_SHIFT)
+
         [p clear];
         [p setId:0];
         [p setX:scaledX1];
@@ -482,24 +500,55 @@ int foo = 0;
      
         [eventMsg addItems:[p build]];
 
+        msg = [Request builder];
+        [msg setType:Request_RequestTypeTouchevent];
+        [msg setTouch:[eventMsg build]];
+        request = [msg build];
+        [ad.client sendSVMPMessage:request];
+        //NSLog(@"Change PINCH MOVE X1:%f Y1:%f X2:%f Y2:%f", scaledX1, scaledY1, scaledX2, scaledY2);
+    }
+    else if (state == UIGestureRecognizerStateEnded) {
+        //CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)recognizer scale]);
+        //NSLog(@"END scale %f", scale);
+        /* I/System.out( 1589): ==============
+         I/System.out( 1589): PP2 :262
+         I/System.out( 1589): P add x:207.42188 y:241.87502
+         I/System.out( 1589): P add x:155.74219 y:310.78125
+         I/System.out( 1589): ==============
+         I/System.out( 1589): PP3 1
+         I/System.out( 1589): P add x:207.42188 y:241.87502
+         */
+        
+        //NSLog(@"END PINCH X1:%f Y1:%f X2:%f Y2:%f", scaledX1, scaledY1, scaledX2, scaledY2);
 
+        
+        // android ACTION_POINTER_UP
+        p = [TouchEvent_PointerCoords builder];
+        eventMsg = [TouchEvent builder];
+        //** 1 << 8 , says that there is a second set of coordinates attached to this event
+        [eventMsg setAction:6 | (1<< 8)]; // x106 = 262 android ACTION_POINTER_UP (1 << ACTION_POINTER_INDEX_SHIFT)
+        [p clear];
+        [p setId:0];
+        [p setX:scaledX1];
+        [p setY:scaledY1];
+        [eventMsg addItems:[p build]];
+        [p clear];
+        [p setId:1];
+        [p setX:scaledX2];
+        [p setY:scaledY2];
+        [eventMsg addItems:[p build]];
         
         msg = [Request builder];
         [msg setType:Request_RequestTypeTouchevent];
         [msg setTouch:[eventMsg build]];
         request = [msg build];
         [ad.client sendSVMPMessage:request];
-        NSLog(@"pinch: send ACTION_MOVE");
-    }
-    else if (state == UIGestureRecognizerStateEnded) {
-        //CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)recognizer scale]);
-        //NSLog(@"END scale %f", scale);
-        NSLog(@"END PINCH X1:%f Y1:%f X2:%f Y2:%f", point1.x, point1.y, point2.x, point2.y);
+       // NSLog(@"pinch: send ACTION_POINTER_UP");
         
-        // android ACTION_POINTER_2_UP
+        //** SEND UP
         p = [TouchEvent_PointerCoords builder];
         eventMsg = [TouchEvent builder];
-        [eventMsg setAction:0x106];
+        [eventMsg setAction:1]; // android ACTION_UP(1)
         [p clear];
         [p setId:0];
         [p setX:scaledX1];
@@ -511,128 +560,14 @@ int foo = 0;
         [msg setTouch:[eventMsg build]];
         request = [msg build];
         [ad.client sendSVMPMessage:request];
-        NSLog(@"pinch: send ACTION_POINTER_2_UP");
-        
-        //** SEND UP
-        p = [TouchEvent_PointerCoords builder];
-        eventMsg = [TouchEvent builder];
-        [eventMsg setAction:1]; // android ACTION_UP(1)
-        [p clear];
-        [p setId:0];
-        [p setX:scaledX2];
-        [p setY:scaledY2];
-        [eventMsg addItems:[p build]];
-        
-        msg = [Request builder];
-        [msg setType:Request_RequestTypeTouchevent];
-        [msg setTouch:[eventMsg build]];
-        request = [msg build];
-        [ad.client sendSVMPMessage:request];
-        NSLog(@"pinch: send ACTION_UP");
+        //NSLog(@"pinch: send ACTION_UP");
         
     }
     else {
         //** cancelled, failed etc
-        NSLog(@"pinch else ");
+        //NSLog(@"pinch else ");
     }
     
-
-
-#if 0
-    //** create android events
-    
-    //////////////////////////////////////////////////////////////
-    // events sequence of zoom gesture
-    // 1. send ACTION_DOWN event of one start point
-    // 2. send ACTION_POINTER_2_DOWN of two start points
-    // 3. send ACTION_MOVE of two middle points
-    // 4. repeat step 3 with updated middle points (x,y),
-    //      until reach the end points
-    // 5. send ACTION_POINTER_2_UP of two end points
-    // 6. send ACTION_UP of one end point
-    //////////////////////////////////////////////////////////////
-    
-    // step 1
-    //event = MotionEvent.obtain(downTime, eventTime,
-    //                           MotionEvent.ACTION_DOWN, 1, properties,
-    //                           pointerCoords, 0,  0, 1, 1, 0, 0, 0, 0 );
-    
-    // inst.sendPointerSync(event);
-    TouchEvent_PointerProper_Builder  *prop;
-    [prop tooType:1]; //TOOL_TYPE_FINGER
-    
-    
-    //** SEND DOWN
-    [eventMsg setAction:0]; // android ACTION_DOWN(0)
-    float adjX = tapX * scale;
-    float adjY = tapY * scale;
-    [p clear];
-    [p setId:0];
-    [p setX:adjX];
-    [p setY:adjY];
-    [eventMsg addItems:[p build]];
-     NSLog(@"TOUCH DOWN %.2f ; %.2f", adjX, adjY);
-    
-    msg = [Request builder];
-    [msg setType:Request_RequestTypeTouchevent];
-    [msg setTouch:[eventMsg build]];
-    request = [msg build];
-    
-    [ad.client sendSVMPMessage:request];
-
-    
-    
-    //step 2
-    //event = MotionEvent.obtain(downTime, eventTime,
-    //                           MotionEvent.ACTION_POINTER_2_DOWN, 2,
-    //                           properties, pointerCoords, 0, 0, 1, 1, 0, 0, 0, 0);
-    //   inst.sendPointerSync(event);
-
-    [eventMsg setAction:0x105]; // android ACTION_POINTER_2_DOWN
-    adjX = tapX * scale;
-    adjY = tapY * scale;
-    [p clear];
-    [p setId:0];
-    [p setX:adjX];
-    [p setY:adjY];
-    [eventMsg addItems:[p build]];
-    NSLog(@"ACTION_POINTER_2_DOWN %.2f ; %.2f", adjX, adjY);
-    [ad.client sendSVMPMessage:request];
-    
-    //step 5
-/*    pc1.x = endPoint1.x;
-    pc1.y = endPoint1.y;
-    pc2.x = endPoint2.x;
-    pc2.y = endPoint2.y;
-    pointerCoords[0] = pc1;
-    pointerCoords[1] = pc2;
-    
-    eventTime += EVENT_MIN_INTERVAL;
-    event = MotionEvent.obtain(downTime, eventTime,
-                               MotionEvent.ACTION_POINTER_2_UP, 2, properties,
-                               pointerCoords, 0, 0, 1, 1, 0, 0, 0, 0);
-    inst.sendPointerSync(event);*/
-    
-    [eventMsg setAction:0x106]; // android ACTION_POINTER_2_UP
-    adjX = tapX * scale;
-    adjY = tapY * scale;
-    [p clear];
-    [p setId:0];
-    [p setX:adjX];
-    [p setY:adjY];
-    [eventMsg addItems:[p build]];
-    NSLog(@"ACTION_POINTER_2_UP %.2f ; %.2f", adjX, adjY);
-    [ad.client sendSVMPMessage:request];
-    
-    /*
-    
-    // step 6
-    /*eventTime += EVENT_MIN_INTERVAL;
-    event = MotionEvent.obtain(downTime, eventTime,
-                               MotionEvent.ACTION_UP, 1, properties,
-                               pointerCoords, 0, 0, 1, 1, 0, 0, 0, 0 );
-    inst.sendPointerSync(event);*/
-#endif
 }
 
 
