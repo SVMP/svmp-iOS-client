@@ -32,6 +32,7 @@
     bool gotScreenInfo = false;
     float firstX = 0.0;
     float firstY = 0.0;
+
     UILabel *loadingLabel;
 
 //** Resize the video
@@ -242,7 +243,7 @@ static void init(VideoView *self) {
     
     //**
     //** movement
-    NSLog(@"MOVE x: %.2f  y: %.2f", translation.x, translation.y);
+    NSLog(@"MOVE x: %.2f + %.2f  y: %.2f + %.2f", firstX, translation.x, firstY, translation.y);
 
     //** create and send event msg
     p = [TouchEvent_PointerCoords builder];
@@ -383,6 +384,7 @@ float _lastScale = 0;
 int _lastTapX = 0;
 int _lastTapY = 0;
 
+int foo = 0;
 - (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer  {
     TouchEvent_Builder *eventMsg;
     TouchEvent_PointerCoords_Builder *p;
@@ -391,11 +393,15 @@ int _lastTapY = 0;
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if (!gotScreenInfo) return;
-    if( recognizer.numberOfTouches < 2) return; 
+    if( recognizer.numberOfTouches < 2) return;
     //NSLog(@"twoFingerPinch");
     
     CGPoint point1 = [recognizer locationOfTouch:0 inView:self];
     CGPoint point2 = [recognizer locationOfTouch:1 inView:self];
+    float scaledX1 = point1.x * xScaleFactor;
+    float scaledY1 = point1.y * yScaleFactor;
+    float scaledX2 = point2.x * xScaleFactor;
+    float scaledY2 = point2.y * yScaleFactor;
     
     //** see http://stackoverflow.com/questions/11523423/how-to-generate-zoom-pinch-gesture-for-testing-for-android
     //** http://developer.android.com/reference/android/view/MotionEvent.html#ACTION_POINTER_2_UP
@@ -415,10 +421,10 @@ int _lastTapY = 0;
         [eventMsg setAction:0]; // android ACTION_DOWN(0)
         [p clear];
         [p setId:0];
-        [p setX:point1.x];
-        [p setY:point1.y];
+        [p setX:scaledX1];
+        [p setY:scaledY1];
         [eventMsg addItems:[p build]];
-        NSLog(@"START TOUCH DOWN %.2f ; %.2f", point1.x, point1.y);
+        
         
         msg = [Request builder];
         [msg setType:Request_RequestTypeTouchevent];
@@ -426,16 +432,23 @@ int _lastTapY = 0;
         request = [msg build];
         [ad.client sendSVMPMessage:request];
         
-        // android ACTION_POINTER_2_DOWN
+        //** SEND DOWN
         p = [TouchEvent_PointerCoords builder];
         eventMsg = [TouchEvent builder];
-        [eventMsg setAction:0x105];
+        [eventMsg setAction:261]; // android ACTION_DOWN(0)
         [p clear];
         [p setId:0];
-        [p setX:point2.x];
-        [p setY:point2.y];
+        [p setX:scaledX1];
+        [p setY:scaledY1];
         [eventMsg addItems:[p build]];
-        NSLog(@"START ACTION_POINTER_2_DOWN %.2f ; %.2f", point2.x, point2.y);
+
+        [p clear];
+        [p setId:1];
+        [p setX:scaledX2];
+        [p setY:scaledY2];
+        [eventMsg addItems:[p build]];
+        NSLog(@"START TOUCH DOWN %.2f ; %.2f", point1.x, point1.y);
+
         
         msg = [Request builder];
         [msg setType:Request_RequestTypeTouchevent];
@@ -443,22 +456,33 @@ int _lastTapY = 0;
         request = [msg build];
         [ad.client sendSVMPMessage:request];
         
+
+
     }
     else if (state == UIGestureRecognizerStateChanged) {
         //CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)recognizer scale]);
         //NSLog(@"Change scale %f", scale);
-        NSLog(@"Change PINCH MOVE X1:%f Y1:%f X2:%f Y2:%f", point1.x, point1.y, point2.x, point2.y);
+        NSLog(@"Change PINCH MOVE X1:%f Y1:%f X2:%f Y2:%f", scaledX1, scaledY1, scaledX2, scaledY2);
 
-        
+
         // android ACTION_MOVE
         p = [TouchEvent_PointerCoords builder];
         eventMsg = [TouchEvent builder];
-        [eventMsg setAction:2];
+        [eventMsg setAction:(2 | (1 << 8))];
         [p clear];
         [p setId:0];
-        [p setX:point1.x];
-        [p setY:point1.y];
+        [p setX:scaledX1];
+        [p setY:scaledY1];
         [eventMsg addItems:[p build]];
+
+        [p clear];
+        [p setId: 1];
+        [p setX:scaledX2];
+        [p setY:scaledY2];
+     
+        [eventMsg addItems:[p build]];
+
+
         
         msg = [Request builder];
         [msg setType:Request_RequestTypeTouchevent];
@@ -478,8 +502,8 @@ int _lastTapY = 0;
         [eventMsg setAction:0x106];
         [p clear];
         [p setId:0];
-        [p setX:point1.x];
-        [p setY:point1.y];
+        [p setX:scaledX1];
+        [p setY:scaledY1];
         [eventMsg addItems:[p build]];
         
         msg = [Request builder];
@@ -495,8 +519,8 @@ int _lastTapY = 0;
         [eventMsg setAction:1]; // android ACTION_UP(1)
         [p clear];
         [p setId:0];
-        [p setX:point2.x];
-        [p setY:point2.y];
+        [p setX:scaledX2];
+        [p setY:scaledY2];
         [eventMsg addItems:[p build]];
         
         msg = [Request builder];
