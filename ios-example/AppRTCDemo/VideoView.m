@@ -96,7 +96,6 @@ static void init(VideoView *self) {
     //** add two finger tap - for Android back button
     //UITapGestureRecognizer *twoTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
     //[twoTapRecognizer setNumberOfTouchesRequired:2];
-        //[twoTapRecognizer numberOfTapsRequired:2]; // setNumberOfTapsRequired:2];
     //[twoTapRecognizer setDelegate:self];
 	//[self addGestureRecognizer:twoTapRecognizer];
     
@@ -106,6 +105,11 @@ static void init(VideoView *self) {
     [self addGestureRecognizer:twoFingerPinch];
 }
 
+
+//******************************
+//******************************
+//**
+//**
 - (void) cancelLoadingAndInitTouch {
     //** return for now, not working, needs debug
     return;
@@ -119,6 +123,11 @@ static void init(VideoView *self) {
     return; */
 }
 
+
+//******************************
+//******************************
+//**
+//**
 - (BOOL)handleScreenInfoResponse:(Response *) msg {
     NSLog(@"ScreenInfo response START");
     if ( ![msg hasScreenInfo] )
@@ -137,6 +146,11 @@ static void init(VideoView *self) {
     return true;
 }
 
+
+//******************************
+//******************************
+//**
+//**
 - (void)sendScreenInfo {
     //** send SCREENINFO request
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -149,6 +163,11 @@ static void init(VideoView *self) {
 }
 
 
+//******************************
+//******************************
+//**
+//** MOVE
+//**
 - (void)handleMove:(UIPanGestureRecognizer *)recognizer {
     TouchEvent_Builder *eventMsg;
     TouchEvent_PointerCoords_Builder *p;
@@ -246,6 +265,11 @@ static void init(VideoView *self) {
 
 }
 
+//******************************
+//******************************
+//**
+//**  TAP
+//**
 int once = 1; //disable
 //** handle tap
 - (void)handleTap:(UITapGestureRecognizer *)recognizer {
@@ -315,63 +339,278 @@ int once = 1; //disable
     [ad.client sendSVMPMessage:request];
 }
 
-float _lastScale = 0;
-
-- (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer  {
-    NSLog(@"twoFingerPinch");
-    
-    if([(UIPinchGestureRecognizer*)recognizer state] == UIGestureRecognizerStateBegan) {
-        _lastScale = 1.0;
-    }
-    CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)recognizer scale]);
-    
-    NSLog(@"scale %f", scale);
-
-}
 
 #if 0
-//** handle tap
 int x = 0;
 - (void)handleDoubleTap:(UITapGestureRecognizer *)recognizer {
     TouchEvent_Builder *eventMsg;
     TouchEvent_PointerCoords_Builder *p;
     Request_Builder *msg;
     Request *request;
-    
-    if (!gotScreenInfo) return;
-
-    //** make this equiv to the android BACK button - for now
-    
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
+    if (!gotScreenInfo) return;
+    
+    NSLog(@"DOUBLE DOWN - ");
+    
+
+#if 0
     eventMsg = [TouchEvent builder];
     p = [TouchEvent_PointerCoords builder];
     
     //** SEND DOWN
     [eventMsg setAction:8]; // android BUTTON_BACK(8)
-    NSLog(@"DOUBLE DOWN - BACK");
+
     
     msg = [Request builder];
     [msg setType:Request_RequestTypeTouchevent];
     [msg setTouch:[eventMsg build]];
     request = [msg build];
-  
-  /*
-    // create a RotationInfo Builder
-    RotationInfo_Builder *riBuilder = [RotationInfo builder];
-    [riBuilder setRotation: (x++ % 4)];
+    [ad.client sendSVMPMessage:request];
     
-    // pack RotationInfo into Request wrapper
+#endif
+    
+}
+#endif
+
+
+//******************************
+//******************************
+//**
+//**  Pinch and Zoom
+//**
+float _lastScale = 0;
+int _lastTapX = 0;
+int _lastTapY = 0;
+
+- (void)twoFingerPinch:(UIPinchGestureRecognizer *)recognizer  {
+    TouchEvent_Builder *eventMsg;
+    TouchEvent_PointerCoords_Builder *p;
+    Request_Builder *msg;
+    Request *request;
+    APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    if (!gotScreenInfo) return;
+    
+    //NSLog(@"twoFingerPinch");
+    
+    CGPoint point1 = [recognizer locationOfTouch:0 inView:self];
+    CGPoint point2 = [recognizer locationOfTouch:1 inView:self];
+    
+    //** see http://stackoverflow.com/questions/11523423/how-to-generate-zoom-pinch-gesture-for-testing-for-android
+    //** http://developer.android.com/reference/android/view/MotionEvent.html#ACTION_POINTER_2_UP
+    //** http://rogchap.com/2011/06/10/ios-image-manipulation-with-uigesturerecognizer-scale-move-rotate/
+    //** http://www.codeproject.com/Articles/319401/Simple-Gestures-on-Android
+    //** https://developer.apple.com/library/ios/documentation/uikit/reference/UIGestureRecognizer_Class/Reference/Reference.html#//apple_ref/c/econst/UIGestureRecognizerStateChanged
+    //** http://stackoverflow.com/questions/10309613/find-points-of-pinch-gesture
+    
+    integer_t state = [(UIPinchGestureRecognizer*)recognizer state];
+    if(state == UIGestureRecognizerStateBegan) {
+        _lastScale = 1.0;
+        //NSLog(@"Begin PINCH TAPPED X:%f Y:%f", point1.x, point1.y);
+
+        //** SEND DOWN
+        p = [TouchEvent_PointerCoords builder];
+        eventMsg = [TouchEvent builder];
+        [eventMsg setAction:0]; // android ACTION_DOWN(0)
+        [p clear];
+        [p setId:0];
+        [p setX:point1.x];
+        [p setY:point1.y];
+        [eventMsg addItems:[p build]];
+        NSLog(@"START TOUCH DOWN %.2f ; %.2f", point1.x, point1.y);
+        
+        msg = [Request builder];
+        [msg setType:Request_RequestTypeTouchevent];
+        [msg setTouch:[eventMsg build]];
+        request = [msg build];
+        [ad.client sendSVMPMessage:request];
+        
+        // android ACTION_POINTER_2_DOWN
+        p = [TouchEvent_PointerCoords builder];
+        eventMsg = [TouchEvent builder];
+        [eventMsg setAction:0x105];
+        [p clear];
+        [p setId:0];
+        [p setX:point2.x];
+        [p setY:point2.y];
+        [eventMsg addItems:[p build]];
+        NSLog(@"START ACTION_POINTER_2_DOWN %.2f ; %.2f", point2.x, point2.y);
+        
+        msg = [Request builder];
+        [msg setType:Request_RequestTypeTouchevent];
+        [msg setTouch:[eventMsg build]];
+        request = [msg build];
+        [ad.client sendSVMPMessage:request];
+        
+    }
+    else if (state == UIGestureRecognizerStateChanged) {
+        //CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)recognizer scale]);
+        //NSLog(@"Change scale %f", scale);
+        NSLog(@"Change PINCH MOVE X1:%f Y1:%f X2:%f Y2:%f", point1.x, point1.y, point2.x, point2.y);
+
+        
+        // android ACTION_MOVE
+        p = [TouchEvent_PointerCoords builder];
+        eventMsg = [TouchEvent builder];
+        [eventMsg setAction:2];
+        [p clear];
+        [p setId:0];
+        [p setX:point1.x];
+        [p setY:point1.y];
+        [eventMsg addItems:[p build]];
+        
+        msg = [Request builder];
+        [msg setType:Request_RequestTypeTouchevent];
+        [msg setTouch:[eventMsg build]];
+        request = [msg build];
+        [ad.client sendSVMPMessage:request];
+        NSLog(@"pinch: send ACTION_MOVE");
+    }
+    else if (state == UIGestureRecognizerStateEnded) {
+        //CGFloat scale = 1.0 - (_lastScale - [(UIPinchGestureRecognizer*)recognizer scale]);
+        //NSLog(@"END scale %f", scale);
+        NSLog(@"END PINCH X1:%f Y1:%f X2:%f Y2:%f", point1.x, point1.y, point2.x, point2.y);
+        
+        // android ACTION_POINTER_2_UP
+        p = [TouchEvent_PointerCoords builder];
+        eventMsg = [TouchEvent builder];
+        [eventMsg setAction:0x106];
+        [p clear];
+        [p setId:0];
+        [p setX:point1.x];
+        [p setY:point1.y];
+        [eventMsg addItems:[p build]];
+        
+        msg = [Request builder];
+        [msg setType:Request_RequestTypeTouchevent];
+        [msg setTouch:[eventMsg build]];
+        request = [msg build];
+        [ad.client sendSVMPMessage:request];
+        NSLog(@"pinch: send ACTION_POINTER_2_UP");
+        
+        //** SEND UP
+        p = [TouchEvent_PointerCoords builder];
+        eventMsg = [TouchEvent builder];
+        [eventMsg setAction:1]; // android ACTION_UP(1)
+        [p clear];
+        [p setId:0];
+        [p setX:point2.x];
+        [p setY:point2.y];
+        [eventMsg addItems:[p build]];
+        
+        msg = [Request builder];
+        [msg setType:Request_RequestTypeTouchevent];
+        [msg setTouch:[eventMsg build]];
+        request = [msg build];
+        [ad.client sendSVMPMessage:request];
+        NSLog(@"pinch: send ACTION_UP");
+        
+    }
+    else {
+        //** cancelled, failed etc
+        NSLog(@"pinch else ");
+    }
+    
+
+
+#if 0
+    //** create android events
+    
+    //////////////////////////////////////////////////////////////
+    // events sequence of zoom gesture
+    // 1. send ACTION_DOWN event of one start point
+    // 2. send ACTION_POINTER_2_DOWN of two start points
+    // 3. send ACTION_MOVE of two middle points
+    // 4. repeat step 3 with updated middle points (x,y),
+    //      until reach the end points
+    // 5. send ACTION_POINTER_2_UP of two end points
+    // 6. send ACTION_UP of one end point
+    //////////////////////////////////////////////////////////////
+    
+    // step 1
+    //event = MotionEvent.obtain(downTime, eventTime,
+    //                           MotionEvent.ACTION_DOWN, 1, properties,
+    //                           pointerCoords, 0,  0, 1, 1, 0, 0, 0, 0 );
+    
+    // inst.sendPointerSync(event);
+    TouchEvent_PointerProper_Builder  *prop;
+    [prop tooType:1]; //TOOL_TYPE_FINGER
+    
+    
+    //** SEND DOWN
+    [eventMsg setAction:0]; // android ACTION_DOWN(0)
+    float adjX = tapX * scale;
+    float adjY = tapY * scale;
+    [p clear];
+    [p setId:0];
+    [p setX:adjX];
+    [p setY:adjY];
+    [eventMsg addItems:[p build]];
+     NSLog(@"TOUCH DOWN %.2f ; %.2f", adjX, adjY);
+    
     msg = [Request builder];
-    [msg setType:Request_RequestTypeRotationInfo];
-    [msg setRotationInfo:[riBuilder build]];
+    [msg setType:Request_RequestTypeTouchevent];
+    [msg setTouch:[eventMsg build]];
     request = [msg build];
-*/
-    
     
     [ad.client sendSVMPMessage:request];
+
+    
+    
+    //step 2
+    //event = MotionEvent.obtain(downTime, eventTime,
+    //                           MotionEvent.ACTION_POINTER_2_DOWN, 2,
+    //                           properties, pointerCoords, 0, 0, 1, 1, 0, 0, 0, 0);
+    //   inst.sendPointerSync(event);
+
+    [eventMsg setAction:0x105]; // android ACTION_POINTER_2_DOWN
+    adjX = tapX * scale;
+    adjY = tapY * scale;
+    [p clear];
+    [p setId:0];
+    [p setX:adjX];
+    [p setY:adjY];
+    [eventMsg addItems:[p build]];
+    NSLog(@"ACTION_POINTER_2_DOWN %.2f ; %.2f", adjX, adjY);
+    [ad.client sendSVMPMessage:request];
+    
+    //step 5
+/*    pc1.x = endPoint1.x;
+    pc1.y = endPoint1.y;
+    pc2.x = endPoint2.x;
+    pc2.y = endPoint2.y;
+    pointerCoords[0] = pc1;
+    pointerCoords[1] = pc2;
+    
+    eventTime += EVENT_MIN_INTERVAL;
+    event = MotionEvent.obtain(downTime, eventTime,
+                               MotionEvent.ACTION_POINTER_2_UP, 2, properties,
+                               pointerCoords, 0, 0, 1, 1, 0, 0, 0, 0);
+    inst.sendPointerSync(event);*/
+    
+    [eventMsg setAction:0x106]; // android ACTION_POINTER_2_UP
+    adjX = tapX * scale;
+    adjY = tapY * scale;
+    [p clear];
+    [p setId:0];
+    [p setX:adjX];
+    [p setY:adjY];
+    [eventMsg addItems:[p build]];
+    NSLog(@"ACTION_POINTER_2_UP %.2f ; %.2f", adjX, adjY);
+    [ad.client sendSVMPMessage:request];
+    
+    /*
+    
+    // step 6
+    /*eventTime += EVENT_MIN_INTERVAL;
+    event = MotionEvent.obtain(downTime, eventTime,
+                               MotionEvent.ACTION_UP, 1, properties,
+                               pointerCoords, 0, 0, 1, 1, 0, 0, 0, 0 );
+    inst.sendPointerSync(event);*/
+#endif
 }
-#endif 
+
 
 - (void)sendVmRotation:(int)orientation {
     Request_Builder *msg;
