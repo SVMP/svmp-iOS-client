@@ -391,7 +391,7 @@ int _lastTapY = 0;
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if (!gotScreenInfo) return;
-    
+    if( recognizer.numberOfTouches < 2) return; 
     //NSLog(@"twoFingerPinch");
     
     CGPoint point1 = [recognizer locationOfTouch:0 inView:self];
