@@ -98,6 +98,7 @@
 		4FD7F5011732E1C2009295E5 /* APPRTCAppClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD7F5001732E1C2009295E5 /* APPRTCAppClient.m */; };
 		4FEE3E531743C94D0005814A /* ios_channel.html in Resources */ = {isa = PBXBuildFile; fileRef = 4FEE3E511743C92D0005814A /* ios_channel.html */; };
 		4FEE3EB71746A3810005814A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEE3EB61746A3810005814A /* Icon.png */; };
+		52A6997818D0ED9700E81F7D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 52A6997718D0ED9700E81F7D /* MBProgressHUD.m */; };
 		FE2A3867182D981300E10046 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2A3866182D981300E10046 /* OpenGLES.framework */; };
 		FE2A3869182D989D00E10046 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2A3868182D989D00E10046 /* QuartzCore.framework */; };
 		FE680E6E182AE41900C0D516 /* libaudio_processing_neon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE680E6D182AE41900C0D516 /* libaudio_processing_neon.a */; };
@@ -307,6 +308,8 @@
 		4FD7F5001732E1C2009295E5 /* APPRTCAppClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APPRTCAppClient.m; sourceTree = "<group>"; };
 		4FEE3E511743C92D0005814A /* ios_channel.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ios_channel.html; sourceTree = "<group>"; };
 		4FEE3EB61746A3810005814A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
+		52A6997618D0ED9700E81F7D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		52A6997718D0ED9700E81F7D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ProtocolBuffers.xcodeproj; path = proto_buf/ProtocolBuffers.xcodeproj; sourceTree = "<group>"; };
 		FE2A3866182D981300E10046 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		FE2A3868182D989D00E10046 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -572,6 +575,8 @@
 		4FBCC0541728E929004C8C0B /* AppRTCDemo */ = {
 			isa = PBXGroup;
 			children = (
+				52A6997618D0ED9700E81F7D /* MBProgressHUD.h */,
+				52A6997718D0ED9700E81F7D /* MBProgressHUD.m */,
 				3E3EB82918BE73FE00CB2739 /* APComplexPass_iPad.storyboard */,
 				3E3EB82A18BE73FE00CB2739 /* APComplexPass_iPhone.storyboard */,
 				3E3EB82B18BE73FE00CB2739 /* APQuestionPass_iPad.storyboard */,
@@ -778,6 +783,7 @@
 				186CA7591836D3DB00CE8212 /* VideoView.m in Sources */,
 				4FD7F5011732E1C2009295E5 /* APPRTCAppClient.m in Sources */,
 				FECDB9A3184E8080007C2286 /* Svmp.pb.m in Sources */,
+				52A6997818D0ED9700E81F7D /* MBProgressHUD.m in Sources */,
 				3E7FC8DE18BCDB0D00101184 /* iMASMainViewController.m in Sources */,
 				3E7FC8E218BCDB0D00101184 /* APViewController.m in Sources */,
 			);

@@ -38,6 +38,7 @@
 #import "VideoView.h"
 #import <QuartzCore/QuartzCore.h>
 #import <SecureFoundation/SecureFoundation.h>
+#import "MBProgressHUD.h"
 
 @interface APPRTCViewController ()
 
@@ -147,17 +148,10 @@ float tol = 0.50;
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-    
-    if ([self connectedToInternet] == NO) {
-        NSLog(@"*** NO INTERNET connection found!");
-    }
 
     UIAccelerometer *accel = [UIAccelerometer sharedAccelerometer];
     accel.delegate = self;
     //accel.updateInterval = 1.0f/60.0f;
-
-    APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [ad launchSvmpAppClient];
 
     //** Add video view to this view
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-80);
@@ -173,19 +167,15 @@ float tol = 0.50;
     [button setTitle:@"i" forState:UIControlStateNormal];
     button.frame = CGRectMake(screenWidth - 22, screenHeight - 42, 22.0, 22.0);
     [self.view addSubview:button];
-
     
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.labelText = @"Loading";
+    APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [ad launchSvmpAppClient:hud];
 }
 
 - (void) videoReady {
     [_videoView cancelLoadingAndInitTouch];
 }
-
-- (BOOL) connectedToInternet
-{
-    NSString *URLString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.google.com"]];
-    return ( URLString != NULL ) ? YES : NO;
-}
-
 
 @end
