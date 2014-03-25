@@ -38,7 +38,6 @@
 #import "APPRTCAppClient.h"
 #import "RTCSessionDescriptonDelegate.h"
 #import "RTCVideoTrack.h"
-#import "MBProgressHUD.h"
 
 // Used to send a message to an apprtc.appspot.com "room".
 @protocol APPRTCSendMessage<NSObject>
@@ -64,9 +63,8 @@
 @property (strong, nonatomic) APPRTCViewController *viewController;
 @property (strong, nonatomic) APPRTCAppClient *client;
 @property (nonatomic, strong)  RTCVideoTrack *localVideoTrack;
-@property (nonatomic, strong) MBProgressHUD *hud;
 
-- (BOOL) launchSvmpAppClient:(MBProgressHUD *)hud;
+- (BOOL) launchSvmpAppClient;
 - (void) setCandidate:(NSDictionary *)objects;
 - (void) runNextWindow;
 - (void) loadRTCView;

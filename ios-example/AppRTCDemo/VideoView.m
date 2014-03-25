@@ -33,7 +33,7 @@
     float firstX = 0.0;
     float firstY = 0.0;
 
-    //UILabel *loadingLabel;
+    UILabel *loadingLabel;
 
 //** Resize the video
 #define VIDEO_WIDTH 320
@@ -71,7 +71,18 @@ static void init(VideoView *self) {
     // [[self layer] setCornerRadius:VIDEO_HEIGHT/2.0];
     [[self layer] setMasksToBounds:YES];
     [self setBackgroundColor:[UIColor darkGrayColor]];
+    
+    //** hack in LOADING text...
+    loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(32, 32, 250, 35)];
+    
+    [loadingLabel setTextColor:[UIColor whiteColor]];
+    [loadingLabel setBackgroundColor:[UIColor darkGrayColor]];
+    [loadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 18.0f]];
+    [loadingLabel setText:@"Loading... (tap to dismiss)"];
+    loadingLabel.center = CGPointMake(VIDEO_WIDTH/2, VIDEO_HEIGHT/2);
+    [self addSubview:loadingLabel];
 
+    
     //** add tap gesture recognizer
     UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     recognizer.delegate = self;
@@ -165,11 +176,7 @@ static void init(VideoView *self) {
     Request_Builder *msg;
     Request *request;
     
-    if (!gotScreenInfo)
-    {
-        [self sendScreenInfo];
-        return;
-    }
+    if (!gotScreenInfo) return;
     
    // NSLog(@"handleMove");
     
@@ -265,6 +272,7 @@ static void init(VideoView *self) {
 //**
 //**  TAP
 //**
+int once = 1; //disable
 //** handle tap
 - (void)handleTap:(UITapGestureRecognizer *)recognizer {
     TouchEvent_Builder *eventMsg;
@@ -272,11 +280,14 @@ static void init(VideoView *self) {
     Request_Builder *msg;
     Request *request;
     
-    if (!gotScreenInfo)
-    {
+    if (once) {
         [self sendScreenInfo];
+        once = 0;
+        //** remove loading label
+        [loadingLabel removeFromSuperview];
         return;
     }
+    if (!gotScreenInfo) return;
     
     CGPoint tapPoint = [recognizer locationInView:self];
     int tapX = (int) tapPoint.x;
@@ -340,11 +351,7 @@ int x = 0;
     Request *request;
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    if (!gotScreenInfo)
-    {
-        [self sendScreenInfo];
-        return;
-    }
+    if (!gotScreenInfo) return;
     
     NSLog(@"DOUBLE DOWN - ");
     
@@ -381,12 +388,7 @@ int x = 0;
     Request *request;
     APPRTCAppDelegate *ad = (APPRTCAppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    if (!gotScreenInfo)
-    {
-        [self sendScreenInfo];
-        return;
-    }
-    
+    if (!gotScreenInfo) return;
     if( recognizer.numberOfTouches != 2) return;
     //NSLog(@"twoFingerPinch");
     

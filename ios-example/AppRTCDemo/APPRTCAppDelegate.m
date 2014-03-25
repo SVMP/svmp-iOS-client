@@ -57,10 +57,9 @@
 
 @interface PCObserver : NSObject<RTCPeerConnectionDelegate>
 
-- (id)initWithDelegate:(id<APPRTCSendMessage>)delegate
-      forProcessDialog:(MBProgressHUD *)hud;
+- (id)initWithDelegate:(id<APPRTCSendMessage>)delegate;
 @property(nonatomic, strong)  VideoView *videoView;
-@property(nonatomic, strong) MBProgressHUD *hud;
+
 
 @end
 
@@ -70,11 +69,9 @@
 @synthesize videoView = _videoView;
 
 
-- (id)initWithDelegate:(id<APPRTCSendMessage>)delegate
-      forProcessDialog:(MBProgressHUD *)hud {
+- (id)initWithDelegate:(id<APPRTCSendMessage>)delegate {
    NSLog(@"SEQ11- *** PeerObserver (PCO) init");
-    
-    self.hud = hud;
+
     if (self = [super init]) {
       _delegate = delegate;
    }
@@ -101,9 +98,7 @@
 
         NSAssert([stream.videoTracks count] >= 1,
                  @"Expected at least 1 video stream");
-        self.hud.removeFromSuperViewOnHide = YES;
-        [self.hud hide:YES];
-        
+      
         if ([stream.videoTracks count] > 0) {
             [[self videoView] renderVideoTrackInterface:[stream.videoTracks objectAtIndex:0]];
         }
@@ -271,7 +266,7 @@
 //**********************
 //**
 //**
-- (BOOL)launchSvmpAppClient:(MBProgressHUD *)hud {
+- (BOOL)launchSvmpAppClient {
     if (self.client) {
         return NO;
     }
@@ -281,8 +276,6 @@
     self.client.ICEServerDelegate = self;
     //self.client.messageHandler = self;
 
-    self.hud = hud;
-    
     //** send Auth Packet
     [self.client sendAuthPacket];
     return YES;
@@ -318,7 +311,7 @@
     
     self.queuedRemoteCandidates = [NSMutableArray array];
     self.peerConnectionFactory = [[RTCPeerConnectionFactory alloc] init];
-    self.pcObserver = [[PCObserver alloc] initWithDelegate:self forProcessDialog:self.hud];
+    self.pcObserver = [[PCObserver alloc] initWithDelegate:self];
     self.peerConnection =
       [self.peerConnectionFactory peerConnectionWithICEServers:servers
                                                    constraints:_constraints
