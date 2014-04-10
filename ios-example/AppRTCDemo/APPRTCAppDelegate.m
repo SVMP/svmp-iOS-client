@@ -193,6 +193,7 @@
 @synthesize peerConnectionFactory = _peerConnectionFactory;
 @synthesize queuedRemoteCandidates = _queuedRemoteCandidates;
 @synthesize localVideoTrack = _localVideoTrack;
+@synthesize loginView = _loginView;
 
 
 #pragma mark - UIApplicationDelegate methods
@@ -210,9 +211,10 @@
 //** load connection page
 - (void)loadFormView {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    id contID = [storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
+    //** bug fix - need to ensure this pointer is saved on the heap, so it can take method calls at a later time
+    _loginView = [storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
     
-    self.window.rootViewController = contID;
+    self.window.rootViewController = _loginView;
     [self.window makeKeyAndVisible];
 }
 
