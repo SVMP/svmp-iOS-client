@@ -147,10 +147,6 @@ float tol = 0.50;
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-    
-    if ([self connectedToInternet] == NO) {
-        NSLog(@"*** NO INTERNET connection found!");
-    }
 
     UIAccelerometer *accel = [UIAccelerometer sharedAccelerometer];
     accel.delegate = self;
@@ -180,12 +176,5 @@ float tol = 0.50;
 - (void) videoReady {
     [_videoView cancelLoadingAndInitTouch];
 }
-
-- (BOOL) connectedToInternet
-{
-    NSString *URLString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.google.com"]];
-    return ( URLString != NULL ) ? YES : NO;
-}
-
 
 @end
