@@ -156,14 +156,15 @@ float tol = 0.50;
     [ad launchSvmpAppClient];
 
     //** Add video view to this view
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-80);
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGRect frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height);
     _videoView = [[VideoView alloc] initWithFrame:frame];
     [self.view addSubview:_videoView];
     
     //** add Disconnect button
     button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [button addTarget:self action:@selector(disconnectMenu:) forControlEvents:UIControlEventTouchUpInside];
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
+
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     [button setTitle:@"i" forState:UIControlStateNormal];

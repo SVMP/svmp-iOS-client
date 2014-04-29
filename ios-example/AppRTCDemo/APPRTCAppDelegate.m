@@ -210,7 +210,18 @@
 
 //** load connection page
 - (void)loadFormView {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    UIStoryboard *storyboard = NULL;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        // Place iPhone/iPod specific code here...
+        storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
+    }
+    else
+    {
+        // Place iPad-specific code here...
+        storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard_iPad" bundle:nil];
+    }
+    
     //** bug fix - need to ensure this pointer is saved on the heap, so it can take method calls at a later time
     _loginView = [storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
     

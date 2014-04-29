@@ -36,7 +36,6 @@
 		3E3EB83018BE73FF00CB2739 /* APQuestionPass_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E3EB82C18BE73FF00CB2739 /* APQuestionPass_iPhone.storyboard */; };
 		3E3EB83418BE8F0F00CB2739 /* androidLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E3EB83318BE8F0F00CB2739 /* androidLogo.png */; };
 		3E7FC8DE18BCDB0D00101184 /* iMASMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */; };
-		3E7FC8E118BCDB0D00101184 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */; };
 		3E7FC8E218BCDB0D00101184 /* APViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E7FC8DC18BCDB0D00101184 /* APViewController.m */; };
 		3E7FC8E718BCDB9300101184 /* libSecureFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E7FC8CC18BCD95B00101184 /* libSecureFoundation.a */; };
 		3E7FC8E918BCDBA900101184 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E7FC8E818BCDBA900101184 /* CoreData.framework */; };
@@ -97,6 +96,8 @@
 		4FD7F5011732E1C2009295E5 /* APPRTCAppClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD7F5001732E1C2009295E5 /* APPRTCAppClient.m */; };
 		4FEE3E531743C94D0005814A /* ios_channel.html in Resources */ = {isa = PBXBuildFile; fileRef = 4FEE3E511743C92D0005814A /* ios_channel.html */; };
 		4FEE3EB71746A3810005814A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEE3EB61746A3810005814A /* Icon.png */; };
+		52ABB1EA190F0F3100355CC2 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52ABB1E8190F0F3100355CC2 /* MainStoryboard_iPad.storyboard */; };
+		52ABB1EB190F0F3100355CC2 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52ABB1E9190F0F3100355CC2 /* MainStoryboard_iPhone.storyboard */; };
 		FE2A3867182D981300E10046 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2A3866182D981300E10046 /* OpenGLES.framework */; };
 		FE2A3869182D989D00E10046 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE2A3868182D989D00E10046 /* QuartzCore.framework */; };
 		FE58130F18F5F8600061B12F /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2945DB3217C21D25004BEFD1 /* libstdc++.dylib */; };
@@ -238,7 +239,6 @@
 		3E7FC8C618BCD95B00101184 /* SecureFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SecureFoundation.xcodeproj; path = ../vendor/securefoundation/SecureFoundation.xcodeproj; sourceTree = "<group>"; };
 		3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iMASMainViewController.m; sourceTree = "<group>"; };
 		3E7FC8D618BCDB0D00101184 /* iMASMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iMASMainViewController.h; sourceTree = "<group>"; };
-		3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		3E7FC8DC18BCDB0D00101184 /* APViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APViewController.m; sourceTree = "<group>"; };
 		3E7FC8DD18BCDB0D00101184 /* APViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APViewController.h; sourceTree = "<group>"; };
 		3E7FC8E818BCDBA900101184 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -307,6 +307,8 @@
 		4FD7F5001732E1C2009295E5 /* APPRTCAppClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APPRTCAppClient.m; sourceTree = "<group>"; };
 		4FEE3E511743C92D0005814A /* ios_channel.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ios_channel.html; sourceTree = "<group>"; };
 		4FEE3EB61746A3810005814A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
+		52ABB1E8190F0F3100355CC2 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		52ABB1E9190F0F3100355CC2 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		FE234D88184FD5CE0080000D /* ProtocolBuffers.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ProtocolBuffers.xcodeproj; path = proto_buf/ProtocolBuffers.xcodeproj; sourceTree = "<group>"; };
 		FE2A3866182D981300E10046 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		FE2A3868182D989D00E10046 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -578,6 +580,8 @@
 		4FBCC0541728E929004C8C0B /* AppRTCDemo */ = {
 			isa = PBXGroup;
 			children = (
+				52ABB1E8190F0F3100355CC2 /* MainStoryboard_iPad.storyboard */,
+				52ABB1E9190F0F3100355CC2 /* MainStoryboard_iPhone.storyboard */,
 				3E3EB82918BE73FE00CB2739 /* APComplexPass_iPad.storyboard */,
 				3E3EB82A18BE73FE00CB2739 /* APComplexPass_iPhone.storyboard */,
 				3E3EB82B18BE73FE00CB2739 /* APQuestionPass_iPad.storyboard */,
@@ -586,7 +590,6 @@
 				3E3EB82218BE73DB00CB2739 /* APSimplePass_iPhone.storyboard */,
 				3E7FC8D518BCDB0D00101184 /* iMASMainViewController.m */,
 				3E7FC8D618BCDB0D00101184 /* iMASMainViewController.h */,
-				3E7FC8DB18BCDB0D00101184 /* MainStoryboard.storyboard */,
 				3E7FC8DC18BCDB0D00101184 /* APViewController.m */,
 				3E7FC8DD18BCDB0D00101184 /* APViewController.h */,
 				FECDB9A2184E8080007C2286 /* Svmp.pb.m */,
@@ -666,6 +669,11 @@
 				CLASSPREFIX = RTC;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = Google;
+				TargetAttributes = {
+					4FBCC04A1728E929004C8C0B = {
+						DevelopmentTeam = M9BLEU3LFV;
+					};
+				};
 			};
 			buildConfigurationList = 4FBCC0461728E929004C8C0B /* Build configuration list for PBXProject "Svmp-iOS-Client" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -755,14 +763,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52ABB1EA190F0F3100355CC2 /* MainStoryboard_iPad.storyboard in Resources */,
 				4FEE3E531743C94D0005814A /* ios_channel.html in Resources */,
 				4FBCC0611728E929004C8C0B /* Default.png in Resources */,
 				4FBCC06B1728E929004C8C0B /* APPRTCViewController.xib in Resources */,
 				4FEE3EB71746A3810005814A /* Icon.png in Resources */,
-				3E7FC8E118BCDB0D00101184 /* MainStoryboard.storyboard in Resources */,
 				3E3EB82318BE73DB00CB2739 /* APSimplePass_iPad.storyboard in Resources */,
 				3E3EB82418BE73DB00CB2739 /* APSimplePass_iPhone.storyboard in Resources */,
 				3E3EB82D18BE73FF00CB2739 /* APComplexPass_iPad.storyboard in Resources */,
+				52ABB1EB190F0F3100355CC2 /* MainStoryboard_iPhone.storyboard in Resources */,
 				3E3EB82E18BE73FF00CB2739 /* APComplexPass_iPhone.storyboard in Resources */,
 				3E3EB82F18BE73FF00CB2739 /* APQuestionPass_iPad.storyboard in Resources */,
 				3E3EB83018BE73FF00CB2739 /* APQuestionPass_iPhone.storyboard in Resources */,
@@ -887,6 +896,8 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -938,8 +949,9 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-stdlib=libstdc++";
 				PRODUCT_NAME = "Svmp-iOS-Client";
+				PROVISIONING_PROFILE = "D8A5310B-4007-4352-81FD-63635539FC84";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};
@@ -951,6 +963,8 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -973,8 +987,9 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-stdlib=libstdc++";
 				PRODUCT_NAME = "Svmp-iOS-Client";
+				PROVISIONING_PROFILE = "D8A5310B-4007-4352-81FD-63635539FC84";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = armv7;
 				WRAPPER_EXTENSION = app;
 			};

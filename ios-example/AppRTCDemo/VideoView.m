@@ -32,12 +32,10 @@
     bool gotScreenInfo = false;
     float firstX = 0.0;
     float firstY = 0.0;
+int width;
+int height;
 
     UILabel *loadingLabel;
-
-//** Resize the video
-#define VIDEO_WIDTH 320
-#define VIDEO_HEIGHT 470
 
 -(void) disconnectMenu {
     NSLog(@"HERE");
@@ -45,13 +43,14 @@
 
 
 static void init(VideoView *self) {
-    
+    width = self.frame.size.width;
+    height = self.frame.size.height;
     UIView<RTCVideoRenderView> *renderView = [RTCVideoRenderer newRenderViewWithFrame:CGRectMake(200, 100, 240, 180)];
     [self setRenderView:renderView];
     UIImageView *placeholderView = [[UIImageView alloc] initWithFrame:[renderView frame]];
     [self setPlaceholderView:placeholderView];
     NSDictionary *views = NSDictionaryOfVariableBindings(renderView, placeholderView);
-    NSDictionary *metrics = @{@"VIDEO_WIDTH" : @(VIDEO_WIDTH), @"VIDEO_HEIGHT" : @(VIDEO_HEIGHT)};
+    NSDictionary *metrics = @{@"VIDEO_WIDTH" : @(width), @"VIDEO_HEIGHT" : @(height)};
     
     [placeholderView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self addSubview:placeholderView];
@@ -79,7 +78,7 @@ static void init(VideoView *self) {
     [loadingLabel setBackgroundColor:[UIColor darkGrayColor]];
     [loadingLabel setFont:[UIFont fontWithName: @"Trebuchet MS" size: 18.0f]];
     [loadingLabel setText:@"Loading... (tap to dismiss)"];
-    loadingLabel.center = CGPointMake(VIDEO_WIDTH/2, VIDEO_HEIGHT/2);
+    loadingLabel.center = CGPointMake(width/2, height/2);
     [self addSubview:loadingLabel];
 
     
@@ -139,8 +138,8 @@ static void init(VideoView *self) {
     int x = [[msg screenInfo] x];
     int y = [[msg screenInfo] y];
     NSLog(@"Got the ServerInfo: xsize=%d ysize=%d" , x, y);
-    xScaleFactor = (float)x/(float)VIDEO_WIDTH;
-    yScaleFactor = (float)y/(float)VIDEO_HEIGHT;
+    xScaleFactor = (float)x/(float)width;
+    yScaleFactor = (float)y/(float)height;
     NSLog(@"Scale factor: %.2f ; %.2f", xScaleFactor, yScaleFactor);
     
     gotScreenInfo = true;
@@ -199,8 +198,8 @@ static void init(VideoView *self) {
         //** add location of finger
         [p clear];
         [p setId:0]; //** id of single finger down
-        [p setX:firstX];
-        [p setY:firstY];
+        [p setX:(firstX * xScaleFactor)];
+        [p setY:(firstY * yScaleFactor)];
         [eventMsg addItems:[p build]];
         
         msg = [Request builder];
@@ -229,8 +228,8 @@ static void init(VideoView *self) {
         //** add location of finger
         [p clear];
         [p setId:0];
-        [p setX:endX];
-        [p setY:endY];
+        [p setX:(endX * xScaleFactor)];
+        [p setY:(endY * yScaleFactor)];
         [eventMsg addItems:[p build]];
         
         msg = [Request builder];
@@ -254,8 +253,10 @@ static void init(VideoView *self) {
     //** add location of finger
     [p clear];
     [p setId:0];
-    [p setX:(firstX + translation.x)];
-    [p setY:(firstY + translation.y)];
+    float adjX = (firstX + translation.x) * xScaleFactor;
+    float adjY = (firstY + translation.y) * yScaleFactor;
+    [p setX:(adjX)];
+    [p setY:(adjY)];
     [eventMsg addItems:[p build]];
     
     msg = [Request builder];
@@ -624,7 +625,7 @@ int x = 0;
 -(CGSize)intrinsicContentSize {
     // We add a bit of a buffer to keep the video from showing out of our border
     CGFloat borderSize = 0; //[[self layer] borderWidth];
-    return CGSizeMake(VIDEO_HEIGHT + borderSize - 1, VIDEO_HEIGHT + borderSize - 1);
+    return CGSizeMake(height + borderSize - 1, height + borderSize - 1);
 }
 
 - (void)setVideoOrientation:(UIInterfaceOrientation)videoOrientation {
