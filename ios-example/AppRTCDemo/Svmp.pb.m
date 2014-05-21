@@ -59,6 +59,7 @@ BOOL SensorTypeIsValidValue(SensorType value) {
 @property (strong) WebRTCMessage* webrtcMsg;
 @property (strong) RotationInfo* rotationInfo;
 @property (strong) Ping* pingRequest;
+@property (strong) VideoStreamInfo* videoInfo;
 @end
 
 @implementation Request
@@ -133,6 +134,13 @@ BOOL SensorTypeIsValidValue(SensorType value) {
   hasPingRequest_ = !!value_;
 }
 @synthesize pingRequest;
+- (BOOL) hasVideoInfo {
+  return !!hasVideoInfo_;
+}
+- (void) setHasVideoInfo:(BOOL) value_ {
+  hasVideoInfo_ = !!value_;
+}
+@synthesize videoInfo;
 - (id) init {
   if ((self = [super init])) {
     self.type = Request_RequestTypeAuth;
@@ -145,6 +153,7 @@ BOOL SensorTypeIsValidValue(SensorType value) {
     self.webrtcMsg = [WebRTCMessage defaultInstance];
     self.rotationInfo = [RotationInfo defaultInstance];
     self.pingRequest = [Ping defaultInstance];
+    self.videoInfo = [VideoStreamInfo defaultInstance];
   }
   return self;
 }
@@ -237,6 +246,9 @@ static Request* defaultRequestInstance = nil;
   if (self.hasPingRequest) {
     [output writeMessage:11 value:self.pingRequest];
   }
+  if (self.hasVideoInfo) {
+    [output writeMessage:12 value:self.videoInfo];
+  }
   [self.unknownFields writeToCodedOutputStream:output];
 }
 - (int32_t) serializedSize {
@@ -275,6 +287,9 @@ static Request* defaultRequestInstance = nil;
   }
   if (self.hasPingRequest) {
     size_ += computeMessageSize(11, self.pingRequest);
+  }
+  if (self.hasVideoInfo) {
+    size_ += computeMessageSize(12, self.videoInfo);
   }
   size_ += self.unknownFields.serializedSize;
   memoizedSerializedSize = size_;
@@ -368,6 +383,12 @@ static Request* defaultRequestInstance = nil;
                          withIndent:[NSString stringWithFormat:@"%@  ", indent]];
     [output appendFormat:@"%@}\n", indent];
   }
+  if (self.hasVideoInfo) {
+    [output appendFormat:@"%@%@ {\n", indent, @"videoInfo"];
+    [self.videoInfo writeDescriptionTo:output
+                         withIndent:[NSString stringWithFormat:@"%@  ", indent]];
+    [output appendFormat:@"%@}\n", indent];
+  }
   [self.unknownFields writeDescriptionTo:output withIndent:indent];
 }
 - (void) storeInDictionary:(NSMutableDictionary *)dictionary {
@@ -419,6 +440,11 @@ static Request* defaultRequestInstance = nil;
     [self.pingRequest storeInDictionary:messageDictionary];
     [dictionary setObject:[NSDictionary dictionaryWithDictionary:messageDictionary] forKey:@"pingRequest"];
   }
+  if (self.hasVideoInfo) {
+    NSMutableDictionary *messageDictionary = [NSMutableDictionary dictionary];
+    [self.videoInfo storeInDictionary:messageDictionary];
+    [dictionary setObject:[NSDictionary dictionaryWithDictionary:messageDictionary] forKey:@"videoInfo"];
+  }
   [self.unknownFields storeInDictionary:dictionary];
 }
 - (BOOL) isEqual:(id)other {
@@ -450,6 +476,8 @@ static Request* defaultRequestInstance = nil;
       (!self.hasRotationInfo || [self.rotationInfo isEqual:otherMessage.rotationInfo]) &&
       self.hasPingRequest == otherMessage.hasPingRequest &&
       (!self.hasPingRequest || [self.pingRequest isEqual:otherMessage.pingRequest]) &&
+      self.hasVideoInfo == otherMessage.hasVideoInfo &&
+      (!self.hasVideoInfo || [self.videoInfo isEqual:otherMessage.videoInfo]) &&
       (self.unknownFields == otherMessage.unknownFields || (self.unknownFields != nil && [self.unknownFields isEqual:otherMessage.unknownFields]));
 }
 - (NSUInteger) hash {
@@ -483,6 +511,9 @@ static Request* defaultRequestInstance = nil;
   }
   if (self.hasPingRequest) {
     hashCode = hashCode * 31 + [self.pingRequest hash];
+  }
+  if (self.hasVideoInfo) {
+    hashCode = hashCode * 31 + [self.videoInfo hash];
   }
   hashCode = hashCode * 31 + [self.unknownFields hash];
   return hashCode;
@@ -575,6 +606,9 @@ BOOL Request_RequestTypeIsValidValue(Request_RequestType value) {
   }
   if (other.hasPingRequest) {
     [self mergePingRequest:other.pingRequest];
+  }
+  if (other.hasVideoInfo) {
+    [self mergeVideoInfo:other.videoInfo];
   }
   [self mergeUnknownFields:other.unknownFields];
   return self;
@@ -685,6 +719,15 @@ BOOL Request_RequestTypeIsValidValue(Request_RequestType value) {
         }
         [input readMessage:subBuilder extensionRegistry:extensionRegistry];
         [self setPingRequest:[subBuilder buildPartial]];
+        break;
+      }
+      case 98: {
+        VideoStreamInfo_Builder* subBuilder = [VideoStreamInfo builder];
+        if (self.hasVideoInfo) {
+          [subBuilder mergeFrom:self.videoInfo];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setVideoInfo:[subBuilder buildPartial]];
         break;
       }
     }
@@ -974,6 +1017,36 @@ BOOL Request_RequestTypeIsValidValue(Request_RequestType value) {
 - (Request_Builder*) clearPingRequest {
   result.hasPingRequest = NO;
   result.pingRequest = [Ping defaultInstance];
+  return self;
+}
+- (BOOL) hasVideoInfo {
+  return result.hasVideoInfo;
+}
+- (VideoStreamInfo*) videoInfo {
+  return result.videoInfo;
+}
+- (Request_Builder*) setVideoInfo:(VideoStreamInfo*) value {
+  result.hasVideoInfo = YES;
+  result.videoInfo = value;
+  return self;
+}
+- (Request_Builder*) setVideoInfoBuilder:(VideoStreamInfo_Builder*) builderForValue {
+  return [self setVideoInfo:[builderForValue build]];
+}
+- (Request_Builder*) mergeVideoInfo:(VideoStreamInfo*) value {
+  if (result.hasVideoInfo &&
+      result.videoInfo != [VideoStreamInfo defaultInstance]) {
+    result.videoInfo =
+      [[[VideoStreamInfo builderWithPrototype:result.videoInfo] mergeFrom:value] buildPartial];
+  } else {
+    result.videoInfo = value;
+  }
+  result.hasVideoInfo = YES;
+  return self;
+}
+- (Request_Builder*) clearVideoInfo {
+  result.hasVideoInfo = NO;
+  result.videoInfo = [VideoStreamInfo defaultInstance];
   return self;
 }
 @end
@@ -2081,16 +2154,12 @@ static Intent* defaultIntentInstance = nil;
   NSMutableArray * flagsArrayArray = [NSMutableArray new];
   NSUInteger flagsArrayCount=self.flagsArray.count;
   for(int i=0;i<flagsArrayCount;i++){
-      //** SVMP fix and workaround
-      [flagsArrayArray addObject: @([self.flagsArray int32AtIndex:i])]; // forKey: @"flags"];
+    [flagsArrayArray addObject: @([self.flagsArray int32AtIndex:i])];
   }
   [dictionary setObject: flagsArrayArray forKey: @"flags"];
-  //** SVMP code fixes
-#if 0
-  for (NSString* element in self.categoriesArray) {
+  /*for (NSString* element in self.categoriesArray) {
     [output appendFormat:@"%@%@: %@\n", indent, @"categories", element];
-  }
-#endif
+  }*/
   [self.unknownFields storeInDictionary:dictionary];
 }
 - (BOOL) isEqual:(id)other {
@@ -4001,8 +4070,7 @@ static SensorEvent* defaultSensorEventInstance = nil;
   NSMutableArray * valuesArrayArray = [NSMutableArray new];
   NSUInteger valuesArrayCount=self.valuesArray.count;
   for(int i=0;i<valuesArrayCount;i++){
-       //** SVMP fixes and work around
-      [valuesArrayArray addObject: @([self.valuesArray floatAtIndex:i])]; // forKey: @"values"];
+    [valuesArrayArray addObject: @([self.valuesArray floatAtIndex:i])];
   }
   [dictionary setObject: valuesArrayArray forKey: @"values"];
   [self.unknownFields storeInDictionary:dictionary];
@@ -8745,7 +8813,7 @@ BOOL AuthRequest_AuthRequestTypeIsValidValue(AuthRequest_AuthRequestType value) 
 
 @interface AuthResponse ()
 @property AuthResponse_AuthResponseType type;
-@property (strong) NSString* sessionToken;
+@property (strong) SessionInfo* sessionInfo;
 @end
 
 @implementation AuthResponse
@@ -8757,17 +8825,17 @@ BOOL AuthRequest_AuthRequestTypeIsValidValue(AuthRequest_AuthRequestType value) 
   hasType_ = !!value_;
 }
 @synthesize type;
-- (BOOL) hasSessionToken {
-  return !!hasSessionToken_;
+- (BOOL) hasSessionInfo {
+  return !!hasSessionInfo_;
 }
-- (void) setHasSessionToken:(BOOL) value_ {
-  hasSessionToken_ = !!value_;
+- (void) setHasSessionInfo:(BOOL) value_ {
+  hasSessionInfo_ = !!value_;
 }
-@synthesize sessionToken;
+@synthesize sessionInfo;
 - (id) init {
   if ((self = [super init])) {
     self.type = AuthResponse_AuthResponseTypeAuthOk;
-    self.sessionToken = @"";
+    self.sessionInfo = [SessionInfo defaultInstance];
   }
   return self;
 }
@@ -8787,14 +8855,19 @@ static AuthResponse* defaultAuthResponseInstance = nil;
   if (!self.hasType) {
     return NO;
   }
+  if (self.hasSessionInfo) {
+    if (!self.sessionInfo.isInitialized) {
+      return NO;
+    }
+  }
   return YES;
 }
 - (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
   if (self.hasType) {
     [output writeEnum:1 value:self.type];
   }
-  if (self.hasSessionToken) {
-    [output writeString:2 value:self.sessionToken];
+  if (self.hasSessionInfo) {
+    [output writeMessage:2 value:self.sessionInfo];
   }
   [self.unknownFields writeToCodedOutputStream:output];
 }
@@ -8808,8 +8881,8 @@ static AuthResponse* defaultAuthResponseInstance = nil;
   if (self.hasType) {
     size_ += computeEnumSize(1, self.type);
   }
-  if (self.hasSessionToken) {
-    size_ += computeStringSize(2, self.sessionToken);
+  if (self.hasSessionInfo) {
+    size_ += computeMessageSize(2, self.sessionInfo);
   }
   size_ += self.unknownFields.serializedSize;
   memoizedSerializedSize = size_;
@@ -8849,8 +8922,11 @@ static AuthResponse* defaultAuthResponseInstance = nil;
   if (self.hasType) {
     [output appendFormat:@"%@%@: %d\n", indent, @"type", self.type];
   }
-  if (self.hasSessionToken) {
-    [output appendFormat:@"%@%@: %@\n", indent, @"sessionToken", self.sessionToken];
+  if (self.hasSessionInfo) {
+    [output appendFormat:@"%@%@ {\n", indent, @"sessionInfo"];
+    [self.sessionInfo writeDescriptionTo:output
+                         withIndent:[NSString stringWithFormat:@"%@  ", indent]];
+    [output appendFormat:@"%@}\n", indent];
   }
   [self.unknownFields writeDescriptionTo:output withIndent:indent];
 }
@@ -8858,8 +8934,10 @@ static AuthResponse* defaultAuthResponseInstance = nil;
   if (self.hasType) {
     [dictionary setObject: @(self.type) forKey: @"type"];
   }
-  if (self.hasSessionToken) {
-    [dictionary setObject: self.sessionToken forKey: @"sessionToken"];
+  if (self.hasSessionInfo) {
+    NSMutableDictionary *messageDictionary = [NSMutableDictionary dictionary];
+    [self.sessionInfo storeInDictionary:messageDictionary];
+    [dictionary setObject:[NSDictionary dictionaryWithDictionary:messageDictionary] forKey:@"sessionInfo"];
   }
   [self.unknownFields storeInDictionary:dictionary];
 }
@@ -8874,8 +8952,8 @@ static AuthResponse* defaultAuthResponseInstance = nil;
   return
       self.hasType == otherMessage.hasType &&
       (!self.hasType || self.type == otherMessage.type) &&
-      self.hasSessionToken == otherMessage.hasSessionToken &&
-      (!self.hasSessionToken || [self.sessionToken isEqual:otherMessage.sessionToken]) &&
+      self.hasSessionInfo == otherMessage.hasSessionInfo &&
+      (!self.hasSessionInfo || [self.sessionInfo isEqual:otherMessage.sessionInfo]) &&
       (self.unknownFields == otherMessage.unknownFields || (self.unknownFields != nil && [self.unknownFields isEqual:otherMessage.unknownFields]));
 }
 - (NSUInteger) hash {
@@ -8883,8 +8961,8 @@ static AuthResponse* defaultAuthResponseInstance = nil;
   if (self.hasType) {
     hashCode = hashCode * 31 + self.type;
   }
-  if (self.hasSessionToken) {
-    hashCode = hashCode * 31 + [self.sessionToken hash];
+  if (self.hasSessionInfo) {
+    hashCode = hashCode * 31 + [self.sessionInfo hash];
   }
   hashCode = hashCode * 31 + [self.unknownFields hash];
   return hashCode;
@@ -8943,8 +9021,8 @@ BOOL AuthResponse_AuthResponseTypeIsValidValue(AuthResponse_AuthResponseType val
   if (other.hasType) {
     [self setType:other.type];
   }
-  if (other.hasSessionToken) {
-    [self setSessionToken:other.sessionToken];
+  if (other.hasSessionInfo) {
+    [self mergeSessionInfo:other.sessionInfo];
   }
   [self mergeUnknownFields:other.unknownFields];
   return self;
@@ -8977,7 +9055,12 @@ BOOL AuthResponse_AuthResponseTypeIsValidValue(AuthResponse_AuthResponseType val
         break;
       }
       case 18: {
-        [self setSessionToken:[input readString]];
+        SessionInfo_Builder* subBuilder = [SessionInfo builder];
+        if (self.hasSessionInfo) {
+          [subBuilder mergeFrom:self.sessionInfo];
+        }
+        [input readMessage:subBuilder extensionRegistry:extensionRegistry];
+        [self setSessionInfo:[subBuilder buildPartial]];
         break;
       }
     }
@@ -8999,20 +9082,347 @@ BOOL AuthResponse_AuthResponseTypeIsValidValue(AuthResponse_AuthResponseType val
   result.type = AuthResponse_AuthResponseTypeAuthOk;
   return self;
 }
-- (BOOL) hasSessionToken {
-  return result.hasSessionToken;
+- (BOOL) hasSessionInfo {
+  return result.hasSessionInfo;
 }
-- (NSString*) sessionToken {
-  return result.sessionToken;
+- (SessionInfo*) sessionInfo {
+  return result.sessionInfo;
 }
-- (AuthResponse_Builder*) setSessionToken:(NSString*) value {
-  result.hasSessionToken = YES;
-  result.sessionToken = value;
+- (AuthResponse_Builder*) setSessionInfo:(SessionInfo*) value {
+  result.hasSessionInfo = YES;
+  result.sessionInfo = value;
   return self;
 }
-- (AuthResponse_Builder*) clearSessionToken {
-  result.hasSessionToken = NO;
-  result.sessionToken = @"";
+- (AuthResponse_Builder*) setSessionInfoBuilder:(SessionInfo_Builder*) builderForValue {
+  return [self setSessionInfo:[builderForValue build]];
+}
+- (AuthResponse_Builder*) mergeSessionInfo:(SessionInfo*) value {
+  if (result.hasSessionInfo &&
+      result.sessionInfo != [SessionInfo defaultInstance]) {
+    result.sessionInfo =
+      [[[SessionInfo builderWithPrototype:result.sessionInfo] mergeFrom:value] buildPartial];
+  } else {
+    result.sessionInfo = value;
+  }
+  result.hasSessionInfo = YES;
+  return self;
+}
+- (AuthResponse_Builder*) clearSessionInfo {
+  result.hasSessionInfo = NO;
+  result.sessionInfo = [SessionInfo defaultInstance];
+  return self;
+}
+@end
+
+@interface SessionInfo ()
+@property (strong) NSString* token;
+@property int32_t maxLength;
+@property int32_t gracePeriod;
+@end
+
+@implementation SessionInfo
+
+- (BOOL) hasToken {
+  return !!hasToken_;
+}
+- (void) setHasToken:(BOOL) value_ {
+  hasToken_ = !!value_;
+}
+@synthesize token;
+- (BOOL) hasMaxLength {
+  return !!hasMaxLength_;
+}
+- (void) setHasMaxLength:(BOOL) value_ {
+  hasMaxLength_ = !!value_;
+}
+@synthesize maxLength;
+- (BOOL) hasGracePeriod {
+  return !!hasGracePeriod_;
+}
+- (void) setHasGracePeriod:(BOOL) value_ {
+  hasGracePeriod_ = !!value_;
+}
+@synthesize gracePeriod;
+- (id) init {
+  if ((self = [super init])) {
+    self.token = @"";
+    self.maxLength = 0;
+    self.gracePeriod = 0;
+  }
+  return self;
+}
+static SessionInfo* defaultSessionInfoInstance = nil;
++ (void) initialize {
+  if (self == [SessionInfo class]) {
+    defaultSessionInfoInstance = [[SessionInfo alloc] init];
+  }
+}
++ (SessionInfo*) defaultInstance {
+  return defaultSessionInfoInstance;
+}
+- (SessionInfo*) defaultInstance {
+  return defaultSessionInfoInstance;
+}
+- (BOOL) isInitialized {
+  if (!self.hasToken) {
+    return NO;
+  }
+  if (!self.hasMaxLength) {
+    return NO;
+  }
+  if (!self.hasGracePeriod) {
+    return NO;
+  }
+  return YES;
+}
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output {
+  if (self.hasToken) {
+    [output writeString:1 value:self.token];
+  }
+  if (self.hasMaxLength) {
+    [output writeInt32:2 value:self.maxLength];
+  }
+  if (self.hasGracePeriod) {
+    [output writeInt32:3 value:self.gracePeriod];
+  }
+  [self.unknownFields writeToCodedOutputStream:output];
+}
+- (int32_t) serializedSize {
+  int32_t size_ = memoizedSerializedSize;
+  if (size_ != -1) {
+    return size_;
+  }
+
+  size_ = 0;
+  if (self.hasToken) {
+    size_ += computeStringSize(1, self.token);
+  }
+  if (self.hasMaxLength) {
+    size_ += computeInt32Size(2, self.maxLength);
+  }
+  if (self.hasGracePeriod) {
+    size_ += computeInt32Size(3, self.gracePeriod);
+  }
+  size_ += self.unknownFields.serializedSize;
+  memoizedSerializedSize = size_;
+  return size_;
+}
++ (SessionInfo*) parseFromData:(NSData*) data {
+  return (SessionInfo*)[[[SessionInfo builder] mergeFromData:data] build];
+}
++ (SessionInfo*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (SessionInfo*)[[[SessionInfo builder] mergeFromData:data extensionRegistry:extensionRegistry] build];
+}
++ (SessionInfo*) parseFromInputStream:(NSInputStream*) input {
+  return (SessionInfo*)[[[SessionInfo builder] mergeFromInputStream:input] build];
+}
++ (SessionInfo*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (SessionInfo*)[[[SessionInfo builder] mergeFromInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (SessionInfo*) parseFromCodedInputStream:(PBCodedInputStream*) input {
+  return (SessionInfo*)[[[SessionInfo builder] mergeFromCodedInputStream:input] build];
+}
++ (SessionInfo*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  return (SessionInfo*)[[[SessionInfo builder] mergeFromCodedInputStream:input extensionRegistry:extensionRegistry] build];
+}
++ (SessionInfo_Builder*) builder {
+  return [[SessionInfo_Builder alloc] init];
+}
++ (SessionInfo_Builder*) builderWithPrototype:(SessionInfo*) prototype {
+  return [[SessionInfo builder] mergeFrom:prototype];
+}
+- (SessionInfo_Builder*) builder {
+  return [SessionInfo builder];
+}
+- (SessionInfo_Builder*) toBuilder {
+  return [SessionInfo builderWithPrototype:self];
+}
+- (void) writeDescriptionTo:(NSMutableString*) output withIndent:(NSString*) indent {
+  if (self.hasToken) {
+    [output appendFormat:@"%@%@: %@\n", indent, @"token", self.token];
+  }
+  if (self.hasMaxLength) {
+    [output appendFormat:@"%@%@: %@\n", indent, @"maxLength", [NSNumber numberWithInt:self.maxLength]];
+  }
+  if (self.hasGracePeriod) {
+    [output appendFormat:@"%@%@: %@\n", indent, @"gracePeriod", [NSNumber numberWithInt:self.gracePeriod]];
+  }
+  [self.unknownFields writeDescriptionTo:output withIndent:indent];
+}
+- (void) storeInDictionary:(NSMutableDictionary *)dictionary {
+  if (self.hasToken) {
+    [dictionary setObject: self.token forKey: @"token"];
+  }
+  if (self.hasMaxLength) {
+    [dictionary setObject: [NSNumber numberWithInt:self.maxLength] forKey: @"maxLength"];
+  }
+  if (self.hasGracePeriod) {
+    [dictionary setObject: [NSNumber numberWithInt:self.gracePeriod] forKey: @"gracePeriod"];
+  }
+  [self.unknownFields storeInDictionary:dictionary];
+}
+- (BOOL) isEqual:(id)other {
+  if (other == self) {
+    return YES;
+  }
+  if (![other isKindOfClass:[SessionInfo class]]) {
+    return NO;
+  }
+  SessionInfo *otherMessage = other;
+  return
+      self.hasToken == otherMessage.hasToken &&
+      (!self.hasToken || [self.token isEqual:otherMessage.token]) &&
+      self.hasMaxLength == otherMessage.hasMaxLength &&
+      (!self.hasMaxLength || self.maxLength == otherMessage.maxLength) &&
+      self.hasGracePeriod == otherMessage.hasGracePeriod &&
+      (!self.hasGracePeriod || self.gracePeriod == otherMessage.gracePeriod) &&
+      (self.unknownFields == otherMessage.unknownFields || (self.unknownFields != nil && [self.unknownFields isEqual:otherMessage.unknownFields]));
+}
+- (NSUInteger) hash {
+  NSUInteger hashCode = 7;
+  if (self.hasToken) {
+    hashCode = hashCode * 31 + [self.token hash];
+  }
+  if (self.hasMaxLength) {
+    hashCode = hashCode * 31 + [[NSNumber numberWithInt:self.maxLength] hash];
+  }
+  if (self.hasGracePeriod) {
+    hashCode = hashCode * 31 + [[NSNumber numberWithInt:self.gracePeriod] hash];
+  }
+  hashCode = hashCode * 31 + [self.unknownFields hash];
+  return hashCode;
+}
+@end
+
+@interface SessionInfo_Builder()
+@property (strong) SessionInfo* result;
+@end
+
+@implementation SessionInfo_Builder
+@synthesize result;
+- (id) init {
+  if ((self = [super init])) {
+    self.result = [[SessionInfo alloc] init];
+  }
+  return self;
+}
+- (PBGeneratedMessage*) internalGetResult {
+  return result;
+}
+- (SessionInfo_Builder*) clear {
+  self.result = [[SessionInfo alloc] init];
+  return self;
+}
+- (SessionInfo_Builder*) clone {
+  return [SessionInfo builderWithPrototype:result];
+}
+- (SessionInfo*) defaultInstance {
+  return [SessionInfo defaultInstance];
+}
+- (SessionInfo*) build {
+  [self checkInitialized];
+  return [self buildPartial];
+}
+- (SessionInfo*) buildPartial {
+  SessionInfo* returnMe = result;
+  self.result = nil;
+  return returnMe;
+}
+- (SessionInfo_Builder*) mergeFrom:(SessionInfo*) other {
+  if (other == [SessionInfo defaultInstance]) {
+    return self;
+  }
+  if (other.hasToken) {
+    [self setToken:other.token];
+  }
+  if (other.hasMaxLength) {
+    [self setMaxLength:other.maxLength];
+  }
+  if (other.hasGracePeriod) {
+    [self setGracePeriod:other.gracePeriod];
+  }
+  [self mergeUnknownFields:other.unknownFields];
+  return self;
+}
+- (SessionInfo_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input {
+  return [self mergeFromCodedInputStream:input extensionRegistry:[PBExtensionRegistry emptyRegistry]];
+}
+- (SessionInfo_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry {
+  PBUnknownFieldSet_Builder* unknownFields = [PBUnknownFieldSet builderWithUnknownFields:self.unknownFields];
+  while (YES) {
+    int32_t tag = [input readTag];
+    switch (tag) {
+      case 0:
+        [self setUnknownFields:[unknownFields build]];
+        return self;
+      default: {
+        if (![self parseUnknownField:input unknownFields:unknownFields extensionRegistry:extensionRegistry tag:tag]) {
+          [self setUnknownFields:[unknownFields build]];
+          return self;
+        }
+        break;
+      }
+      case 10: {
+        [self setToken:[input readString]];
+        break;
+      }
+      case 16: {
+        [self setMaxLength:[input readInt32]];
+        break;
+      }
+      case 24: {
+        [self setGracePeriod:[input readInt32]];
+        break;
+      }
+    }
+  }
+}
+- (BOOL) hasToken {
+  return result.hasToken;
+}
+- (NSString*) token {
+  return result.token;
+}
+- (SessionInfo_Builder*) setToken:(NSString*) value {
+  result.hasToken = YES;
+  result.token = value;
+  return self;
+}
+- (SessionInfo_Builder*) clearToken {
+  result.hasToken = NO;
+  result.token = @"";
+  return self;
+}
+- (BOOL) hasMaxLength {
+  return result.hasMaxLength;
+}
+- (int32_t) maxLength {
+  return result.maxLength;
+}
+- (SessionInfo_Builder*) setMaxLength:(int32_t) value {
+  result.hasMaxLength = YES;
+  result.maxLength = value;
+  return self;
+}
+- (SessionInfo_Builder*) clearMaxLength {
+  result.hasMaxLength = NO;
+  result.maxLength = 0;
+  return self;
+}
+- (BOOL) hasGracePeriod {
+  return result.hasGracePeriod;
+}
+- (int32_t) gracePeriod {
+  return result.gracePeriod;
+}
+- (SessionInfo_Builder*) setGracePeriod:(int32_t) value {
+  result.hasGracePeriod = YES;
+  result.gracePeriod = value;
+  return self;
+}
+- (SessionInfo_Builder*) clearGracePeriod {
+  result.hasGracePeriod = NO;
+  result.gracePeriod = 0;
   return self;
 }
 @end

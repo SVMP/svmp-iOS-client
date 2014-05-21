@@ -46,6 +46,8 @@
 @class SensorSubscribe_Builder;
 @class SensorUnsubscribe;
 @class SensorUnsubscribe_Builder;
+@class SessionInfo;
+@class SessionInfo_Builder;
 @class TouchEvent;
 @class TouchEvent_Builder;
 @class TouchEvent_PointerCoords;
@@ -193,6 +195,7 @@ BOOL WebRTCMessage_WebRTCTypeIsValidValue(WebRTCMessage_WebRTCType value);
 #define Request_webrtcMsg @"webrtcMsg"
 #define Request_rotationInfo @"rotationInfo"
 #define Request_pingRequest @"pingRequest"
+#define Request_videoInfo @"videoInfo"
 @interface Request : PBGeneratedMessage {
 @private
   BOOL hasAuthRequest_:1;
@@ -204,6 +207,7 @@ BOOL WebRTCMessage_WebRTCTypeIsValidValue(WebRTCMessage_WebRTCType value);
   BOOL hasWebrtcMsg_:1;
   BOOL hasRotationInfo_:1;
   BOOL hasPingRequest_:1;
+  BOOL hasVideoInfo_:1;
   BOOL hasType_:1;
   AuthRequest* authRequest;
   VideoRequest* videoRequest;
@@ -214,6 +218,7 @@ BOOL WebRTCMessage_WebRTCTypeIsValidValue(WebRTCMessage_WebRTCType value);
   WebRTCMessage* webrtcMsg;
   RotationInfo* rotationInfo;
   Ping* pingRequest;
+  VideoStreamInfo* videoInfo;
   Request_RequestType type;
 }
 - (BOOL) hasType;
@@ -226,6 +231,7 @@ BOOL WebRTCMessage_WebRTCTypeIsValidValue(WebRTCMessage_WebRTCType value);
 - (BOOL) hasWebrtcMsg;
 - (BOOL) hasRotationInfo;
 - (BOOL) hasPingRequest;
+- (BOOL) hasVideoInfo;
 @property (readonly) Request_RequestType type;
 @property (readonly, strong) AuthRequest* authRequest;
 @property (readonly, strong) VideoRequest* videoRequest;
@@ -236,6 +242,7 @@ BOOL WebRTCMessage_WebRTCTypeIsValidValue(WebRTCMessage_WebRTCType value);
 @property (readonly, strong) WebRTCMessage* webrtcMsg;
 @property (readonly, strong) RotationInfo* rotationInfo;
 @property (readonly, strong) Ping* pingRequest;
+@property (readonly, strong) VideoStreamInfo* videoInfo;
 
 + (Request*) defaultInstance;
 - (Request*) defaultInstance;
@@ -339,6 +346,13 @@ BOOL WebRTCMessage_WebRTCTypeIsValidValue(WebRTCMessage_WebRTCType value);
 - (Request_Builder*) setPingRequestBuilder:(Ping_Builder*) builderForValue;
 - (Request_Builder*) mergePingRequest:(Ping*) value;
 - (Request_Builder*) clearPingRequest;
+
+- (BOOL) hasVideoInfo;
+- (VideoStreamInfo*) videoInfo;
+- (Request_Builder*) setVideoInfo:(VideoStreamInfo*) value;
+- (Request_Builder*) setVideoInfoBuilder:(VideoStreamInfo_Builder*) builderForValue;
+- (Request_Builder*) mergeVideoInfo:(VideoStreamInfo*) value;
+- (Request_Builder*) clearVideoInfo;
 @end
 
 #define Response_type @"type"
@@ -1952,18 +1966,18 @@ BOOL WebRTCMessage_WebRTCTypeIsValidValue(WebRTCMessage_WebRTCType value);
 @end
 
 #define AuthResponse_type @"type"
-#define AuthResponse_sessionToken @"sessionToken"
+#define AuthResponse_sessionInfo @"sessionInfo"
 @interface AuthResponse : PBGeneratedMessage {
 @private
-  BOOL hasSessionToken_:1;
+  BOOL hasSessionInfo_:1;
   BOOL hasType_:1;
-  NSString* sessionToken;
+  SessionInfo* sessionInfo;
   AuthResponse_AuthResponseType type;
 }
 - (BOOL) hasType;
-- (BOOL) hasSessionToken;
+- (BOOL) hasSessionInfo;
 @property (readonly) AuthResponse_AuthResponseType type;
-@property (readonly, strong) NSString* sessionToken;
+@property (readonly, strong) SessionInfo* sessionInfo;
 
 + (AuthResponse*) defaultInstance;
 - (AuthResponse*) defaultInstance;
@@ -2005,10 +2019,82 @@ BOOL WebRTCMessage_WebRTCTypeIsValidValue(WebRTCMessage_WebRTCType value);
 - (AuthResponse_Builder*) setType:(AuthResponse_AuthResponseType) value;
 - (AuthResponse_Builder*) clearType;
 
-- (BOOL) hasSessionToken;
-- (NSString*) sessionToken;
-- (AuthResponse_Builder*) setSessionToken:(NSString*) value;
-- (AuthResponse_Builder*) clearSessionToken;
+- (BOOL) hasSessionInfo;
+- (SessionInfo*) sessionInfo;
+- (AuthResponse_Builder*) setSessionInfo:(SessionInfo*) value;
+- (AuthResponse_Builder*) setSessionInfoBuilder:(SessionInfo_Builder*) builderForValue;
+- (AuthResponse_Builder*) mergeSessionInfo:(SessionInfo*) value;
+- (AuthResponse_Builder*) clearSessionInfo;
+@end
+
+#define SessionInfo_token @"token"
+#define SessionInfo_maxLength @"maxLength"
+#define SessionInfo_gracePeriod @"gracePeriod"
+@interface SessionInfo : PBGeneratedMessage {
+@private
+  BOOL hasMaxLength_:1;
+  BOOL hasGracePeriod_:1;
+  BOOL hasToken_:1;
+  int32_t maxLength;
+  int32_t gracePeriod;
+  NSString* token;
+}
+- (BOOL) hasToken;
+- (BOOL) hasMaxLength;
+- (BOOL) hasGracePeriod;
+@property (readonly, strong) NSString* token;
+@property (readonly) int32_t maxLength;
+@property (readonly) int32_t gracePeriod;
+
++ (SessionInfo*) defaultInstance;
+- (SessionInfo*) defaultInstance;
+
+- (BOOL) isInitialized;
+- (void) writeToCodedOutputStream:(PBCodedOutputStream*) output;
+- (SessionInfo_Builder*) builder;
++ (SessionInfo_Builder*) builder;
++ (SessionInfo_Builder*) builderWithPrototype:(SessionInfo*) prototype;
+- (SessionInfo_Builder*) toBuilder;
+
++ (SessionInfo*) parseFromData:(NSData*) data;
++ (SessionInfo*) parseFromData:(NSData*) data extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
++ (SessionInfo*) parseFromInputStream:(NSInputStream*) input;
++ (SessionInfo*) parseFromInputStream:(NSInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
++ (SessionInfo*) parseFromCodedInputStream:(PBCodedInputStream*) input;
++ (SessionInfo*) parseFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
+@end
+
+@interface SessionInfo_Builder : PBGeneratedMessage_Builder {
+@private
+  SessionInfo* result;
+}
+
+- (SessionInfo*) defaultInstance;
+
+- (SessionInfo_Builder*) clear;
+- (SessionInfo_Builder*) clone;
+
+- (SessionInfo*) build;
+- (SessionInfo*) buildPartial;
+
+- (SessionInfo_Builder*) mergeFrom:(SessionInfo*) other;
+- (SessionInfo_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input;
+- (SessionInfo_Builder*) mergeFromCodedInputStream:(PBCodedInputStream*) input extensionRegistry:(PBExtensionRegistry*) extensionRegistry;
+
+- (BOOL) hasToken;
+- (NSString*) token;
+- (SessionInfo_Builder*) setToken:(NSString*) value;
+- (SessionInfo_Builder*) clearToken;
+
+- (BOOL) hasMaxLength;
+- (int32_t) maxLength;
+- (SessionInfo_Builder*) setMaxLength:(int32_t) value;
+- (SessionInfo_Builder*) clearMaxLength;
+
+- (BOOL) hasGracePeriod;
+- (int32_t) gracePeriod;
+- (SessionInfo_Builder*) setGracePeriod:(int32_t) value;
+- (SessionInfo_Builder*) clearGracePeriod;
 @end
 
 #define VideoRequest_ip @"ip"

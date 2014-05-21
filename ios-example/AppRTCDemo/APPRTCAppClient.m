@@ -785,7 +785,7 @@ int cnt;
     
     if ( rt ==  Response_ResponseTypeAuth )
     {
-        NSLog(@"Response_ResponseTypeAuth");
+        /*NSLog(@"Response_ResponseTypeAuth");
         AuthResponse *authResp = [resp authResponse];
         if ( [authResp type] == AuthResponse_AuthResponseTypeAuthOk ) {
             //** we authenticated successfully, check if we received a session token
@@ -805,7 +805,7 @@ int cnt;
                 // if we used a session token and authentication failed, discard it
                 //dbHandler.updateSessionToken(connectionInfo, "");
             }
-        }
+        }*/
     }
     else if ( rt == Response_ResponseTypeVmready ) {
         NSLog(@"Response_ResponseTypeVmready  - VM READY!!");
